@@ -1,6 +1,5 @@
-<snippet>
-  <content><![CDATA[
-# ${1:Speak Local(ly)}
+
+# Speak Local(ly)
 
 An imitation of the old [spocal.net](http://www.spocal.net).
 It's unfinished work: It has more or less "full" functionality, but isn't scalable and some things are missing (e.g. good error handling).
@@ -36,7 +35,3 @@ Idea from spocal.net. Some are own ideas. Programming et all from myself (Fabio 
 ## License
 
 GNU General Public License v2.0
-
-]]></content>
-  <tabTrigger>readme</tabTrigger>
-</snippet>
