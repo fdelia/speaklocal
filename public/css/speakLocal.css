@@ -1,0 +1,173 @@
+
+.content {
+	max-width: 800px;
+}
+
+#login-buttons a {
+	/*color: white;*/
+    color: #777;
+	position: relative;
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+
+}
+
+@media (min-width: 768px) {
+.navbar-nav #login-buttons a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+}
+
+@media (max-width: 768px) {
+.navbar-nav #login-buttons a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+
+}
+
+/*.navbar {font-size: 1.1em;}*/
+
+
+
+
+html, body, .meta-content {min-height: 100%;}
+
+.navbar {margin-bottom: 0;}
+.navbar-nav {margin: 0;}
+.navbar-nav>li {float: left;}
+
+/*.space {line-height: 1px;}*/
+
+.padding-0 {padding-left: 0; padding-right: 0;}
+.userShortcut img {width: 35px; height: 35px; border:1px solid #ddd; border-radius:5px;}
+.post-author img, .msg-author img {width: 40px; height: 40px;}
+.new-post .userShortcut {font-size: 20px;}
+.new-post .userShortcut img {width: 40px; height: 40px;}
+
+.post-author-icon {font-size: 1.4em;}
+.comment-author img {width: 35px; height: 35px;}
+.comment-author-icon {font-size: 1.2em;}
+.msg-author a {text-decoration: none; color: #555555;}
+
+/*.new-post {margin: 1px 3px 1px 3px;}*/
+.post {margin: 3px 3px 25px 3px; padding: 10px; border-radius: 5px;}
+.post-title a {color: black;}
+.noti-active {background-color: blue;}
+.comment {margin: 3px 0 3px 0; border-top:1px solid #eee; padding: 9px 0 3px 0;}
+.post-input {border-top: 1px solid #eee; padding: 9px 0 0 0; margin: 0 2px 0 2px;}
+.post-panel {margin: 0 0 5px 0;}
+.post-panel a, .comment-panel a {color: #555555;}
+.post-panel a:hover {color:#2fa4e7;}
+a.spam:hover {color:red;}
+a.no-spam:hover {color: green;}
+.liked {color:red;}
+/*.post-time, .comment-time {font-size: 0.9em;}*/
+
+.btn {border-radius: 4px;}
+
+.list-group-item a {display: inline-block;}
+
+/* another hack, in future make own login/registration template */
+a.login-close-text, .accounts-dialog .additional-link-container a {
+    color: #428bca !important; padding: 0 !important;
+}
+a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
+    text-decoration: underline !important;
+}
+
+
+.noti_container {
+    position:relative;
+    border:1px solid blue;
+    width:16px;
+    height:16px;
+}
+
+.noti_bubble {
+    position:absolute;
+    /*top: -6px;
+    right:-6px;*/
+    z-index: 999;
+    padding:1px 6px 1px 5px;
+    background-color:red;
+    color:white;
+    font-weight:bold;
+    font-size:0.75em;
+    
+    border-radius:30px;
+    box-shadow:1px 1px 1px gray;
+}
+
+.msg .noti_bubble {
+    margin-top:-40px;
+}
+
+
+
+
+/* ----------- iPhone 5 and 5S ----------- */
+
+/* Portrait and Landscape */
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px)and (-webkit-min-device-pixel-ratio: 2) {
+    .navbar {1.3em;}
+}
+
+
+/* ----------- iPhone 6 ----------- */
+
+/* Portrait and Landscape */
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) { 
+    .navbar {1.3em;}
+
+}
+
+
+/* ----------- iPhone 6+ ----------- */
+
+/* Portrait and Landscape */
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) { 
+    .navbar {1.3em;}
+
+}
+
+
+/* ----------- Galaxy S3 ----------- */
+
+/* Portrait and Landscape */
+@media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 2) {
+ .navbar {1.3em;}
+}
+
+
+/* ----------- Galaxy S4 ----------- */
+
+/* Portrait and Landscape */
+@media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+ .navbar {1.3em;}
+}
+
+
+/* ----------- Galaxy S5 ----------- */
+
+/* Portrait and Landscape */
+@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+ .navbar {1.3em;}
+}
+
+
+/* ----------- HTC One ----------- */
+
+/* Portrait and Landscape */
+@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+.navbar {1.3em;}
+}
+
+/* Xperia */
+@media screen and (-webkit-device-pixel-ratio:3) {
+ .navbar {1.3em;}   
+}

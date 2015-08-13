@@ -1,0 +1,28 @@
+<div class="post-author"> 
+	You as
+		<user-shortcut user="vm.conv.fromUserObj" showYou="false"></user-shortcut>
+	talking to 
+		<user-shortcut user="vm.conv.toUserObj" showYou="false"></user-shortcut>
+</div>
+
+<div class="reference">
+	Message started from this <a href="/#/post/{{vm.conv.fromPostId}}">post</a>.
+</div>
+	<hr/>
+
+<div class="list-group">
+	<div ng-repeat="message in vm.msgs" class="list-group-item">
+		<div ng-class="{'pull-right': message.toUser !== vm.conv.fromUserObj._id}">
+			{{ message.text }} <small class="text-muted">{{ vm.timeAgo(message.createdAt) }} ago</small>
+		</div>
+		<div class="clearfix"> </div>
+	</div>
+</div>
+
+
+<div class="message-input panel-footer">
+	<form class="new-comment" ng-submit="vm.sendMessage(text); text='';">
+	<input type="text" ng-model="text" placeholder="Write a message..." class="form-control">
+	<button class="btn btn-default" type="submit">Send</button>
+	</form>
+</div>

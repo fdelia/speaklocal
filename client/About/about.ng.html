@@ -1,0 +1,44 @@
+<h3>About this site</h3>
+<p class="text-warning">
+	Disclaimer: This is not professional work. It's build in fast development with no prior experience about MeteorJs. I'm aware of the <a href="https://github.com/johnpapa/angular-styleguide" target="_blank">styleguides</a>.
+</p>
+<p class="text-info">
+	The profile image upload size is restricted: The meteor server hasn't installed graphicsmagick and so the images can't be cropped and downsized automatically.
+</p>
+<p>
+The creator of this "app" wanted to see how long it'd take him to make his own <a href="https://www.spocal.net" target="_blank">Spocal</a>. He had no prior knowledge of angularJs or meteorJs and learned everything while doing this.
+</p>
+	<h4>There are features missing!</h4>
+<p>
+Yes. Some (bigger) features from the original Spocal are missing: Notification emails and an android/ios app (<del>however this site is also built for mobiles</del> will be revised). <br>There are also smaller features missing (user activity, edit posts/comments, more user data etc.), but these can be added easily.
+</p>
+	<h4>It doesn't look that nice</h4>
+<p>
+Unfortunately yes. I was primary concerned with operational things. I'm open to concrete suggestions for improvement. The site uses bootstrap and can change the whole appearance by switching template.
+</p>
+	<h4>Why are there no tests?</h4>
+<p>
+I usually write unit tests: I tried three different packages/ways to make tests work. The best I found is sanjo:jasmine package for meteor, which looks pretty promising. However, after googling the third bug (having strange errors which come and go without changing anything; not loading the altered test file, you have to restart to server etc.), I gave up. I'd really like to add tests, but at the moment it already took me too much time to get started.
+</p>
+	<h4>Why AngularJs and MeteorJs?</h4>
+<p>
+I was recommended to take a serious look to both frameworks. This little project seemed predestined for this matter. While developing the app, I run across some issues:
+<ul>
+	<li>I find it difficult to follow standards/ways how some problems are solved: Either there are none or they're hard to find.</li>
+	<li>Lazy-loading hasn't settled in angularJs (however, there are plugins which add this).</li>
+	<li>I didn't find an error handling for subscribtion/publishing in angular-meteor. I'm sure there is one...?</li>
+	<li>Having a lot of callbacks because of asynchronity; what I need is to go on when all subscribtions are ready, not to wait for subscribtion 1, then subscribe to 2, then... etc. It's surely possible somehow.</li>
+	<li>I'm still publishing too much (aka sending too much data to the client). I'm not happy with my model yet... And the publish/subscribe model is pain when handling relations.</li>
+	<li>Comming from abstract languages like Python and Scala, I was surprised how much effort some basic things need: Like trying to group elements in a mongodb collection (aggregate with observer support isn't yet supported by meteor).</li>
+</ul>
+Most of these problems may go away with more experience.
+</p>
+	<h4>Working schedule</h4>
+<p>
+5 soirées à 3-5 heures + some more time for tidying up
+</p>
+	<h4>Summary</h4>
+<p>
+Some solutions are not satisfying: The anonymous profiles (2 collections) and normal users (1 collection) could have been put in one collection. My solution distinguishes the two, thus has a clean user collection, but the model is a bit confusing. And then one has always to subscribe to 3 collections to work with users & profiles.<br>
+- I like the frameworks; it's easier to develop a "reactive" app and MeteorJs saves some work.
+</p>

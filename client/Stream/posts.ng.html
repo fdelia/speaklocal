@@ -1,0 +1,37 @@
+<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+	{{alert.msg}}
+</alert>
+
+<div ng-show="showWelcomeMsg()" ng-include="'client/Stream/welcome.ng.html'"></div>
+    
+<div class="new-post row" ng-hide="stateParamsId !== undefined || !currentUser">
+
+
+    
+	<div class="col-md-1 col-sm-1 col-xs-1">
+		<user-shortcut ng-if="currentUser" user="currentUser" img-only="1" ano-mode="anoMode"></user-shortcut>
+	</div>
+	<div class="col-md-11 col-sm-11 col-xs-10">
+		<form class="new-post"
+		      ng-submit="addPost(title, text); title=''; text='';"
+		      >
+		  <input ng-model="title" type="text" class="form-control"
+		         name="title" placeholder="Add a title..." />
+	     <textarea ng-model="text" ng-model-options="{ debounce: 1000 }" name="text" class="form-control" placeholder="What's going on? ..."></textarea>
+	     <button class="btn btn-primary" type="submit">Create Post</button>
+		</form>
+	</div>
+</div>
+
+<div class="new-post row" ng-hide="stateParamsId === undefined">
+	<a href="" onclick="window.history.back()">&lt;- back</a>
+</div>
+
+<br>
+
+<div class="" ng-repeat="post in posts" ng-include src="'client/Stream/post.ng.html'">
+</div>
+
+<ul class="pager" ng-hide="posts.length === 0 || hideLoadMore()">
+	<li><a href="" ng-click="loadMorePosts()">Load more posts</a></li>
+</ul>

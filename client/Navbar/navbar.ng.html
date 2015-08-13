@@ -1,0 +1,57 @@
+<div ng-controller="NavbarCtrl">
+
+<nav role="navigation" class="navbar navbar-default" >
+	
+	  <ul class="nav navbar-nav">
+	  	<li ng-class="{active: routeIsStream()}"><a href="/#/">
+        <span class="glyphicon glyphicon-home"></span>
+      </a></li>
+      
+	  	<li ng-class="{active: routeIs('/notifications')}" ng-show="$root.currentUser">
+        	<div class="noti_bubble" ng-show="notiCounter>0">{{ notiCounter }}</div>
+        	<a href="/#/notifications">
+            <span class="glyphicon glyphicon-bell"></span>
+          </a>
+      </li>
+
+	  	<li ng-class="{active: routeIsMessage()}" ng-show="$root.currentUser">
+	  		<div class="noti_bubble" ng-show="msgCounter>0">{{ msgCounter }}</div>
+	  		<a href="/#/messages">
+          <span class="glyphicon glyphicon-envelope"></span>
+        </a></li>
+
+      <li ng-class="{active: routeIsUserlist()}" ng-show="$root.currentUser"><a href="/#/users">
+        <span class="glyphicon glyphicon-user"></span>
+      </a></li>
+
+	  	<li ng-class="{active: routeIs('/user/'+currentUser.username)}" ng-show="$root.currentUser"><a href="/#/user/{{currentUser.username}}">
+        <span class="glyphicon glyphicon-cog"></span>
+      </a></li>
+	  	
+      <li><meteor-include src="loginButtons"></meteor-include></li>
+
+      <li ng-show="$root.currentUser" title="Anonymous?">
+      	<a href="" ng-click="switchAnoMode()">
+      		<span class="glyphicon glyphicon-volume-up" ng-hide="anoMode"></span>
+          <span class="glyphicon glyphicon-volume-off" ng-show="anoMode"></span>
+      		<!-- <input type="checkbox" ng-check="anoMode" ng-model="anoMode" disabled> -->
+          <small>
+            <span ng-show="anoMode">anonymous</span>
+            <span ng-hide="anoMode">normal</span>
+          </small>
+      	</a>
+      </li>
+
+      <li ng-class="{active: routeIs('/about')}">
+      	<a href="/#/about">
+      		<span class="glyphicon glyphicon-info-sign"></span>
+      	</a>
+      </li>
+	  </ul>
+
+  
+
+  
+</nav>
+
+  </div>

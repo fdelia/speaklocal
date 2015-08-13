@@ -1,0 +1,61 @@
+<div class="post panel panel-default container-fluid">
+	<div class="post-time pull-right text-muted"><small>{{ formatTime(post.createdAt) }} ago</small></div>
+	
+	<div class="post-author">
+		<user-shortcut user="post.user" show-you="isThisUser(post.user.isUser)"></user-shortcut>
+	</div>
+	<div class="post-title lead"><a href="/#/post/{{ post._id }}">{{ post.title }}</a></div>
+	<p class="post-text" ng-bind-html="post.text | linky"></p>
+
+	<div class="post-panel"><small>
+		<span class="glyphicon glyphicon-comment"></span> 
+		<span class="post-comment-counter">{{ post.comments.length }}</span>
+		<span class="glyphicon glyphicon-heart" ng-class="{liked: post.userHasLiked}" data-toggle="tooltip" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"></span> 
+		<span class="post-like-counter" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}">{{ post.likes.length }}</span>
+		<a class="post-like" ng-click="likeUnlikePost(post._id)" href="" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"> {{ post.userHasLiked ? 'Unlike' : 'Like' }}</a>
+		<!-- <a href="/#/message/{{post.userId}}" ng-hide="post.userId == $root.currentUser._id || isThisUser(post.user.isUser)">Message</a> -->
+		<a href="/#/message/{{post.userId}}" ng-click="sendMsgTo(post.userId, post._id)" ng-hide="post.userId == $root.currentUser._id || isThisUser(post.user.isUser)">Message</a>
+		<small class="pull-right">
+			<a href="" class="spam">
+				<span class="glyphicon glyphicon-fire"></span>
+				is Spam
+			</a>
+			<a href="" class="no-spam">
+				<span class="glyphicon glyphicon-thumbs-up"></span>
+				no Spam
+			</a>
+			(<span class="post-spam-percent">{{ post.spam }}</span> %) &nbsp;
+		</small>
+	</small></div>
+
+	<div class="post-comments">
+		<div class="comment" ng-repeat="comment in post.comments">
+			<div class="comment-time pull-right text-muted"><small>{{ formatTime(comment.createdAt) }} ago</small></div>
+			<div class="comment-author">
+				<user-shortcut user="comment.user" show-you="isThisUser(comment.user.isUser)"></user-shortcut>
+			</div>
+			<div class="comment-text" ng-bind-html="comment.text | linky"></div>
+			<div class="comment-panel"><small>
+				<span class="glyphicon glyphicon-heart" ng-class="{liked: comment.userHasLiked}" data-toggle="tooltip" title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}"></span> 
+				<span class="comment-like-counter" title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}">{{ comment.likes.length }}</span>
+				<a class="comment-like" ng-click="likeUnlikeComment(comment._id)" href="" title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}"> {{ comment.userHasLiked ? 'Unlike' : 'Like' }}</a>
+				<!-- <a href="/#/message/{{comment.userId}}" ng-hide="comment.userId == $root.currentUser._id || isThisUser(comment.user.isUser)">Message</a> -->
+				<a href="/#/message/{{comment.userId}}" ng-click="sendMsgTo(comment.user._id, post._id)" ng-hide="comment.userId == $root.currentUser._id || isThisUser(comment.user.isUser)">Message</a>
+			</small></div>
+		</div>
+	</div>
+
+	<div class="post-input row" ng-show="currentUser">
+		<div class="col-md-1 col-sm-1 col-xs-1 padding-0">
+			<user-shortcut user="currentUser" img-only="1" ano-mode="anoMode"></user-shortcut>
+		</div>
+		<form class="new-comment" ng-submit="addComment(post._id, postText); postText='';">
+		<div class="col-md-11 col-sm-11 col-xs-10">
+			<textarea name="postText" ng-model="postText" rows="1" class="form-control field" placeholder="Write a comment..."></textarea>
+		<!-- </div>
+		<div class="col-md-1 col-sm-1 col-xs-1"> -->
+			<button class="btn btn-default" type="submit">Comment</button>		
+		</div>
+		</form>
+	</div>
+</div>

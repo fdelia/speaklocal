@@ -1,0 +1,32 @@
+
+<span>
+
+	
+	<span class="userShortcut" ng-if="!imgOnly">
+	    <a href="/#/user/{{ user.username }}" ng-if="! user.isAno && ! user.profile.userImageUrl">
+	        <span class="post-author-icon glyphicon glyphicon-user"></span>
+	        {{ user.username }}
+	    </a>
+
+	    <a href="/#/user/{{ user.username }}" ng-if="! user.isAno && user.profile.userImageUrl">
+	        <!-- <span class="post-author-icon glyphicon glyphicon-user"></span> -->
+	        <img src="{{ user.profile.userImageUrl }}" class="userImg" />
+	        {{ user.username }}
+	    </a>
+
+	    <span ng-if="user.isAno">
+	        <img src="/images/kitten.jpg" class="img-rounded" />
+	        {{ user.username }} {{ showYou ? '(you)' : '' }}
+	    </span>
+	</span>
+
+
+
+	<span class="userShortcut userShortcut-imgOnly" ng-if="imgOnly">
+		<span class="post-author-icon glyphicon glyphicon-user" ng-if="! anoMode && ! user.profile.userImageUrl"></span>
+		<img src="{{ user.profile.userImageUrl }}" class="userImg" ng-if="! anoMode && user.profile.userImageUrl" />
+		<img src="/images/kitten.jpg" class="img-rounded" ng-if="anoMode" />
+	</span>
+
+
+</span>

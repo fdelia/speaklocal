@@ -1,0 +1,27 @@
+To add
+ ☐ from where is the error: tried to load angular more than once??? it's even there after removing all of my code (and some packages)
+ ☐ infinite scroll pagination for posts, including limited subscribtion for posts, comments and likes, maybe also for anoProfiles
+ ☐ same for notifications and conversations
+ ✔ tidy up code, make it more readable @done (15-08-10 19:01)
+ ✔ neuer post, der automatisch bei anderem User geaddet wird: diesen Liken/Commenten geht nicht @done (15-08-10 19:34)
+ ☐ validation of inputs (escaping everything), use aldeed / collections2 for that
+ ☐ link preview
+ ☐ make bubbles out of comments to preview posts (switch to and out this of this view)
+ ✔ navbar: http://stackoverflow.com/questions/14656567/meteor-subscribe-to-a-count for counting new messages and notifications @done (15-08-10 19:01)
+
+ Testing
+ ☐ install velocity:html-reporter
+ ☐ install sanjo:jasmine
+
+
+Performance, new model:
+  comments are embedded in posts
+  likes are embedded in posts and comments
+  no collection for comments and likes
+  anoUserIds saved in posts
+  queries will only be posts with skip and limit, are posts by id
+  only subscribe to users, anoUsers, anoUserProfiles and posts
+  
+  if posts are published not for stream, don't send comments and likes field
+
+  also save messages in conversation (but that doesnt affect performance)

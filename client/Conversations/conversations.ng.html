@@ -1,0 +1,29 @@
+<!-- <div class="new-message">
+	<a href="/#/">New Message</a>
+</div>
+
+<br> -->
+
+<div ng-show="convs.length === 0" class="post panel panel-default">No messages.</div>
+
+<ul class="list-group">
+	<li  class="list-group-item" ng-class="{'list-group-item-info': conv.unseenMsgs	}" ng-repeat="conv in convs | limitTo: quantity">
+
+			You as <user-shortcut user="conv.fromUserObj" showYou="false"></user-shortcut>
+			talking to
+			<user-shortcut user="conv.toUserObj" showYou="false"></user-shortcut>
+			:
+
+			<!-- <div class="noti_bubble" ng-show="conv.unseenMsgs>0">{{ conv.unseenMsgs }}</div> -->
+			<a href="/#/message/{{ conv._id }}">
+				<span class="glyphicon glyphicon-envelope"></span> 
+				{{ conv.lastMsg }}
+			</a>
+			
+			<small class="text-muted">&nbsp; ({{ timeAgo(conv.updatedAt) }} ago)</small>
+	</li>
+</ul>
+
+<ul class="pager" ng-hide="convs.length === 0" >
+	<li><a href="" ng-click="quantity = quantity + 20">Load more</a></li>
+</ul>

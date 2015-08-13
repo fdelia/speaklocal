@@ -1,0 +1,74 @@
+<div>
+
+ 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+      {{alert.msg}}
+    </alert>
+   	
+   	<div ng-if="user">
+
+		<h1>{{ user.username }}</h1>
+		<div class="">Active since</div><div class="">xxx</div>
+
+		<div ng-show="$root.currentUser._id === user._id">
+			<h3>Settings</h3>
+			<form ng-submit="updateUser(user.username, user.bio)">
+				<div>
+					<label for="newUsername">Username</label>
+					<input class="form-control" type="text" name="newUsername" ng-model="user.username" ng-required="true" ng-minlength="3">
+				</div>
+				<div>
+					<label for="newBio">Bio</label>
+					<textarea name="newBio" class="form-control" ng-model="user.bio">TODO</textarea>
+				</div>
+				<button type="submit">save</button>
+			</form>
+
+			<form ng-submit="uploadImage(userImage)">
+				<label for="userImage">User image (max. 500kb)</label>
+				<input fileread="userImage" type="file" name="userImage" ng-model="userImage" class="myFileInput" ngf-select="onFileSelect($files)" accept="image/*">
+				<button type="submit">upload</button>
+			</form>
+		</div>
+
+		<div ng-hide="$root.currentUser._id === user._id">
+			<a href="/#/message/{{user._id}}" disable>Send message</a>
+		</div>
+
+		<h3>Activity</h3>
+		<ul class="list-group">
+			<li ng-repeat="activity in activities" class="list-group-item row">
+				<small class="text-muted pull-right">&nbsp; {{ timeAgo(activity.createdAt) }} ago</small>
+
+				<div ng-if="activity.title">
+					<a href="/#/post/{{activity._id}}">
+						Wrote post "{{ activity.title }}"
+					</a>
+				</div>
+				<div ng-if="postId">
+					<a href="/#/post/{{activity.postId}}">
+						Wrote comment "{{ activity.text }}"
+					</a>
+				</div>
+				<div ng-if="activity.on">
+					<span ng-if="activity.type === 'post'">
+						<a href="/#/post/{{activity.on}}">
+							Liked post ...
+							"{{ activity.onObj.title }}"
+						</a>
+					</span>
+					<span ng-if="activity.type === 'comment'">
+						<a href="">
+							Liked comment ...
+							
+						</a>
+					</span>
+				</div>
+
+			</li>
+		</ul>
+
+
+
+	</div>
+
+</div>
