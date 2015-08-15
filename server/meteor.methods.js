@@ -50,8 +50,8 @@ Meteor.methods({
     };
 
     // var post2 = post; // test
-    post2.likeUserIds = [];
-    post2.comments = [];
+    // post2.likeUserIds = [];
+    // post2.comments = [];
     // post2._id = Posts2.insert(post2); // test
     // var user2 = getThisUserOnPost(post2._id); // test
     
@@ -115,14 +115,14 @@ Meteor.methods({
     };
 
     // test
-    comment.index = post.comments ? post.comments.length: 0;
-    Posts2.update({
-      _id: postId
-    }, {
-      $push: {
-        comments: comment
-      }
-    });
+    // comment.index = post.comments ? post.comments.length: 0;
+    // Posts2.update({
+    //   _id: postId
+    // }, {
+    //   $push: {
+    //     comments: comment
+    //   }
+    // });
 
     comment._id = Comments.insert(comment);
     console.log('added comment');
