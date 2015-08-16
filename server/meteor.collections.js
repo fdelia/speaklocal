@@ -1,3 +1,7 @@
+/*
+    In future: Split up the server files in modules like on client.
+ */
+ 
 Posts = new Mongo.Collection('posts');
 // Posts2 = new Mongo.Collection('posts2');
 Comments = new Mongo.Collection('comments');

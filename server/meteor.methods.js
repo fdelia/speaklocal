@@ -1,3 +1,8 @@
+/*
+    In future: Split up the server files in modules like on client.
+ */
+
+
 var KITTEN_NAMES = 'Caliente,Salsa,Chili,Paprika,Tamale,Sunset,Frosty,Icy,Pearl,Snowball,Snowflake,Midnight,Ebony,Shadow,Indigo,Grimalkin,Kitty'.split(',');
 
 
@@ -104,7 +109,7 @@ Meteor.methods({
     text = _.escape(text).trim();
     var user = getThisUserOnPost(postId);
 
-    // TODO validate title and text (remove html)
+    // TODO validate text (remove html)
     var comment = {
       postId: postId,
       userId: user._id,

@@ -25,6 +25,7 @@ I usually write unit tests: I tried three different packages/ways to make tests 
 I was recommended to take a serious look to both frameworks. This little project seemed predestined for this matter. While developing the app, I run across some issues:
 <ul>
 	<li>I find it difficult to follow standards/ways how some problems are solved: Either there are none or they're hard to find.</li>
+	<li>MeteorJs doesn't support http answers (like 201) for meteor methods? A server should response with proper messages and status codes.</li>
 	<li>Lazy-loading hasn't settled in angularJs (however, there are plugins which add this).</li>
 	<li>I didn't find an error handling for subscribtion/publishing in angular-meteor. I'm sure there is one...?</li>
 	<li>Having a lot of callbacks because of asynchronity; what I need is to go on when all subscribtions are ready, not to wait for subscribtion 1, then subscribe to 2, then... etc. It's surely possible somehow.</li>

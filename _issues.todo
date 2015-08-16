@@ -1,5 +1,20 @@
-To add
- ☐ from where is the error: tried to load angular more than once??? it's even there after removing all of my code (and some packages)
+Issues:
+ ☐ navbar.controller.js: routeIsUserlist(): currentUser sometimes set too late and then undefined
+ ☐ user.controller.js: bio is not updated -> use profile.bio, also in server.methods.js
+ ☐ meteor.collections.js: finish limiting of published rows for remaining views, see all // TODO s
+ ☐ remove all logs on server when finished
+ ☐ meteor.methods.js: addPost: too much is escaped, should only escape basic html chars
+ ☐ meteor.methods.js: addComment: same as above
+ ☐ after adding a post, if liked right away, it's not updated in the view of the user who added the post. the issue is resolved after commenting on the post, reloading the controller.
+ ☐ user activity: unfinished, not showing user comments and likes
+ ☐ error: tried to load angular more than once??? it's even there after removing all of my code (and some packages) ??
+
+
+
+
+
+
+To add :
  ☐ infinite scroll pagination for posts, including limited subscribtion for posts, comments and likes, maybe also for anoProfiles
  ☐ same for notifications and conversations
  ✔ tidy up code, make it more readable @done (15-08-10 19:01)
@@ -12,6 +27,14 @@ To add
  Testing
  ☐ install velocity:html-reporter
  ☐ install sanjo:jasmine
+
+
+
+
+
+
+
+
 
 
 Performance, new model:
