@@ -2,6 +2,7 @@
 # Speak Local(ly)
 
 An imitation of the old [spocal.net](http://www.spocal.net).
+**This is not professional work**
 It's unfinished work: It has more or less "full" functionality, but isn't scalable and some things are missing (e.g. good error handling).
 I uploaded it [here](http://speaklocal.meteor.com). However, the server of speaklocal.meteor.com is free and very slow.
 
