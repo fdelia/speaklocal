@@ -9,6 +9,7 @@ Messages = new Mongo.Collection('messages');
 AnonymousUsers = new Mongo.Collection('anonymoususers');
 Conversations = new Mongo.Collection('conversations');
 
+// TODO
 // var userImagesStore = new FS.Store.GridFS('userimages');
 // UserImages = new FS.Collection('userimages', {stores: [userImagesStore]});
 
@@ -33,8 +34,6 @@ UserImages = new FS.Collection('userimages', {
   }
 });
 
-
-// Meteor.subscribe('userimages');
 
 
 Accounts.ui.config({

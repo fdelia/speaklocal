@@ -9,12 +9,13 @@ Issues:
  ✔ user activity: unfinished, not showing user comments and likes @done (15-08-17 18:51)
  ☐ user activity: active since (user.createdAt)
  ☐ user activity: limit by date
- ☐ error: tried to load angular more than once??? it's even there after removing all of my code (and some packages) ??
+ ☐ error: tried to load angular more than once??? it's even there after removing all of my code (and some packages), issue with packages/angularjs_angular and packages/angular_angular, both get loaded, bower loading one of them?
  ☐ createUser: add createdAt and updatedAdd
  ☐ throwing error from server to client doesn't work, not sure if done right
  ☐ CSS: remove userShortCut img styles, add bootstrap col-xx-x in templates instead
  ☐ FSCollection: add filter, doesn't work
  ☐ user.controller.js: upload user image, cropping not working (img-crop directive)
+ ☐ Angular: make app more moduler with app.controllers, app.services etc
 
 
 
