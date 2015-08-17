@@ -29,10 +29,10 @@ UserImages = new FS.Collection('userimages', {
       extensions: ['png', 'jpg', 'jpeg']
     },
     onInvalid: function(msg) {
-      // doesnt work
+      // doesn't work
       // there is nothing logged if filter doesnt match, 
       // and the old image is deleted / new one not inserted
-      console.log('Error FSCollection insert: ' + msg);
+      console.error('Error FSCollection insert: ' + msg);
     }
   }
 });
@@ -98,23 +98,30 @@ UserImages.allow({
  *  I think the better way would be to use publish/subscribe as simple API and put the
  *  data logic on the client side.
  */
+// TODO make more DRY
 
-var SLCollection = {
-  postsCursor: null,
-  commentsCursor: null,
-  likesCursor: null,
-  anoUsersCursor: null,
-  userAnoProfilesCursor: null,
-  notifsCursor: null,
-  conversationsCursor: null,
-  opts: null,
-  view: null,
-  userId: null,
-  postId: null,
-  postsForStream: function(opts, userId) {
-    if (!opts) opts = {};
-    if (!opts.skip) opts.skip = 0;
-    if (!opts.limit) opts.limit = 30;
+var SLCollection;
+
+SLCollection = (function() {
+  function SLCollection() {
+    this.postsCursor = null;
+    this.likesCursor = null;
+    this.anoUsersCursor = null;
+    this.userAnoProfilesCursor = null;
+    this.nofisCursor = null;
+    this.conversationsCursor = null;
+    this.opts = null;
+    this.view = null;
+    this.userId = null;
+    this.postId = null;
+  }
+
+  SLCollection.prototype.postsForStream = function(opts, userId) {
+    // default options
+    opts = _.extend({
+      skip: 0,
+      limit: 30
+    }, opts);
 
     if (this.view === 'stream' && this.opts && userId && this.opts.skip === opts.skip && this.opts.limit === opts.limit && this.userId === userId) {
       console.log('already set: forstream');
@@ -174,8 +181,10 @@ var SLCollection = {
         createdAt: 0 // not necessary
       }
     });
-  },
-  postsById: function(postId, userId) {
+
+  }
+
+  SLCollection.prototype.postsById = function(postId, userId) {
     if (this.view === 'byId' && this.postId && this.postId === postId && this.userId === userId) {
       console.log('already set: byid');
       return;
@@ -228,8 +237,8 @@ var SLCollection = {
         createdAt: 0 // not necessary
       }
     });
-  },
-  byUserActivity: function(opts, userId) {
+  }
+  SLCollection.prototype.byUserActivity = function(opts, userId) {
     if (this.view === 'userActivity' && this.opts && userId && this.opts.userId === opts.userId && this.opts.limit === opts.limit && this.opts.skip === opts.skip && this.userId === userId) {
       console.log('already set: byUserActivity');
       return;
@@ -240,8 +249,8 @@ var SLCollection = {
     this.view = 'userActivity';
 
     // TODO
-  },
-  forNotifications: function(opts, userId) {
+  }
+  SLCollection.prototype.forNotifications = function(opts, userId) {
     // TODO if
 
     this.opts = opts;
@@ -249,15 +258,19 @@ var SLCollection = {
     this.view = 'notifs';
 
     // TODO
-  },
-  forConversations: function(opts, userId) {
+  }
+  SLCollection.prototype.forConversations = function(opts, userId) {
+    // default options
+    opts = _.extend({
+      skip: 0,
+      limit: 20
+    }, opts);
+
     if (this.view === 'conversations' && this.userId === userId &&
       this.opts.skip === opts.skip && this.opts.limit === opts.limit) {
       console.log('already set: forConversations');
       return;
     }
-    if (!opts.skip) opts.skip = 0;
-    if (!opts.limit) opts.limit = 20;
 
     this.opts = opts;
     this.userId = userId;
@@ -285,8 +298,8 @@ var SLCollection = {
     // TODO
     // for every conv publish user/anoUser of userId and toUser
     // and also userAnoProfiles (with isUser set)
-  },
-  publishEverything: function(userId) {
+  }
+  SLCollection.prototype.publishEverything = function(userId) {
     console.log('publish everything');
     if (this.userId === userId && this.view == 'all') return;
 
@@ -314,50 +327,48 @@ var SLCollection = {
         createdAt: 0 // not necessary
       }
     });
-  },
+  }
 
-  setCursors: function(opts, userId) {
-    // if (this.userId === userId && this.view === opts.view){
-    //   console.log('already set');
-    //   return;
-    // }
+  SLCollection.prototype.setCursors = function(opts, userId) {
 
     if (opts && opts.postId) {
-      SLCollection.postsById(opts.postId, userId);
+      this.postsById(opts.postId, userId);
     } else if (opts && opts.userId) {
-      SLCollection.byUserActivity(opts, userId);
+      this.byUserActivity(opts, userId);
     } else if (opts && opts.view === 'notifications') {
-      SLCollection.forNotifications(opts, userId);
+      this.forNotifications(opts, userId);
     } else if (opts && opts.limit !== undefined && opts.skip !== undefined) {
-      SLCollection.postsForStream(opts, userId);
+      this.postsForStream(opts, userId);
     } else {
-      SLCollection.publishEverything(userId);
+      this.publishEverything(userId);
     }
-  }
-};
 
+  }
+
+  return SLCollection;
+
+})();
+
+var SLC = new SLCollection();
 
 // no user identification needed for these
 
 // i'm really unsure if this is a good solution, it's pretty messy
 Meteor.publish('posts', function(opts) {
-  // console.log('posts');
-  SLCollection.setCursors(opts, this.userId);
-  return SLCollection.postsCursor;
+  SLC.setCursors(opts, this.userId);
+  return SLC.postsCursor;
   // return Posts.find();
 });
 
 Meteor.publish('comments', function(opts) {
-  // console.log('comments');
-  SLCollection.setCursors(opts, this.userId);
-  return SLCollection.commentsCursor;
+  SLC.setCursors(opts, this.userId);
+  return SLC.commentsCursor;
   // return Comments.find();
 });
 
 Meteor.publish('likes', function(opts) {
-  // console.log('likes');
-  SLCollection.setCursors(opts, this.userId);
-  return SLCollection.likesCursor;
+  SLC.setCursors(opts, this.userId);
+  return SLC.likesCursor;
   // return Likes.find();
 });
 
@@ -368,9 +379,8 @@ Meteor.publish('anoUsers', function(opts) {
   //     createdAt: 0
   //   }
   // });
-  // console.log('anoUsers');
-  SLCollection.setCursors(opts, this.userId);
-  return SLCollection.anoUsersCursor;
+  SLC.setCursors(opts, this.userId);
+  return SLC.anoUsersCursor;
 });
 
 Meteor.publish('allUserData', function() {
@@ -395,9 +405,8 @@ Meteor.publish('userAnoProfiles', function(opts) {
   //     createdAt: 0 // not necessary
   //   }
   // });
-  // console.log('userAnoProfiles');
-  SLCollection.setCursors(opts, this.userId);
-  return SLCollection.userAnoProfilesCursor;
+  SLC.setCursors(opts, this.userId);
+  return SLC.userAnoProfilesCursor;
 });
 
 
@@ -551,8 +560,8 @@ Meteor.publish('likes-byUser', function(opts) {
 //   if (!opts || opts.userId)
 //     this.error(new Meteor.Error('missing-arguments', 'Publishing likes by user, but no userId given'));
 
-  
-  
+
+
 //   return Likes.find({
 
 //   });
