@@ -42,6 +42,11 @@ html, body, .meta-content {min-height: 100%;}
 .navbar-nav {margin: 0;}
 .navbar-nav>li {float: left;}
 
+
+/* TODO Looks stupid */
+.badges div.sl-badge {color: gold; float: left; margin: 5px; padding:8px; border:2px solid navy; border-radius: 8px; background-color: navy;}
+.badges span { font-size: 1.8em;}
+
 /*.space {line-height: 1px;}*/
 
 .padding-0 {padding-left: 0; padding-right: 0;}

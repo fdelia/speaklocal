@@ -8,6 +8,23 @@
 
 		<h3><user-shortcut user="user" img-only="1"></user-shortcut> {{ user.username }}</h3>
 		<ul class="list-group">
+			<li class="list-group-item row badges" ng-if="user.username === 'beacher'">
+					<div>Badges: </div>
+				
+					<div class="sl-badge" title="book expert"> 
+						<span class="glyphicon glyphicon-lamp" ></span>
+						book expert: 4
+					</div>
+					<div class="sl-badge" title="food expert">
+						<span class="glyphicon glyphicon-apple" ></span>
+						food expert: 2
+					</div>
+					<div class="sl-badge" title="math expert">
+						<span class="glyphicon glyphicon-superscript" ></span>
+						math expert: 7
+					</div>
+				
+			</li>
 			<li class="list-group-item row">Active since: </li>
 			<li class="list-group-item row">Likes: {{ numberOfLikes }} <span class="glyphicon glyphicon-heart"></span></li>
 		</ul>
