@@ -4,13 +4,16 @@
       {{alert.msg}}
     </alert>
    	
-   	<div ng-if="user">
+   	<div ng-if="user" class="user-profile">
 
-		<h1>{{ user.username }}</h1>
-		<div class="">Active since</div><div class="">xxx</div>
+		<h3><user-shortcut user="user" img-only="1"></user-shortcut> {{ user.username }}</h3>
+		<ul class="list-group">
+			<li class="list-group-item row">Active since: </li>
+			<li class="list-group-item row">Likes: {{ numberOfLikes }} <span class="glyphicon glyphicon-heart"></span></li>
+		</ul>
 
 		<div ng-show="$root.currentUser._id === user._id">
-			<h3>Settings</h3>
+			<h4>Settings</h4>
 			<form ng-submit="updateUser(user.username, user.bio)">
 				<div>
 					<label for="newUsername">Username</label>
@@ -20,21 +23,47 @@
 					<label for="newBio">Bio</label>
 					<textarea name="newBio" class="form-control" ng-model="user.bio">TODO</textarea>
 				</div>
-				<button type="submit">save</button>
+				<button type="submit" class="btn btn-success">save</button>
 			</form>
 
-			<form ng-submit="uploadImage(userImage)">
+			<!-- <form ng-submit="uploadImage(userImage)"> -->
 				<label for="userImage">User image (max. 500kb)</label>
-				<input fileread="userImage" type="file" name="userImage" ng-model="userImage" class="myFileInput" ngf-select="onFileSelect($files)" accept="image/*">
-				<button type="submit">upload</button>
-			</form>
+				<!-- <input fileread="userImage" type="file" name="userImage" ng-model="userImage" class="myFileInput" accept="image/*"> -->
+
+				<md-dialog class="add-photo-dialog">
+				  <form>
+				    
+				    <md-dialog-content>
+				      <div>
+				        <div ngf-drop ngf-select
+				             ngf-change="addImages($files)"
+				             ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" class="drop-box"
+				             ngf-multiple="false" ngf-allow-dir="false" ngf-accept="'image/*'"
+				             ngf-drop-available="dropAvailable">
+				          <div>Click here to select image or drop it here</div>
+				        </div>
+				      </div>
+				    </md-dialog-content>
+				    
+				  </form>
+				</md-dialog>
+
+				<div ng-show="image.orgImg" class="ng-crop-container">
+				  <img-crop image="image.orgImg" result-image="image.croppedImg" result-image-size="100" area-type="square"></img-crop>
+				</div>
+
+				 
+  				<div ng-show="image.orgImg"><div>Image:</div><img ng-src="{{image.orgImg}}" style="max-width:100px; max-heigth:100px" /></div>
+
+				<button type="submit" ng-disabled="!image.orgImg" class="btn btn-success" ng-click="saveCroppedImage()" >upload</button>
+			<!-- </form> -->
 		</div>
 
 		<div ng-hide="$root.currentUser._id === user._id">
 			<a href="/#/message/{{user._id}}" disable>Send message</a>
 		</div>
 
-		<h3>Activity</h3>
+		<h4>Activity</h4>
 		<ul class="list-group">
 			<li ng-repeat="activity in activities" class="list-group-item row">
 				<small class="text-muted pull-right">&nbsp; {{ timeAgo(activity.createdAt) }} ago</small>
@@ -44,7 +73,7 @@
 						Wrote post "{{ activity.title }}"
 					</a>
 				</div>
-				<div ng-if="postId">
+				<div ng-if="activity.postId">
 					<a href="/#/post/{{activity.postId}}">
 						Wrote comment "{{ activity.text }}"
 					</a>
@@ -52,13 +81,12 @@
 				<div ng-if="activity.on">
 					<span ng-if="activity.type === 'post'">
 						<a href="/#/post/{{activity.on}}">
-							Liked post ...
-							"{{ activity.onObj.title }}"
+							Liked post "{{ activity.post.title }}"
 						</a>
 					</span>
 					<span ng-if="activity.type === 'comment'">
-						<a href="">
-							Liked comment ...
+						<a href="/#/post/{{activity.post._id}}">
+							Liked comment "{{ activity.comm.text }}"
 							
 						</a>
 					</span>

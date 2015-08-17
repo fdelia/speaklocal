@@ -1,7 +1,7 @@
 /*
     In future: Split up the server files in modules like on client.
  */
- 
+
 Posts = new Mongo.Collection('posts');
 // Posts2 = new Mongo.Collection('posts2');
 Comments = new Mongo.Collection('comments');
@@ -406,7 +406,7 @@ Meteor.publish('userData', function() {
     _id: this.userId
   }, {
     fields: {
-      'bio': 1
+      'profile.bio': 1
     }
   });
 });
@@ -533,9 +533,9 @@ Meteor.publish('likes-byUser', function(opts) {
   var user = Meteor.users.findOne({
     _id: opts.userId
   });
-  if (!user) {
+  if (!user)
     this.error(new Meteor.Error('illegal-arguments', 'User not found for userId'));
-  }
+
   if (!parseInt(opts.limit)) opts.limit = 20;
 
   return Likes.find({
@@ -544,6 +544,19 @@ Meteor.publish('likes-byUser', function(opts) {
     limit: opts.limit
   });
 });
+
+
+
+// Meteor.publish('likes-onUser', function(opts) {
+//   if (!opts || opts.userId)
+//     this.error(new Meteor.Error('missing-arguments', 'Publishing likes by user, but no userId given'));
+
+  
+  
+//   return Likes.find({
+
+//   });
+// });
 
 
 Meteor.publish('notifications2', function() {
@@ -571,7 +584,7 @@ Meteor.publish('notifications2-new', function() {
 //   if (!opts.skip) opts.skip = 0;
 //   if (!opts.limit) opts.limit = 20;
 
-  
+
 //   return Posts2.find({}, {
 //     sort: {
 //       'createdAt': -1

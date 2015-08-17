@@ -14,3 +14,6 @@ cfs:standard-packages
 cfs:gridfs
 meteorhacks:fast-render
 u2622:persistent-session
+twbs:bootstrap
+danialfarid:ng-file-upload
+alexk111:ng-img-crop

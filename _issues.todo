@@ -6,15 +6,21 @@ Issues:
  ☐ meteor.methods.js: addPost: too much is escaped, should only escape basic html chars
  ☐ meteor.methods.js: addComment: same as above
  ☐ after adding a post, if liked right away, it's not updated in the view of the user who added the post. the issue is resolved after commenting on the post, reloading the controller.
- ☐ user activity: unfinished, not showing user comments and likes
+ ✔ user activity: unfinished, not showing user comments and likes @done (15-08-17 18:51)
+ ☐ user activity: active since (user.createdAt)
+ ☐ user activity: limit by date
  ☐ error: tried to load angular more than once??? it's even there after removing all of my code (and some packages) ??
+ ☐ createUser: add createdAt and updatedAdd
+ ☐ throwing error from server to client doesn't work, not sure if done right
+ ☐ CSS: remove userShortCut img styles, add bootstrap col-xx-x in templates instead
+ ☐ FSCollection: add filter, doesn't work
+ ☐ user.controller.js: upload user image, cropping not working (img-crop directive)
 
 
 
 
 
-
-To add :
+To add:
  ☐ infinite scroll pagination for posts, including limited subscribtion for posts, comments and likes, maybe also for anoProfiles
  ☐ same for notifications and conversations
  ✔ tidy up code, make it more readable @done (15-08-10 19:01)
@@ -24,7 +30,7 @@ To add :
  ☐ make bubbles out of comments to preview posts (switch to and out this of this view)
  ✔ navbar: http://stackoverflow.com/questions/14656567/meteor-subscribe-to-a-count for counting new messages and notifications @done (15-08-10 19:01)
 
- Testing
+Testing:
  ☐ install velocity:html-reporter
  ☐ install sanjo:jasmine
 
@@ -37,12 +43,7 @@ To add :
 
 
 
-Performance, new model:
-  comments are embedded in posts
-  likes are embedded in posts and comments
-  no collection for comments and likes
-  anoUserIds saved in posts
-  queries will only be posts with skip and limit, are posts by id
+Suggestions for model changes:
   only subscribe to users, anoUsers, anoUserProfiles and posts
   
   if posts are published not for stream, don't send comments and likes field

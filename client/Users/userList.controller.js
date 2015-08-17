@@ -2,12 +2,14 @@
 	'use strict';
 
 	angular.module('app').controller('UserlistCtrl', UserlistCtrl);
-	UserlistCtrl.$inject = [];
+	UserlistCtrl.$inject = ['$meteor'];
 
-	function UserlistCtrl(){
+	function UserlistCtrl($meteor) {
 		var vm = this;
 
-		vm.users = Meteor.users.find().fetch();
+		$meteor.subscribe('allUserData').then(function() {
+			vm.users = Meteor.users.find().fetch();
+		});
 	}
 
 })();

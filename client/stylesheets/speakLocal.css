@@ -1,6 +1,7 @@
 
 .content {
 	max-width: 800px;
+    padding-top: 30px;
 }
 
 #login-buttons a {
@@ -44,14 +45,18 @@ html, body, .meta-content {min-height: 100%;}
 /*.space {line-height: 1px;}*/
 
 .padding-0 {padding-left: 0; padding-right: 0;}
-.userShortcut img {width: 35px; height: 35px; border:1px solid #ddd; border-radius:5px;}
-.post-author img, .msg-author img {width: 40px; height: 40px;}
-.new-post .userShortcut {font-size: 20px;}
-.new-post .userShortcut img {width: 40px; height: 40px;}
+.userShortcut img {width: 50px; height: 50px; border:1px solid #ddd; border-radius:5px;}
+/*h1 .userShortcut img {width: 80px; height: 80px;}*/
+.post-author img, .msg-author img {width: 50px; height: 50px;}
+.new-post .userShortcut {font-size: 24px;}
+.new-post .userShortcut img {width: 50px; height: 50px;}
+.user-profile .userShortcut img {width: 80px; height: 80px; border-radius: 10px;}
 
-.post-author-icon {font-size: 1.4em;}
-.comment-author img {width: 35px; height: 35px;}
-.comment-author-icon {font-size: 1.2em;}
+.user-list .userShortcut img {width: 30px; height: 30px;}
+
+.post-author-icon {font-size: 1.5em;}
+.comment-author img, .new-comment img, .conversations img {width: 40px; height: 40px;}
+.comment-author-icon, .new-comment {font-size: 1.3em;}
 .msg-author a {text-decoration: none; color: #555555;}
 
 /*.new-post {margin: 1px 3px 1px 3px;}*/
@@ -59,7 +64,7 @@ html, body, .meta-content {min-height: 100%;}
 .post-title a {color: black;}
 .noti-active {background-color: blue;}
 .comment {margin: 3px 0 3px 0; border-top:1px solid #eee; padding: 9px 0 3px 0;}
-.post-input {border-top: 1px solid #eee; padding: 9px 0 0 0; margin: 0 2px 0 2px;}
+.new-comment {border-top: 1px solid #eee; padding: 9px 0 0 0; margin: 0 2px 0 2px;}
 .post-panel {margin: 0 0 5px 0;}
 .post-panel a, .comment-panel a {color: #555555;}
 .post-panel a:hover {color:#2fa4e7;}
@@ -108,13 +113,31 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 }
 
 
+.drop-box {
+  background: #F8F8F8;
+  border: 5px dashed #DDD;
+  width: 230px;
+  height: 105px;
+  text-align: center;
+  padding-top: 25px;
+  margin-left: 10px;
+}
+
+.drop-box.dragover {
+  border: 5px dashed blue;
+}
+
+.drop-box.dragover-err {
+  border: 5px dashed red;
+}
+
 
 
 /* ----------- iPhone 5 and 5S ----------- */
 
 /* Portrait and Landscape */
 @media only screen and (min-device-width: 320px) and (max-device-width: 568px)and (-webkit-min-device-pixel-ratio: 2) {
-    .navbar {1.3em;}
+    .navbar {font-size: 1.3em;}
 }
 
 
@@ -122,7 +145,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) { 
-    .navbar {1.3em;}
+    .navbar {font-size: 1.3em;}
 
 }
 
@@ -131,7 +154,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) { 
-    .navbar {1.3em;}
+    .navbar {font-size: 1.3em;}
 
 }
 
@@ -140,7 +163,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 2) {
- .navbar {1.3em;}
+ .navbar {font-size: 1.3em;}
 }
 
 
@@ -148,7 +171,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
- .navbar {1.3em;}
+ .navbar {font-size: 1.3em;}
 }
 
 
@@ -156,7 +179,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
- .navbar {1.3em;}
+ .navbar {font-size: 1.3em;}
 }
 
 
@@ -164,10 +187,10 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
-.navbar {1.3em;}
+.navbar {font-size: 1.3em;}
 }
 
 /* Xperia */
 @media screen and (-webkit-device-pixel-ratio:3) {
- .navbar {1.3em;}   
+ .navbar {font-size: 1.3em;}   
 }

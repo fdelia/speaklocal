@@ -1,5 +1,8 @@
 <div class="post panel panel-default container-fluid">
-	<div class="post-time pull-right text-muted"><small>{{ formatTime(post.createdAt) }} ago</small></div>
+	<div class="post-time pull-right text-muted">
+		<small>{{ formatTime(post.createdAt) }} ago</small>
+		
+	</div>
 	
 	<div class="post-author">
 		<user-shortcut user="post.user" show-you="isThisUser(post.user.isUser)"></user-shortcut>
@@ -45,16 +48,17 @@
 		</div>
 	</div>
 
-	<div class="post-input row" ng-show="currentUser">
+	<div class="new-comment row" ng-show="currentUser">
 		<div class="col-md-1 col-sm-1 col-xs-1 padding-0">
 			<user-shortcut user="currentUser" img-only="1" ano-mode="anoMode"></user-shortcut>
 		</div>
 		<form class="new-comment" ng-submit="addComment(post._id, postText); postText='';">
-		<div class="col-md-11 col-sm-11 col-xs-10">
-			<textarea name="postText" ng-model="postText" rows="1" class="form-control field" placeholder="Write a comment..."></textarea>
-		<!-- </div>
-		<div class="col-md-1 col-sm-1 col-xs-1"> -->
-			<button class="btn btn-default" type="submit">Comment</button>		
+		<div class="col-md-11 col-sm-11 col-xs-10 input-group">
+			<textarea name="postText" msd-elastic ng-model="postText" rows="1" class="form-control field" placeholder="Write a comment..."></textarea>
+		
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="submit">Send</button>
+			</span>
 		</div>
 		</form>
 	</div>

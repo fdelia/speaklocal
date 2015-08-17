@@ -24,12 +24,10 @@ I usually write unit tests: I tried three different packages/ways to make tests 
 <p>
 I was recommended to take a serious look to both frameworks. This little project seemed predestined for this matter. While developing the app, I run across some issues:
 <ul>
+	<li>The longer I work with it... I start to disklike publish/subscribe and want to go back to the classical API. Handling relations is pain and I simply don't want my client to handle with 10'000 rows where not even 100 are needed. The solution to this (according to stack overflow) is to make more meteor methods on the server, which is a bit a messy solution in my opinion.</li>
 	<li>I find it difficult to follow standards/ways how some problems are solved: Either there are none or they're hard to find.</li>
-	<li>MeteorJs doesn't support http answers (like 201) for meteor methods? A server should response with proper messages and status codes.</li>
 	<li>Lazy-loading hasn't settled in angularJs (however, there are plugins which add this).</li>
-	<li>I didn't find an error handling for subscribtion/publishing in angular-meteor. I'm sure there is one...?</li>
 	<li>Having a lot of callbacks because of asynchronity; what I need is to go on when all subscribtions are ready, not to wait for subscribtion 1, then subscribe to 2, then... etc. It's surely possible somehow.</li>
-	<li>I'm still publishing too much (aka sending too much data to the client). I'm not happy with my model yet... And the publish/subscribe model is pain when handling relations.</li>
 	<li>Comming from abstract languages like Python and Scala, I was surprised how much effort some basic things need: Like trying to group elements in a mongodb collection (aggregate with observer support isn't yet supported by meteor).</li>
 </ul>
 Most of these problems may go away with more experience.

@@ -6,7 +6,7 @@
 
 <div ng-show="convs.length === 0" class="post panel panel-default">No messages.</div>
 
-<ul class="list-group">
+<ul class="list-group conversations">
 	<li  class="list-group-item" ng-class="{'list-group-item-info': conv.unseenMsgs	}" ng-repeat="conv in convs | limitTo: quantity">
 
 			You as <user-shortcut user="conv.fromUserObj" showYou="false"></user-shortcut>

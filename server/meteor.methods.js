@@ -59,7 +59,7 @@ Meteor.methods({
     // post2.comments = [];
     // post2._id = Posts2.insert(post2); // test
     // var user2 = getThisUserOnPost(post2._id); // test
-    
+
     post._id = Posts.insert(post);
     var user = getThisUserOnPost(post._id);
 
@@ -425,18 +425,18 @@ Meteor.methods({
   },
 
   updateUserImage: function(userImage) {
-    if (!Meteor.user()) return false;
-    if (!userImage) return false;
+    if (!Meteor.user()) throw new Meteor.Error('not-allowed', 'not logged in');
+    if (!userImage) throw new Meteor.Error('no-image', 'no user image received');
 
     var imageFile = new FS.File(userImage);
     imageFile.attachData(userImage);
     imageFile.createdAt = Date.now();
     imageFile.userId = Meteor.user()._id;
 
-    console.log(imageFile);
     // the filter doesnt work, so I'll do it here
-    if (imageFile.original.type.indexOf('image/') === -1) return false;
-    if (imageFile.original.size > 500 * 1000) return false;
+    if (imageFile.original.type.indexOf('image/') === -1) throw new Meteor.Error('wrong-filetype', 'data received was not an image');
+    if (imageFile.original.size > 500 * 1000) throw new Meteor.Error('file-too.big', 'the uploaded file is too big');
+
 
     var oldImg = UserImages.findOne({
       userId: Meteor.user()._id
@@ -449,7 +449,8 @@ Meteor.methods({
       });
     }
 
-    console.log('insert');
+    console.log('new user image saved');
+
     var obj = UserImages.insert(imageFile, function(err, res) {
       var a = Meteor.users.update({
         _id: Meteor.userId()
@@ -461,6 +462,35 @@ Meteor.methods({
     });
 
     return obj;
+  },
+
+  countLikesFromUser: function(userId){
+    // DRY, this is done several times
+    var user = Meteor.users.findOne({
+      _id: userId
+    });
+    if (!user)
+      this.error(new Meteor.Error('illegal-arguments', 'User not found for userId'));
+
+    // get all ids of posts and comments from this user
+    var postIds = Posts.find({
+      userId: user._id
+    }).fetch().map(function(el) {
+      return el._id;
+    });
+    var commIds = Comments.find({
+      userId: user._id
+    }).fetch().map(function(el) {
+      return el._id;
+    });
+    var allIds = commIds.concat(postIds);
+
+    var numberOfLikes = Likes.find({on: {$in: allIds}}).fetch().length;
+
+    console.log(allIds);
+    console.log(numberOfLikes);
+
+    return numberOfLikes;
   }
 });
 

@@ -42,4 +42,5 @@ Accounts.ui.config({
 });
 
 
-angular.module('app', ['angular-meteor', 'ui.router', 'ngSanitize', 'ui.bootstrap']);
+angular.module('app', ['angular-meteor', 'ui.router', 'ngSanitize', 'ui.bootstrap',
+  'monospaced.elastic', 'ngFileUpload', 'ngImgCrop']);
