@@ -17,6 +17,7 @@ Issues:
  ☐ user.controller.js: upload user image, cropping not working (img-crop directive)
  ☐ Angular: make app more moduler with app.controllers, app.services etc
  ☐ CSS badges looks
+ ☐ userShortCut directive: the returned image and name should be in separate links, because of hover effect
 
 
 

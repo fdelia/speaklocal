@@ -11,8 +11,10 @@
 	<p class="post-text" ng-bind-html="post.text | linky"></p>
 
 	<div class="post-panel"><small>
-		<span class="glyphicon glyphicon-comment"></span> 
-		<span class="post-comment-counter">{{ post.comments.length }}</span>
+		<!-- <a href="" ng-click="" title="subscribe"> -->
+			<span class="glyphicon glyphicon-comment"></span>
+			<span class="post-comment-counter">{{ post.comments.length }}</span>
+		<!-- </a> -->
 		<span class="glyphicon glyphicon-heart" ng-class="{liked: post.userHasLiked}" data-toggle="tooltip" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"></span> 
 		<span class="post-like-counter" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}">{{ post.likes.length }}</span>
 		<a class="post-like" ng-click="likeUnlikePost(post._id)" href="" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"> {{ post.userHasLiked ? 'Unlike' : 'Like' }}</a>
@@ -52,7 +54,7 @@
 		<div class="col-md-1 col-sm-1 col-xs-1 padding-0">
 			<user-shortcut user="currentUser" img-only="1" ano-mode="anoMode"></user-shortcut>
 		</div>
-		<form class="new-comment" ng-submit="addComment(post._id, postText); postText='';">
+		<form class="" ng-submit="addComment(post._id, postText); postText='';">
 		<div class="col-md-11 col-sm-11 col-xs-10 input-group">
 			<textarea name="postText" msd-elastic ng-model="postText" rows="1" class="form-control field" placeholder="Write a comment..."></textarea>
 		

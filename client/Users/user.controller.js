@@ -12,7 +12,6 @@
 		$scope.closeAlert = closeAlert;
 
 		$scope.updateUser = updateUser;
-		// $scope.uploadImage = uploadImage;
 
 		$scope.user = null;
 		$scope.activities = [];
@@ -51,8 +50,8 @@
 					$meteor.subscribe('likes-byUser', opts).then(function() {
 						var activityLog = {};
 
-						// TODO this is unreadable
 
+						// get all "activity elements"
 						var allElements = Posts.find({
 							userId: $scope.user._id
 						}).fetch();
@@ -68,7 +67,7 @@
 							activityLog[el.createdAt] = el;
 						}
 
-						// now sort by date
+						// sort by date
 						function compareNumbers(a, b) {
 							return b - a;
 						}
@@ -78,6 +77,8 @@
 						for (var i = 0; i < 20; i += 1) {
 							var key = sortedKeys[i];
 							if (!key) break;
+
+							// add aditional data
 
 							// only for likes (only likes have .on)
 							if (activityLog[key].on) {
