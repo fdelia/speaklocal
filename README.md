@@ -35,4 +35,4 @@ Idea from spocal.net. Some are own ideas. Programming et all from myself (Fabio 
 
 ## License
 
-GNU General Public License v2.0
+Apache License Version 2.0
