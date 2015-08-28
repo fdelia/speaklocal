@@ -2,7 +2,9 @@
 	'use strict';
 
 	// this should be more than one service
-	// (one for data handling, one for anoMode, one for helper functions)
+	// (one for data handling, one for users and anoMode, one for helper functions)
+
+
 	angular.module('app').factory('speakLocal', speakLocal);
 	speakLocal.$inject = ['$meteor', '$q'];
 

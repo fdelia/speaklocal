@@ -47,8 +47,8 @@
 							$meteor.subscribe('anoUsers').then(function() {
 								$meteor.subscribe('userAnoProfiles').then(function() {
 
-									console.log('subbed to posts: ' + Posts.find().fetch().length);
-									console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
+									// console.log('subbed to posts: ' + Posts.find().fetch().length);
+									// console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
 
 
 									$scope.notifications = Notifications2.find({}, {
@@ -59,8 +59,7 @@
 									}).fetch();
 
 
-									for (var i in $scope.notifications) {
-										var noti = $scope.notifications[i];
+									$scope.notifications.map(function(noti) {
 
 										noti.fromUsers = _.uniq(noti.userIds.map(function(userId) {
 											var user = speakLocal.getUser(userId);
@@ -82,10 +81,15 @@
 											});
 											if (!noti.comment) {
 												console.error('comment not received. not published?');
-												continue;
+												return true; // continue
 											}
 										}
-									}
+
+										if (noti._id == '5gn5RgqY9XSyZytcn')
+											console.log($scope.notifications);
+										
+									});
+
 
 								});
 							});

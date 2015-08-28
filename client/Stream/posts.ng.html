@@ -2,7 +2,7 @@
 	{{alert.msg}}
 </alert>
 
-<div ng-show="showWelcomeMsg()" ng-include="'client/Stream/welcome.ng.html'"></div>
+<div ng-hide="$scope.currentUser" ng-include="'client/Stream/welcome.ng.html'"></div>
     
 <div class="new-post row" ng-hide="stateParamsId !== undefined || !currentUser">
 

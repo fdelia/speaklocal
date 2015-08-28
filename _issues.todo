@@ -1,5 +1,5 @@
 Issues:
- ☐ navbar.controller.js: routeIsUserlist(): currentUser sometimes set too late and then undefined
+ ☐ navbar.controller.js: routeIsUserlist(): currentUser sometimes set too late and then undefined (there's a hack for now)
  ☐ user.controller.js: bio is not updated -> use profile.bio, also in server.methods.js
  ☐ meteor.collections.js: finish limiting of published rows for remaining views, see all // TODO s
  ☐ remove all logs on server when finished
@@ -9,16 +9,17 @@ Issues:
  ✔ user activity: unfinished, not showing user comments and likes @done (15-08-17 18:51)
  ☐ user activity: active since (user.createdAt)
  ☐ user activity: limit by date
- ☐ error: tried to load angular more than once??? it's even there after removing all of my code (and some packages), issue with packages/angularjs_angular and packages/angular_angular, both get loaded, bower loading one of them?
+ ☐ error: tried to load angular more than once??? it's even there after removing all of my code (and some packages), issue with packages/angularjs_angular and packages/angular_angular, both get loaded
  ☐ createUser: add createdAt and updatedAdd
  ☐ throwing error from server to client doesn't work, not sure if done right
  ☐ CSS: remove userShortCut img styles, add bootstrap col-xx-x in templates instead
  ☐ FSCollection: add filter, doesn't work
- ☐ user.controller.js: upload user image, cropping not working (img-crop directive)
+ ☐ user.controller.js: upload user image, cropping doesnt work (img-crop directive)
  ☐ Angular: make app more moduler with app.controllers, app.services etc
- ☐ CSS badges looks
+ ✔ CSS badges looks @done (15-08-28 18:57)
  ☐ userShortCut directive: the returned image and name should be in separate links, because of hover effect
-
+ ✔ notifications: after a noti has been "seen", recommenting / liking doesnt make the noti "unseen" @done (15-08-28 18:13)
+ ☐ when in a conversation: mark the new messages as read
 
 
 

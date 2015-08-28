@@ -25,7 +25,7 @@
 		});
 
 
-
+		// TODO move to data service
 		$meteor.subscribe('conversations').then(function() {
 			$meteor.subscribe('messages').then(function() {
 

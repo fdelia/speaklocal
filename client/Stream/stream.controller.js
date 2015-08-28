@@ -33,8 +33,7 @@
     $scope.loadPosts = loadPosts;
     $scope.hideLoadMore = hideLoadMore;
 
-    $scope.showWelcomeMsg = showWelcomeMsg;
-    // $scope.seenWelcomeMsg = seenWelcomeMsg;
+    // $scope.showWelcomeMsg = showWelcomeMsg;
     $scope.openCreateAccountDialog = openCreateAccountDialog;
 
     loadPosts();
@@ -121,29 +120,15 @@
       });
     };
 
-    var loadedWelcomeMsg = false;
 
-    function showWelcomeMsg() {
-      // if ($scope.currentUser || Session.get('seenWelcomeMsg')) return false;
-      // if (!loadedWelcomeMsg)
-      // $.getScript('/packages/js/jquery.tooltipster.min.js').done(function(script, textStatus){
-      //   // if (c.status !== 200) return false;
-
-      //   $('.post:first').prop('title', 'this is a post');
-      //   $('.post:first').tooltipster();
-      //   loadedWelcomeMsg = true;
-      //   console.log('done');
-      // }).fail(function(jqxhr, settings, exc){
-      //   console.log(exc);
-      //   console.log('failed to laod');
-      // });
-      // return true;
-      return !$scope.currentUser && !Session.get('seenWelcomeMsg');
-    }
+    // function showWelcomeMsg() {
+    //   return !$scope.currentUser; && !Session.get('seenWelcomeMsg');
+    // }
 
     // function seenWelcomeMsg() {
     //   Session.setPersistent('seenWelcomeMsg', true);
     // }
+
 
     function loadMorePosts() {
       opts.skip = $scope.posts.length;
@@ -176,7 +161,7 @@
     };
 
 
-
+    // TODO move to a data service
     function loadPosts() {
       // this callback thing is kind of messy
 
@@ -279,6 +264,48 @@
                     }
                   });
 
+
+
+                  function setCommentLikes(comment) {
+                    var likes = Likes.find({
+                      on: comment._id,
+                      type: 'comment'
+                    }).fetch();
+
+                    comment.userHasLiked = 0;
+                    comment.likes = likes.map(function(el) {
+                      if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
+
+                      var user = speakLocal.getUser(el.userId);
+                      if (!user) {
+                        console.error('user not defined for comment like and userId ' + el.userId);
+                        return true;
+                      }
+                      if (user.isUser !== undefined || ($scope.currentUser && user.username === $scope.currentUser.username)) comment.userHasLiked = 1;
+                      return user.username;
+                    });
+                  }
+
+                  function setPostLikes(post) {
+                    var likes = Likes.find({
+                      on: post._id,
+                      type: 'post'
+                    }).fetch();
+
+                    post.userHasLiked = 0;
+                    post.likes = likes.map(function(el) {
+                      if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
+                      var user = speakLocal.getUser(el.userId);
+
+                      if (!user) {
+                        console.error('user not defined for post like and userId ' + el.userId);
+                        return;
+                      }
+                      if (user.isUser !== undefined || ($scope.currentUser && user.username === $scope.currentUser.username)) post.userHasLiked = 1;
+                      return user.username;
+                    });
+                  }
+
                   /**
                    *  It's actually an "updatePosts" since it updates everything
                    */
@@ -288,72 +315,27 @@
                       _id: likeObj.on
                     });
 
-                    function setCommentLikes(comment) {
-                      var likes = Likes.find({
-                        on: comment._id,
-                        type: 'comment'
-                      }).fetch();
+                    $scope.posts.map(function(post) {
 
-                      comment.userHasLiked = 0;
-                      comment.likes = likes.map(function(el) {
-                        if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
-
-                        var user = speakLocal.getUser(el.userId);
-                        if (!user) {
-                          console.error('user not defined for comment like and userId ' + el.userId);
-                          return true;
-                        }
-                        if (user.isUser !== undefined || ($scope.currentUser && user.username === $scope.currentUser.username)) comment.userHasLiked = 1;
-                        return user.username;
-                      });
-                    }
-
-                    function setPostLikes(post) {
-                      var likes = Likes.find({
-                        on: post._id,
-                        type: 'post'
-                      }).fetch();
-
-                      post.userHasLiked = 0;
-                      post.likes = likes.map(function(el) {
-                        if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
-                        var user = speakLocal.getUser(el.userId);
-
-                        if (!user) {
-                          console.error('user not defined for post like and userId ' + el.userId);
-                          return;
-                        }
-                        if (user.isUser !== undefined || ($scope.currentUser && user.username === $scope.currentUser.username)) post.userHasLiked = 1;
-                        return user.username;
-                      });
-                    }
-
-
-                    for (var i = 0; i < $scope.posts.length; i += 1) {
                       // for performance
-                      if (likeObj && likeObj.type === 'post' && $scope.posts[i]._id !== likeObj.on) continue;
+                      if (likeObj && likeObj.type === 'post' && post._id !== likeObj.on) return true; // continue
 
-                      var post = $scope.posts[i];
                       post.user = speakLocal.getUser(post.userId);
-
                       post.comments = Comments.find({
-                        postId: $scope.posts[i]._id
+                        postId: post._id
                       }).fetch();
 
-
-                      for (var j = 0; j < post.comments.length; j += 1) {
-                        var comment = post.comments[j];
-                        if (likeObj && likeObj.type === 'comment' && $scope.posts[i]._id !== comment.postId) continue;
+                      post.comments.map(function(comment){
+                        if (likeObj && likeObj.type === 'comment' && post._id !== comment.postId) return true; // continue
                         comment.user = speakLocal.getUser(comment.userId);
 
                         comment.likes = [];
                         setCommentLikes(comment);
-                      }
+                      });
 
                       setPostLikes(post);
 
-
-                    }
+                    });
                   }
 
                   initialization = false;

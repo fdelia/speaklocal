@@ -14,18 +14,9 @@
     return userIds;
   }
 
-  /*
-   * don't allow any inserts/updates/removes from client, deny all
-   */
-  // UserImages.allow({
-  //   download: function() {
-  //     return true;
-  //   }
-  // });
-
 
   /*
-   *  From here the solution is very unsatisfying:
+   *  From here on the solution is very unsatisfying:
    *  I tried to put the whole logic which computes what data is needed on the server.
    *  Sure, it's the high-performance method, but it's not readable and error-prone.
    *  I think the better way would be to use publish/subscribe as simple API and put the
@@ -36,6 +27,7 @@
   var SLCollection;
 
   SLCollection = (function() {
+    // "constructor"
     function SLCollection() {
       this.postsCursor = null;
       this.likesCursor = null;
@@ -57,7 +49,7 @@
       }, opts);
 
       if (this.view === 'stream' && this.opts && userId && this.opts.skip === opts.skip && this.opts.limit === opts.limit && this.userId === userId) {
-        console.log('already set: forstream');
+        // console.log('already set: forstream');
         return;
       }
 
@@ -119,7 +111,7 @@
 
     SLCollection.prototype.postsById = function(postId, userId) {
       if (this.view === 'byId' && this.postId && this.postId === postId && this.userId === userId) {
-        console.log('already set: byid');
+        // console.log('already set: byid');
         return;
       }
 
@@ -173,7 +165,7 @@
     }
     SLCollection.prototype.byUserActivity = function(opts, userId) {
       if (this.view === 'userActivity' && this.opts && userId && this.opts.userId === opts.userId && this.opts.limit === opts.limit && this.opts.skip === opts.skip && this.userId === userId) {
-        console.log('already set: byUserActivity');
+        // console.log('already set: byUserActivity');
         return;
       }
 
@@ -201,7 +193,7 @@
 
       if (this.view === 'conversations' && this.userId === userId &&
         this.opts.skip === opts.skip && this.opts.limit === opts.limit) {
-        console.log('already set: forConversations');
+        // console.log('already set: forConversations');
         return;
       }
 
@@ -233,7 +225,7 @@
       // and also userAnoProfiles (with isUser set)
     }
     SLCollection.prototype.publishEverything = function(userId) {
-      console.log('publish everything');
+      // console.log('publish everything');
       if (this.userId === userId && this.view == 'all') return;
 
       this.userId = userId;
@@ -285,6 +277,7 @@
   var SLC = new SLCollection();
 
   // no user identification needed for these
+  //    it simulates a classical api...
 
   // i'm really unsure if this is a good solution, it's pretty messy
   Meteor.publish('posts', function(opts) {
@@ -360,7 +353,6 @@
     var userIds = getAllUserIdsForUser(this.userId);
 
     return Conversations.find({
-      // $and: [{
       $or: [{
         userId: {
           $in: userIds
@@ -434,7 +426,7 @@
       _id: opts.userId
     });
     if (!user) {
-      // throw error
+      this.error(new Meteor.Error('illegal-arguments', 'user not found'));
     }
     if (!parseInt(opts.limit)) opts.limit = 20;
 
@@ -454,7 +446,7 @@
       _id: opts.userId
     });
     if (!user) {
-      // throw error
+      this.error(new Meteor.Error('illegal-arguments', 'user not found'));
     }
     if (!parseInt(opts.limit)) opts.limit = 20;
 
@@ -487,18 +479,6 @@
     });
   });
 
-
-
-  // Meteor.publish('likes-onUser', function(opts) {
-  //   if (!opts || opts.userId)
-  //     this.error(new Meteor.Error('missing-arguments', 'Publishing likes by user, but no userId given'));
-
-
-
-  //   return Likes.find({
-
-  //   });
-  // });
 
 
   Meteor.publish('notifications2', function() {

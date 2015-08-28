@@ -3,7 +3,7 @@
  */
 
 
-var KITTEN_NAMES = 'Caliente,Salsa,Chili,Paprika,Tamale,Sunset,Frosty,Icy,Pearl,Snowball,Snowflake,Midnight,Ebony,Shadow,Indigo,Grimalkin,Kitty'.split(',');
+const KITTEN_NAMES = 'Caliente,Salsa,Chili,Paprika,Tamale,Sunset,Frosty,Icy,Pearl,Snowball,Snowflake,Midnight,Ebony,Shadow,Indigo,Grimalkin,Kitty'.split(',');
 
 
 Meteor.methods({
@@ -464,7 +464,7 @@ Meteor.methods({
     return obj;
   },
 
-  countLikesFromUser: function(userId){
+  countLikesFromUser: function(userId) {
     // DRY, this is done several times
     var user = Meteor.users.findOne({
       _id: userId
@@ -485,13 +485,19 @@ Meteor.methods({
     });
     var allIds = commIds.concat(postIds);
 
-    var numberOfLikes = Likes.find({on: {$in: allIds}}).fetch().length;
+    var numberOfLikes = Likes.find({
+      on: {
+        $in: allIds
+      }
+    }).fetch().length;
 
     console.log(allIds);
     console.log(numberOfLikes);
 
     return numberOfLikes;
   }
+
+
 });
 
 
@@ -661,6 +667,7 @@ function notifyUsersFromPost(postId, type) {
 
 function notifyUser(toUserId, elId, type) {
   console.log('notifyUser');
+
   // get postId
   var postId;
   if (type === 'likeComment') {
@@ -674,7 +681,7 @@ function notifyUser(toUserId, elId, type) {
   var fromUser = getThisUserOnPost(postId); // from liking user on this post
   var author = getRealUser(toUserId);
   // don't notify self
-  if (Meteor.user()._id === getRealUser(toUserId)._id) return false;
+  if (Meteor.user()._id === author._id) return false;
 
   // if not already existing
   var existingNoti = Notifications2.findOne({
@@ -684,27 +691,22 @@ function notifyUser(toUserId, elId, type) {
     type: type
   });
 
-  // var existingNoti = Notifications.findOne({
-  //   userId: fromUser._id,
-  //   to: author._id,
-  //   on: elId,
-  //   type: type
-  // });
 
   if (existingNoti !== undefined) {
     if (existingNoti.seen === 0) return false;
-    // return Notifications.update({
-    //   _id: existingNoti._id
+    var newUserIds = existingNoti.userIds.slice(0);
+    newUserIds.push(fromUser._id);
+    
     return Notifications2.update({
       _id: existingNoti._id
     }, {
       $set: {
         seen: 0,
-        // createdAt: Date.now()
         updatedAt: Date.now(),
-        $push: {
-          userIds: fromuser._id
-        }
+        // $push: {
+        //   userIds: fromUser._id
+        // }
+        userIds: newUserIds
       }
     });
   }

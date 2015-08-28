@@ -67,10 +67,23 @@
     // NOTIFICATIONS
 
     function updateNotiCounter() {
+      // same as on server in publish 'notifications2-new'
       var notifications = Notifications2.find({
+        // to: this.userId,
         seen: 0
       }).fetch();
       $scope.notiCounter = notifications.length;
+
+      // it makes no sense to do it with a method call: 
+      // since the subscribtion to the collection has to be done anyway for .observeChanges()
+
+      // Meteor.call('countNewNotifications', function(err, res) {
+      //   if (err) {
+      //     console.error(err);
+      //   } else {
+      //     $scope.notiCounter = res;
+      //   }
+      // });
     }
 
     $meteor.subscribe('notifications2-new').then(function() {
@@ -95,36 +108,52 @@
     });
 
 
-    // MESSAGES
+    // CONVERSATIONS
 
-    function updateMsgCounter(id, msgObj) {
+    function updateNewConvCounter(id, msgObj) {
       if (initialization) return;
       $scope.msgCounter = 0;
 
       var userIds = speakLocal.getAllUserIdsForThisUser($scope.currentUser._id);
-      var convs = Conversations.find({}).fetch();
+      // var convs = Conversations.find({}).fetch();
 
-      for (var i in convs) {
-        var conv = convs[i];
+      // same as on server in publish 'conversations-new'
+      var convs = Conversations.find({
+        $or: [{
+          userId: {
+            $in: userIds
+          },
+          unseenMsgsFrom: {
+            $gt: 0
+          }
+        }, {
+          toUser: {
+            $in: userIds
+          },
+          unseenMsgsTo: {
+            $gt: 0
+          }
+        }]
+      }).fetch();
 
-        if (userIds.indexOf(conv.userId) !== -1) {
-          conv.fromUserObj = speakLocal.getUser(conv.userId);
-          conv.toUserObj = speakLocal.getUser(conv.toUser);
-          $scope.msgCounter += conv.unseenMsgsFrom ? conv.unseenMsgsFrom : 0;
-        }
-        if (userIds.indexOf(conv.toUser) !== -1) {
-          conv.fromUserObj = speakLocal.getUser(conv.toUser);
-          conv.toUserObj = speakLocal.getUser(conv.userId);
-          $scope.msgCounter += conv.unseenMsgsTo ? conv.unseenMsgsTo : 0;
-        }
-      }
+
+      convs.map(function(conv) {
+
+        if (userIds.indexOf(conv.userId) !== -1)
+          $scope.msgCounter += conv.unseenMsgsFrom ? 1 : 0;
+
+        if (userIds.indexOf(conv.toUser) !== -1)
+          $scope.msgCounter += conv.unseenMsgsTo ? 1 : 0;
+
+      });
+
     }
 
     $meteor.subscribe('conversations-new').then(function() {
       $meteor.subscribe('anoUsers').then(function() {
         $meteor.subscribe('userAnoProfiles').then(function() {
           initialization = false;
-          updateMsgCounter();
+          updateNewConvCounter();
         });
       });
     });
@@ -132,11 +161,11 @@
 
     Conversations.find().observe({
       added: function(newDoc, oldDoc) {
-        updateMsgCounter();
+        updateNewConvCounter();
         $scope.$apply();
       },
       changed: function(newDoc, oldDoc) {
-        updateMsgCounter();
+        updateNewConvCounter();
         $scope.$apply();
       }
     })

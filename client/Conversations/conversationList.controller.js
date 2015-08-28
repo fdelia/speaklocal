@@ -10,6 +10,7 @@
 
 		var opts = {};
 
+		// TODO move to data service
 		$meteor.subscribe('conversations').then(function() {
 
 			$meteor.subscribe('allUserData').then(function() {
@@ -31,8 +32,7 @@
 
 						var userIds = speakLocal.getAllUserIdsForThisUser($scope.currentUser._id);
 
-						for (var i in $scope.convs) {
-							var conv = $scope.convs[i];
+						$scope.convs.map(function(conv){
 
 							if (userIds.indexOf(conv.userId) !== -1) {
 								conv.fromUserObj = speakLocal.getUser(conv.userId);
@@ -46,13 +46,15 @@
 							}
 							if (!conv.fromUserObj) {
 								console.error('an user profile was not found, id: ' + conv.userId);
-								continue;
+								return true; // continue
 							}
 							if (!conv.toUserObj) {
 								console.error('an user profile was not found, id: ' + conv.toUser);
-								continue;
+								return true; // continue
 							}
-						}
+						
+						});
+
 					});
 				});
 			});
