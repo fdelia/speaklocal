@@ -33,7 +33,7 @@
     $scope.loadPosts = loadPosts;
     $scope.hideLoadMore = hideLoadMore;
 
-    // $scope.showWelcomeMsg = showWelcomeMsg;
+    $scope.showWelcomeMsg = showWelcomeMsg;
     $scope.openCreateAccountDialog = openCreateAccountDialog;
 
     loadPosts();
@@ -121,9 +121,9 @@
     };
 
 
-    // function showWelcomeMsg() {
-    //   return !$scope.currentUser; && !Session.get('seenWelcomeMsg');
-    // }
+    function showWelcomeMsg() {
+      return !$scope.currentUser; //&& !Session.get('seenWelcomeMsg');
+    }
 
     // function seenWelcomeMsg() {
     //   Session.setPersistent('seenWelcomeMsg', true);
