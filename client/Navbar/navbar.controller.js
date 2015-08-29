@@ -150,12 +150,12 @@
     }
 
     $meteor.subscribe('conversations-new').then(function() {
-      $meteor.subscribe('anoUsers').then(function() {
-        $meteor.subscribe('userAnoProfiles').then(function() {
+      // $meteor.subscribe('anoUsers').then(function() {
+      //   $meteor.subscribe('userAnoProfiles').then(function() {
           initialization = false;
           updateNewConvCounter();
-        });
-      });
+      //   });
+      // });
     });
 
 

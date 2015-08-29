@@ -21,7 +21,7 @@
 
 		var initialization = true;
 		Notifications2.find().observeChanges({
-			added: function(id, el){
+			added: function(id, el) {
 				if (!initialization)
 					loadNotifs();
 			}
@@ -49,64 +49,51 @@
 		}
 
 		function loadNotifs() {
-			$meteor.subscribe('notifications2').then(function() {
-				$meteor.subscribe('posts').then(function() {
-					$meteor.subscribe('comments').then(function() {
 
-						$meteor.subscribe('allUserData').then(function() {
-							$meteor.subscribe('anoUsers').then(function() {
-								$meteor.subscribe('userAnoProfiles').then(function() {
-
-									// console.log('subbed to posts: ' + Posts.find().fetch().length);
-									// console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
+			// console.log('subbed to posts: ' + Posts.find().fetch().length);
+			// console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
 
 
-									$scope.notifications = Notifications2.find({}, {
-										sort: {
-											// 'createdAt': -1
-											'updatedAt': -1
-										}
-									}).fetch();
+			$scope.notifications = Notifications2.find({}, {
+				sort: {
+					// 'createdAt': -1
+					'updatedAt': -1
+				}
+			}).fetch();
 
 
-									$scope.notifications.map(function(noti) {
+			$scope.notifications.map(function(noti) {
 
-										noti.fromUsers = _.uniq(noti.userIds.map(function(userId) {
-											var user = speakLocal.getUser(userId);
-											if (!user) { // precaution
-												// delete notiGrouped[ind];
-												console.error('Notification: user not found');
-												return;
-											}
-											return user.username;
-										}));
+				noti.fromUsers = _.uniq(noti.userIds.map(function(userId) {
+					var user = speakLocal.getUser(userId);
+					if (!user) { // precaution
+						// delete notiGrouped[ind];
+						console.error('Notification: user not found');
+						return;
+					}
+					return user.username;
+				}));
 
-										noti.post = Posts.findOne({
-											_id: noti.onPost
-										});
-
-										if (noti.type === 'likeComment') {
-											noti.comment = Comments.findOne({
-												_id: noti.on
-											});
-											if (!noti.comment) {
-												console.error('comment not received. not published?');
-												return true; // continue
-											}
-										}
-
-										if (noti._id == '5gn5RgqY9XSyZytcn')
-											console.log($scope.notifications);
-										
-									});
-
-
-								});
-							});
-						});
-					});
+				noti.post = Posts.findOne({
+					_id: noti.onPost
 				});
+
+				if (noti.type === 'likeComment') {
+					noti.comment = Comments.findOne({
+						_id: noti.on
+					});
+					if (!noti.comment) {
+						console.error('comment not received. not published?');
+						return true; // continue
+					}
+				}
+
+				if (noti._id == '5gn5RgqY9XSyZytcn')
+					console.log($scope.notifications);
+
 			});
+
+
 		}
 		$scope.loadNotifs();
 

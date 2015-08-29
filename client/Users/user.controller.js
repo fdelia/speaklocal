@@ -45,67 +45,61 @@
 				userId: $scope.user._id
 			};
 
-			$meteor.subscribe('posts-byUser', opts).then(function() {
-				$meteor.subscribe('comments-byUser', opts).then(function() {
-					$meteor.subscribe('likes-byUser', opts).then(function() {
-						var activityLog = {};
+			var activityLog = {};
 
 
-						// get all "activity elements"
-						var allElements = Posts.find({
-							userId: $scope.user._id
-						}).fetch();
-						allElements = allElements.concat(Comments.find({
-							userId: $scope.user._id
-						}).fetch());
-						allElements = allElements.concat(Likes.find({
-							userId: $scope.user._id
-						}).fetch());
+			// get all "activity elements"
+			var allElements = Posts.find({
+				userId: $scope.user._id
+			}).fetch();
+			allElements = allElements.concat(Comments.find({
+				userId: $scope.user._id
+			}).fetch());
+			allElements = allElements.concat(Likes.find({
+				userId: $scope.user._id
+			}).fetch());
 
-						for (var i in allElements) {
-							var el = allElements[i];
-							activityLog[el.createdAt] = el;
-						}
+			for (var i in allElements) {
+				var el = allElements[i];
+				activityLog[el.createdAt] = el;
+			}
 
-						// sort by date
-						function compareNumbers(a, b) {
-							return b - a;
-						}
-						var sortedKeys = Object.keys(activityLog);
-						sortedKeys.sort(compareNumbers);
+			// sort by date
+			function compareNumbers(a, b) {
+				return b - a;
+			}
+			var sortedKeys = Object.keys(activityLog);
+			sortedKeys.sort(compareNumbers);
 
-						for (var i = 0; i < 20; i += 1) {
-							var key = sortedKeys[i];
-							if (!key) break;
+			for (var i = 0; i < 20; i += 1) {
+				var key = sortedKeys[i];
+				if (!key) break;
 
-							// add aditional data
+				// add aditional data
 
-							// only for likes (only likes have .on)
-							if (activityLog[key].on) {
+				// only for likes (only likes have .on)
+				if (activityLog[key].on) {
 
-								if (activityLog[key].type === 'post') {
-									// subscribtion problem
-									activityLog[key].post = Posts.findOne({
-										_id: activityLog[key].on
-									});
-								}
+					if (activityLog[key].type === 'post') {
+						// subscribtion problem
+						activityLog[key].post = Posts.findOne({
+							_id: activityLog[key].on
+						});
+					}
 
-								if (activityLog[key].type === 'comment') {
-									activityLog[key].comm = Comments.findOne({
-										_id: activityLog[key].on
-									});
-									if (!activityLog[key].comm || !activityLog[key].comm.postId) return;
-									activityLog[key].post = Posts.findOne({
-										_id: activityLog[key].comm.postId
-									});
-								}
-							}
-							$scope.activities.push(activityLog[key]);
-						}
+					if (activityLog[key].type === 'comment') {
+						activityLog[key].comm = Comments.findOne({
+							_id: activityLog[key].on
+						});
+						if (!activityLog[key].comm || !activityLog[key].comm.postId) return;
+						activityLog[key].post = Posts.findOne({
+							_id: activityLog[key].comm.postId
+						});
+					}
+				}
+				$scope.activities.push(activityLog[key]);
+			}
 
-					});
-				});
-			});
 
 
 

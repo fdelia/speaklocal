@@ -11,7 +11,6 @@ accounts-password
 accounts-ui
 cfs:standard-packages
 cfs:gridfs
-meteorhacks:fast-render
 u2622:persistent-session
 danialfarid:ng-file-upload
 angular:angular-sanitize

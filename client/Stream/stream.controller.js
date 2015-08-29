@@ -60,7 +60,7 @@
         $scope.addAlert('warning', 'Please add some text');
         return false;
       }
-      
+
       Meteor.call('addPost', title, text, function(err, res) {
         $scope.title = '';
         $scope.text = '';
@@ -167,186 +167,172 @@
     function loadPosts() {
       // this callback thing is kind of messy
 
-      // $meteor.subscribe('posts2', opts).then(function() {
-      $meteor.subscribe('posts', opts).then(function() {
-        $meteor.subscribe('comments', opts).then(function() {
-          $meteor.subscribe('likes', opts).then(function() {
 
-            $meteor.subscribe('allUserData').then(function() {
-              $meteor.subscribe('anoUsers', opts).then(function() {
-                $meteor.subscribe('userAnoProfiles', opts).then(function() {
+      // console.log('subbed to posts: ' + Posts.find().fetch().length);
+      // console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
+      // console.log('subbed to comments: ' + Comments.find().fetch().length);
+      // console.log('subbed to likes: ' + Likes.find().fetch().length);
 
-                  // console.log('subbed to posts: ' + Posts.find().fetch().length);
-                  // console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
-                  // console.log('subbed to comments: ' + Comments.find().fetch().length);
-                  // console.log('subbed to likes: ' + Likes.find().fetch().length);
+      var initialization = true;
 
-                  var initialization = true;
-
-                  // only show one post or all
-                  if ($stateParams.id)
-                    $scope.posts = [Posts.findOne({
-                      _id: $stateParams.id
-                    })];
-                  else
-                    $scope.posts = $scope.posts.concat(Posts.find({}, {
-                      sort: {
-                        'createdAt': -1
-                      },
-                      skip: opts.skip,
-                      limit: opts.limit
-                    }).fetch());
+      // only show one post or all
+      if ($stateParams.id)
+        $scope.posts = [Posts.findOne({
+          _id: $stateParams.id
+        })];
+      else
+        $scope.posts = $scope.posts.concat(Posts.find({}, {
+          sort: {
+            'createdAt': -1
+          },
+          skip: opts.skip,
+          limit: opts.limit
+        }).fetch());
 
 
-                  updateLikes(null);
+      updateLikes(null);
 
-                  // to add: this feature
-                  $scope.posts.forEach(function(el, i) {
-                    el.spam = 0;
-                  });
-
-                  Posts.find().observe({
-                    // take changed because the post is updated after creation to add userId
-                    changed: function(post, oldPost) {
-                      // insert only if the post is new (not during initialization)
-                      if (!initialization) {
-                        post.comments = [];
-                        // post._id = id;
-                        post.spam = 0;
-                        post.likes = [];
-                        post.user = speakLocal.getUser(post.userId);
-                        // trick to resubscribe and renew cursors (adding the new post)
-                        opts.limit += 1;
-                        $meteor.subscribe('comments', opts);
-
-                        // Problem: see Comments observeChanges added
-                        $scope.posts.splice(0, 0, post);
-                        if ($scope.currentUser && post.userId !== $scope.currentUser._id)
-                          $scope.$apply();
-
-                      }
-                    }
-                  });
-
-                  Comments.find().observeChanges({
-                    added: function(id, comment) {
-                      // Problem: doesn't automatically add for the adding user in an other window/tab
-                      // because there it should be $scope.$apply, but it shouldnt be $apply
-                      // in the window where the user writes the comment
-                      if (initialization) return false;
-
-                      var pseudoLike = {
-                        type: 'post',
-                        on: comment.postId
-                      };
-
-                      updateLikes(pseudoLike);
-
-                      // trick to resubscribe and renew cursors (adding the new comment)
-                      opts.limit += 1;
-                      $meteor.subscribe('likes', opts);
-
-                      if ($scope.currentUser && comment.userId !== $scope.currentUser._id) {
-                        $scope.$apply();
-                      }
-                    }
-                  });
-
-
-                  Likes.find().observe({
-                    added: function(likeObj) {
-                      if (initialization) return false;
-                      updateLikes(likeObj);
-                      $scope.$apply();
-                    },
-                    removed: function(likeObj) {
-                      if (initialization) return false;
-                      updateLikes(likeObj);
-                      $scope.$apply();
-                    }
-                  });
-
-
-
-                  function setCommentLikes(comment) {
-                    var likes = Likes.find({
-                      on: comment._id,
-                      type: 'comment'
-                    }).fetch();
-
-                    comment.userHasLiked = 0;
-                    comment.likes = likes.map(function(el) {
-                      if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
-
-                      var user = speakLocal.getUser(el.userId);
-                      if (!user) {
-                        console.error('user not defined for comment like and userId ' + el.userId);
-                        return true;
-                      }
-                      if (user.isUser !== undefined || ($scope.currentUser && user.username === $scope.currentUser.username)) comment.userHasLiked = 1;
-                      return user.username;
-                    });
-                  }
-
-                  function setPostLikes(post) {
-                    var likes = Likes.find({
-                      on: post._id,
-                      type: 'post'
-                    }).fetch();
-
-                    post.userHasLiked = 0;
-                    post.likes = likes.map(function(el) {
-                      if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
-                      var user = speakLocal.getUser(el.userId);
-
-                      if (!user) {
-                        console.error('user not defined for post like and userId ' + el.userId);
-                        return;
-                      }
-                      if (user.isUser !== undefined || ($scope.currentUser && user.username === $scope.currentUser.username)) post.userHasLiked = 1;
-                      return user.username;
-                    });
-                  }
-
-                  /**
-                   *  It's actually an "updatePosts" since it updates everything
-                   */
-                  function updateLikes(likeObj) {
-                    // for performance
-                    if (likeObj && likeObj.type === 'comment') var likedComment = Comments.findOne({
-                      _id: likeObj.on
-                    });
-
-                    $scope.posts.map(function(post) {
-
-                      // for performance
-                      if (likeObj && likeObj.type === 'post' && post._id !== likeObj.on) return true; // continue
-
-                      post.user = speakLocal.getUser(post.userId);
-                      post.comments = Comments.find({
-                        postId: post._id
-                      }).fetch();
-
-                      post.comments.map(function(comment){
-                        if (likeObj && likeObj.type === 'comment' && post._id !== comment.postId) return true; // continue
-                        comment.user = speakLocal.getUser(comment.userId);
-
-                        comment.likes = [];
-                        setCommentLikes(comment);
-                      });
-
-                      setPostLikes(post);
-
-                    });
-                  }
-
-                  initialization = false;
-                });
-              });
-            });
-          }); // });
-        });
+      // to add: this feature
+      $scope.posts.forEach(function(el, i) {
+        el.spam = 0;
       });
+
+      Posts.find().observe({
+        // take changed because the post is updated after creation to add userId
+        changed: function(post, oldPost) {
+          // insert only if the post is new (not during initialization)
+          if (!initialization) {
+            post.comments = [];
+            // post._id = id;
+            post.spam = 0;
+            post.likes = [];
+            post.user = speakLocal.getUser(post.userId);
+            // trick to resubscribe and renew cursors (adding the new post)
+            opts.limit += 1;
+            $meteor.subscribe('comments', opts);
+
+            // Problem: see Comments observeChanges added
+            $scope.posts.splice(0, 0, post);
+            if ($scope.currentUser && post.userId !== $scope.currentUser._id)
+              $scope.$apply();
+
+          }
+        }
+      });
+
+      Comments.find().observeChanges({
+        added: function(id, comment) {
+          // Problem: doesn't automatically add for the adding user in an other window/tab
+          // because there it should be $scope.$apply, but it shouldnt be $apply
+          // in the window where the user writes the comment
+          if (initialization) return false;
+
+          var pseudoLike = {
+            type: 'post',
+            on: comment.postId
+          };
+
+          updateLikes(pseudoLike);
+
+          // trick to resubscribe and renew cursors (adding the new comment)
+          opts.limit += 1;
+          $meteor.subscribe('likes', opts);
+
+          if ($scope.currentUser && comment.userId !== $scope.currentUser._id) {
+            $scope.$apply();
+          }
+        }
+      });
+
+
+      Likes.find().observe({
+        added: function(likeObj) {
+          if (initialization) return false;
+          updateLikes(likeObj);
+          $scope.$apply();
+        },
+        removed: function(likeObj) {
+          if (initialization) return false;
+          updateLikes(likeObj);
+          $scope.$apply();
+        }
+      });
+
+
+
+      function setCommentLikes(comment) {
+        var likes = Likes.find({
+          on: comment._id,
+          type: 'comment'
+        }).fetch();
+
+        comment.userHasLiked = 0;
+        comment.likes = likes.map(function(el) {
+          if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
+
+          var user = speakLocal.getUser(el.userId);
+          if (!user) {
+            console.error('user not defined for comment like and userId ' + el.userId);
+            return true;
+          }
+          if (user.isUser !== undefined || ($scope.currentUser && user.username === $scope.currentUser.username)) comment.userHasLiked = 1;
+          return user.username;
+        });
+      }
+
+      function setPostLikes(post) {
+        var likes = Likes.find({
+          on: post._id,
+          type: 'post'
+        }).fetch();
+
+        post.userHasLiked = 0;
+        post.likes = likes.map(function(el) {
+          if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
+          var user = speakLocal.getUser(el.userId);
+
+          if (!user) {
+            console.error('user not defined for post like and userId ' + el.userId);
+            return;
+          }
+          if (user.isUser !== undefined || ($scope.currentUser && user.username === $scope.currentUser.username)) post.userHasLiked = 1;
+          return user.username;
+        });
+      }
+
+      /**
+       *  It's actually an "updatePosts" since it updates everything
+       */
+      function updateLikes(likeObj) {
+        // for performance
+        if (likeObj && likeObj.type === 'comment') var likedComment = Comments.findOne({
+          _id: likeObj.on
+        });
+
+        $scope.posts.map(function(post) {
+
+          // for performance
+          if (likeObj && likeObj.type === 'post' && post._id !== likeObj.on) return true; // continue
+
+          post.user = speakLocal.getUser(post.userId);
+          post.comments = Comments.find({
+            postId: post._id
+          }).fetch();
+
+          post.comments.map(function(comment) {
+            if (likeObj && likeObj.type === 'comment' && post._id !== comment.postId) return true; // continue
+            comment.user = speakLocal.getUser(comment.userId);
+
+            comment.likes = [];
+            setCommentLikes(comment);
+          });
+
+          setPostLikes(post);
+
+        });
+      }
+
+      initialization = false;
     }
   }
 

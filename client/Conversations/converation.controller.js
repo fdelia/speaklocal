@@ -26,55 +26,50 @@
 
 
 		// TODO move to data service
-		$meteor.subscribe('conversations').then(function() {
-			$meteor.subscribe('messages').then(function() {
+		// $meteor.subscribe('conversations').then(function() {
 
-				$meteor.subscribe('anoUsers').then(function() {
-					$meteor.subscribe('userAnoProfiles').then(function() {
-						$meteor.subscribe('allUserData').then(function() {
-
-							var conv = Conversations.findOne({
-								_id: convId
-							});
-
-							if (!conv) {
-								// display some error
-								console.error('conversation not found');
-								return;
-							}
-
-							var userIds = speakLocal.getAllUserIdsForThisUser($scope.currentUser._id);
-
-							if (userIds.indexOf(conv.userId) !== -1) {
-								conv.fromUserObj = speakLocal.getUser(conv.userId);
-								conv.toUserObj = speakLocal.getUser(conv.toUser);
-								// conv.unseenMsgs = conv.unseenMsgsFrom;
-							}
-							if (userIds.indexOf(conv.toUser) !== -1) {
-								conv.fromUserObj = speakLocal.getUser(conv.toUser);
-								conv.toUserObj = speakLocal.getUser(conv.userId);
-								// conv.unseenMsgs = conv.unseenMsgsTo;
-							}
-							if (!conv.fromUserObj || !conv.toUserObj) {
-								console.error('an user profile was not found');
-								return;
-							}
+		// only subscribtion needed here
+		$meteor.subscribe('messages').then(function() {
 
 
-							vm.conv = conv;
-							vm.msgs = Messages.find({
-								convId: convId
-							}, {
-								sort: {
-									'createdAt': 1
-								}
-							}).fetch();
-
-
-						});
-					});
-				});
+			var conv = Conversations.findOne({
+				_id: convId
 			});
+
+			if (!conv) {
+				// display some error
+				console.error('conversation not found');
+				return;
+			}
+
+			var userIds = speakLocal.getAllUserIdsForThisUser($scope.currentUser._id);
+
+			if (userIds.indexOf(conv.userId) !== -1) {
+				conv.fromUserObj = speakLocal.getUser(conv.userId);
+				conv.toUserObj = speakLocal.getUser(conv.toUser);
+				// conv.unseenMsgs = conv.unseenMsgsFrom;
+			}
+			if (userIds.indexOf(conv.toUser) !== -1) {
+				conv.fromUserObj = speakLocal.getUser(conv.toUser);
+				conv.toUserObj = speakLocal.getUser(conv.userId);
+				// conv.unseenMsgs = conv.unseenMsgsTo;
+			}
+			if (!conv.fromUserObj || !conv.toUserObj) {
+				console.error('an user profile was not found');
+				return;
+			}
+
+
+			vm.conv = conv;
+			vm.msgs = Messages.find({
+				convId: convId
+			}, {
+				sort: {
+					'createdAt': 1
+				}
+			}).fetch();
+
+
 		});
 
 		var initialization = true;

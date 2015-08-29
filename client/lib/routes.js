@@ -8,13 +8,26 @@
         .state('stream', {
           url: '/',
           templateUrl: 'client/Stream/posts.ng.html',
-          controller: 'StreamCtrl'
+          controller: 'StreamCtrl',
+          resolve: {
+            'subscribtion': ['speakLocalData', function(speakLocalData) {
+              return speakLocalData.subscribeAll();
+            }]
+          }
 
         })
         .state('post', {
           url: '/post/:id',
           templateUrl: 'client/Stream/posts.ng.html',
-          controller: 'StreamCtrl'
+          controller: 'StreamCtrl',
+          resolve: {
+            'currentUser': ['$meteor', function($meteor) {
+              return $meteor.requireUser();
+            }],
+            'subscribtion': ['speakLocalData', function(speakLocalData) {
+              return speakLocalData.subscribeAll();
+            }]
+          }
         })
         .state('notifications', {
           url: '/notifications',
@@ -23,6 +36,9 @@
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
               return $meteor.requireUser();
+            }],
+            'subscribtion': ['speakLocalData', function(speakLocalData) {
+              return speakLocalData.subscribeAll();
             }]
           }
         })
@@ -33,6 +49,9 @@
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
               return $meteor.requireUser();
+            }],
+            'subscribtion': ['speakLocalData', function(speakLocalData) {
+              return speakLocalData.subscribeAll();
             }]
           }
         })
@@ -44,6 +63,9 @@
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
               return $meteor.requireUser();
+            }],
+            'subscribtion': ['speakLocalData', function(speakLocalData) {
+              return speakLocalData.subscribeAll();
             }]
           }
         })
@@ -54,6 +76,9 @@
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
               return $meteor.requireUser();
+            }],
+            'subscribtion': ['speakLocalData', function(speakLocalData) {
+              return speakLocalData.subscribeAll();
             }]
           }
         })
@@ -65,6 +90,9 @@
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
               return $meteor.requireUser();
+            }],
+            'subscribtion': ['speakLocalData', function(speakLocalData) {
+              return speakLocalData.subscribeAll();
             }]
           }
         })
@@ -86,6 +114,8 @@
       if (error === "AUTH_REQUIRED") {
         alert('please login');
         $state.go('stream');
+      } else  {
+        console.error(error);
       }
     });
   }]);

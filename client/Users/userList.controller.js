@@ -7,9 +7,9 @@
 	function UserlistCtrl($meteor) {
 		var vm = this;
 
-		$meteor.subscribe('allUserData').then(function() {
-			vm.users = Meteor.users.find().fetch();
-		});
+		// $meteor.subscribe('allUserData').then(function() {
+		vm.users = Meteor.users.find().fetch();
+		// });
 	}
 
 })();
