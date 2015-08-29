@@ -60,9 +60,11 @@
         $scope.addAlert('warning', 'Please add some text');
         return false;
       }
+      
       Meteor.call('addPost', title, text, function(err, res) {
+        $scope.title = '';
+        $scope.text = '';
         $scope.$apply();
-
       });
     };
 

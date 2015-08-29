@@ -130,7 +130,6 @@ Meteor.methods({
     // });
 
     comment._id = Comments.insert(comment);
-    console.log('added comment');
 
     notifyUsersFromPost(postId, 'comment');
 
@@ -140,7 +139,7 @@ Meteor.methods({
 
   // notification
   removeNoti: function(type, onId) {
-    console.log('remove ' + type + ' ' + onId);
+    // console.log('remove ' + type + ' ' + onId);
     return Notifications2.update({
       type: type,
       to: Meteor.user()._id,
@@ -491,9 +490,7 @@ Meteor.methods({
       }
     }).fetch().length;
 
-    console.log(allIds);
-    console.log(numberOfLikes);
-
+ 
     return numberOfLikes;
   }
 

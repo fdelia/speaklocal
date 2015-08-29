@@ -19,6 +19,16 @@
 			view: 'notifications'
 		};
 
+		var initialization = true;
+		Notifications2.find().observeChanges({
+			added: function(id, el){
+				if (!initialization)
+					loadNotifs();
+			}
+		});
+		initialization = false;
+
+
 		function loadMoreNotifs() {
 			opts.skip = $scope.notiGrouped.length;
 			$scope.loadNotifs();
