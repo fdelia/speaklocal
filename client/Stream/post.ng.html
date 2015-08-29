@@ -20,7 +20,7 @@
 		<a class="post-like" ng-click="likeUnlikePost(post._id)" href="" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"> {{ post.userHasLiked ? 'Unlike' : 'Like' }}</a>
 		<!-- <a href="/#/message/{{post.userId}}" ng-hide="post.userId == $root.currentUser._id || isThisUser(post.user.isUser)">Message</a> -->
 		<a href="/#/message/{{post.userId}}" ng-click="sendMsgTo(post.userId, post._id)" ng-hide="post.userId == $root.currentUser._id || isThisUser(post.user.isUser)">Message</a>
-		<small class="pull-right">
+		<!--<small class="pull-right">
 			<a href="" class="spam">
 				<span class="glyphicon glyphicon-fire"></span>
 				is Spam
@@ -30,7 +30,7 @@
 				no Spam
 			</a>
 			(<span class="post-spam-percent">{{ post.spam }}</span> %) &nbsp;
-		</small>
+		</small>-->
 	</small></div>
 
 	<div class="post-comments">

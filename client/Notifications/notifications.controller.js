@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('app').controller('NotiCtrl', NotiCtrl);
-	NotiCtrl.$inject = ['$scope', '$meteor', 'speakLocal', '$state'];
+	NotiCtrl.$inject = ['$scope', 'speakLocal', '$state'];
 
-	function NotiCtrl($scope, $meteor, speakLocal, $state) {
+	function NotiCtrl($scope, speakLocal, $state) {
 		// subscription is needed to find posts/comments below
 		$scope.timeAgo = speakLocal.timeAgo;
 		$scope.loadMoreNotifs = loadMoreNotifs;
@@ -13,12 +13,9 @@
 		$scope.loadNotifs = loadNotifs;
 		$scope.removeNoti = removeNoti;
 
-		var opts = {
-			skip: 0,
-			limit: 20,
-			view: 'notifications'
-		};
-
+		var limit = 20;
+		var loadPerPage = 20;
+		
 		var initialization = true;
 		Notifications2.find().observeChanges({
 			added: function(id, el) {
@@ -30,7 +27,7 @@
 
 
 		function loadMoreNotifs() {
-			opts.skip = $scope.notiGrouped.length;
+			limit += loadPerPage;
 			$scope.loadNotifs();
 		}
 
@@ -50,15 +47,12 @@
 
 		function loadNotifs() {
 
-			// console.log('subbed to posts: ' + Posts.find().fetch().length);
-			// console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
-
-
 			$scope.notifications = Notifications2.find({}, {
 				sort: {
 					// 'createdAt': -1
 					'updatedAt': -1
-				}
+				},
+				limit: limit
 			}).fetch();
 
 

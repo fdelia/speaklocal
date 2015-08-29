@@ -167,7 +167,6 @@
     function loadPosts() {
       // this callback thing is kind of messy
 
-
       // console.log('subbed to posts: ' + Posts.find().fetch().length);
       // console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
       // console.log('subbed to comments: ' + Comments.find().fetch().length);
@@ -190,7 +189,7 @@
         }).fetch());
 
 
-      updateLikes(null);
+      updatePosts(null);
 
       // to add: this feature
       $scope.posts.forEach(function(el, i) {
@@ -232,7 +231,7 @@
             on: comment.postId
           };
 
-          updateLikes(pseudoLike);
+          updatePosts(pseudoLike);
 
           // trick to resubscribe and renew cursors (adding the new comment)
           opts.limit += 1;
@@ -248,18 +247,19 @@
       Likes.find().observe({
         added: function(likeObj) {
           if (initialization) return false;
-          updateLikes(likeObj);
+          updatePosts(likeObj);
           $scope.$apply();
         },
         removed: function(likeObj) {
           if (initialization) return false;
-          updateLikes(likeObj);
+          updatePosts(likeObj);
           $scope.$apply();
         }
       });
 
 
-
+      // the next two functions are slowing down the rendering
+      // in future userIds of likes may be saved in posts/comments itself
       function setCommentLikes(comment) {
         var likes = Likes.find({
           on: comment._id,
@@ -268,10 +268,10 @@
 
         comment.userHasLiked = 0;
         comment.likes = likes.map(function(el) {
-          if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
+          // if (!el.userId) return; // unclear why this must be, maybe DB has strange inputs from dev
 
           var user = speakLocal.getUser(el.userId);
-          if (!user) {
+          if (!user) { // if user deleted etc.
             console.error('user not defined for comment like and userId ' + el.userId);
             return true;
           }
@@ -288,10 +288,10 @@
 
         post.userHasLiked = 0;
         post.likes = likes.map(function(el) {
-          if (!el.userId) return; // unclear why this should be, maybe DB has strange inputs from dev
+          // if (!el.userId) return; // unclear why this must be, maybe DB has strange inputs from dev
           var user = speakLocal.getUser(el.userId);
 
-          if (!user) {
+          if (!user) { // if user deleted etc.
             console.error('user not defined for post like and userId ' + el.userId);
             return;
           }
@@ -301,9 +301,12 @@
       }
 
       /**
-       *  It's actually an "updatePosts" since it updates everything
+       *  It's takes likeObj to reload only the touched post
+       *  set comments for post
+       *  set likes for post (incl. username)
+       *  set likes for each comment (incl. username)
        */
-      function updateLikes(likeObj) {
+      function updatePosts(likeObj) {
         // for performance
         if (likeObj && likeObj.type === 'comment') var likedComment = Comments.findOne({
           _id: likeObj.on
@@ -313,10 +316,15 @@
 
           // for performance
           if (likeObj && likeObj.type === 'post' && post._id !== likeObj.on) return true; // continue
+          if (likedComment && likedComment.postId !== post._id) return true; // continue
 
           post.user = speakLocal.getUser(post.userId);
           post.comments = Comments.find({
             postId: post._id
+          }, {
+            sort: {
+              createdAt: 1
+            }
           }).fetch();
 
           post.comments.map(function(comment) {
@@ -330,7 +338,9 @@
           setPostLikes(post);
 
         });
+
       }
+
 
       initialization = false;
     }

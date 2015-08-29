@@ -2,13 +2,14 @@
 	'use strict';
 
 	angular.module('app').controller('ConversationsCtrl', ConversationsCtrl);
-	ConversationsCtrl.$inject = ['$scope', '$meteor', 'speakLocal'];
+	ConversationsCtrl.$inject = ['$scope', 'speakLocal'];
 
-	function ConversationsCtrl($scope, $meteor, speakLocal) {
+	function ConversationsCtrl($scope, speakLocal) {
 		$scope.timeAgo = speakLocal.timeAgo;
-		$scope.quantity = 20;
-
-		var opts = {};
+		$scope.loadMoreConvs = loadMoreConvs;
+		
+		var limit = 20;
+		var loadPerPage = 20;
 
 		loadConversationList();
 
@@ -25,27 +26,20 @@
 		});
 		initialization = false;
 
-
+		function loadMoreConvs(){
+			limit += loadPerPage;
+			loadConversationList();
+		}
 
 		// TODO move to data service
 		function loadConversationList() {
-			// $meteor.subscribe('conversations').then(function() {
-
-			// 	$meteor.subscribe('allUserData').then(function() {
-			// 		$meteor.subscribe('anoUsers', opts).then(function() {
-			// 			$meteor.subscribe('userAnoProfiles', opts).then(function() {
-
-			// console.log('subbed to posts: ' + Posts.find().fetch().length);
-			// console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
-			// console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
-			// console.log('subbed to users: ' + Meteor.users.find().fetch().length);
-
-
+			
 			// order by updatedAt reverse (newest comes first)
 			$scope.convs = Conversations.find({}, {
 				sort: {
 					'updatedAt': -1
-				}
+				},
+				limit: limit
 			}).fetch();
 
 			var userIds = speakLocal.getAllUserIdsForThisUser($scope.currentUser._id);
@@ -72,11 +66,6 @@
 				}
 
 			});
-
-			// 			});
-			// 		});
-			// 	});
-			// });
 		}
 	}
 	// ]);

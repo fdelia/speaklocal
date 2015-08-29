@@ -1,7 +1,7 @@
 Issues:
  ☐ navbar.controller.js: routeIsUserlist(): currentUser sometimes set too late and then undefined (there's a hack for now)
  ☐ user.controller.js: bio is not updated -> use profile.bio, also in server.methods.js
- ☐ meteor.collections.js: finish limiting of published rows for remaining views, see all // TODO s
+ ✔ meteor.collections.js: finish limiting of published rows for remaining views, see all // TODO s @done (15-08-29 17:04)
  ☐ remove all logs on server when finished
  ☐ meteor.methods.js: addPost: too much is escaped, should only escape basic html chars
  ☐ meteor.methods.js: addComment: same as above
@@ -30,7 +30,7 @@ To add:
  ✔ neuer post, der automatisch bei anderem User geaddet wird: diesen Liken/Commenten geht nicht @done (15-08-10 19:34)
  ☐ validation of inputs (escaping everything), use aldeed / collections2 for that
  ☐ link preview
- ☐ make bubbles out of comments to preview posts (switch to and out this of this view)
+ ☐ meteor add meteorhacks:fast-render
  ✔ navbar: http://stackoverflow.com/questions/14656567/meteor-subscribe-to-a-count for counting new messages and notifications @done (15-08-10 19:01)
 
 Testing:

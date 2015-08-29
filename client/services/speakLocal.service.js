@@ -21,11 +21,14 @@
 
 		// *** MUST BE SUBSCRIBED TO ANOUSERS AND ALLUSERDATA TO WORK ***
 		function getUser(userId) {
-			if (userId === undefined) {
-				console.error('userId is undefined');
+			// if (userId === undefined) {
+			// 	console.error('userId is undefined');
+			// 	return null;
+			// }
+			if (!userId) {
+				console.error('no userId given');
 				return null;
 			}
-			if (!userId) return null;
 
 			var user = AnonymousUsers.findOne({
 				_id: userId
@@ -37,7 +40,8 @@
 				});
 			}
 
-			return user;
+			// user may still be undefined (if wrong userId)
+			return user; 
 		}
 
 		function getAllUserIdsForThisUser(currentUserId) {
