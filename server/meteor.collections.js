@@ -255,6 +255,9 @@
     }
 
     SLCollection.prototype.setCursors = function(opts, userId) {
+      // test scalibility
+      // this.publishEverything(userId);
+      // return SLCollection;
 
       if (opts && opts.postId) {
         this.postsById(opts.postId, userId);

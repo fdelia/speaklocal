@@ -9,10 +9,10 @@ urigo:angular
 urigo:angular-ui-router
 accounts-password
 accounts-ui
-angularjs:angular-sanitize
 cfs:standard-packages
 cfs:gridfs
 meteorhacks:fast-render
 u2622:persistent-session
 danialfarid:ng-file-upload
+angular:angular-sanitize
 alexk111:ng-img-crop
