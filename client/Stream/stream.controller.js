@@ -45,7 +45,8 @@
         return false;
       }
       Meteor.call('addComment', title, text, function(err, res) {
-        $scope.$apply();
+        if (err) $scope.addAlert('warning', err);
+        else $scope.$apply();
       });
     };
 
@@ -62,16 +63,20 @@
       }
 
       Meteor.call('addPost', title, text, function(err, res) {
-        $scope.title = '';
-        $scope.text = '';
-        $scope.$apply();
+        if (err) $scope.addAlert('warning', err);
+        else {
+          $scope.title = '';
+          $scope.text = '';
+          $scope.$apply();
+        }
       });
     };
 
     function likeUnlikePost(postId) {
       if (!$scope.currentUser) return false;
       Meteor.call('likeUnlikePostComment', 'post', postId, function(err, res) {
-        $scope.$apply();
+        if (err) $scope.addAlert('warning', err);
+        else $scope.$apply();
       });
 
       // test
@@ -84,7 +89,8 @@
     function likeUnlikeComment(commentId) {
       if (!$scope.currentUser) return false;
       Meteor.call('likeUnlikePostComment', 'comment', commentId, function(err, res) {
-        $scope.$apply();
+        if (err) $scope.addAlert('warning', err);
+        else $scope.$apply();
       });
 
       // test need index to like comment   
@@ -301,7 +307,7 @@
       }
 
       /**
-       *  It's takes likeObj to reload only the touched post
+       *  It's takes likeObj to reload only the touched post, if there's no liekObj everything is reloaded
        *  set comments for post
        *  set likes for post (incl. username)
        *  set likes for each comment (incl. username)

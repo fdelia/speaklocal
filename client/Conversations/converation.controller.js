@@ -15,7 +15,8 @@
 
 		function sendMessage(text) {
 			Meteor.call('sendMessage', convId, text, function(err, res) {
-				$scope.$apply(); // not sure if necessary
+				if (!err)
+					$scope.$apply(); // not sure if necessary
 			});
 		}
 
@@ -26,7 +27,6 @@
 
 
 		// TODO move to data service
-		// $meteor.subscribe('conversations').then(function() {
 
 		// only subscribtion needed here
 		$meteor.subscribe('messages').then(function() {
