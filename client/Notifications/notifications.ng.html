@@ -1,8 +1,5 @@
 <div ng-show="notifications.length === 0" class="post panel panel-default">No notifications.</div>
 
-<!-- <ul class="list-group">
-	<li ng-repeat="noti in notifications" class="list-group-item" ng-class="{'list-group-item-info': !noti.seen}" > -->
-
 <div class="seen-all">
 	<a href="" ng-click="markAllAsSeen()">Mark all as seen</a>
 	<br/><br/>
@@ -10,16 +7,18 @@
 
 <div class="list-group">
 
-		<a href="/#/post/{{ noti.post._id }}" ng-click="removeNoti(noti.type, noti.on)" ng-repeat="noti in notifications" class="list-group-item" ng-class="{'list-group-item-info': !noti.seen}">
+		<a ui-sref="post({id: noti.post._id})" ng-click="removeNoti(noti.type, noti.on)" ng-repeat="noti in notifications" class="list-group-item" ng-class="{'list-group-item-info': !noti.seen}">
 		<small class="text-muted pull-right">{{ timeAgo(noti.updatedAt) }} ago</small>
 			<div ng-if="noti.type==='comment'">
 				<span class="glyphicon glyphicon-comment"></span> &nbsp;
 				{{ noti.fromUsers.join(', ') }} {{ noti.fromUsers.length>1 ? 'have' : 'has' }} commented on post "{{ noti.post.title }}"
 			</div>
+
 			<div ng-if="noti.type==='likePost'">
 				<span class="glyphicon glyphicon-heart"></span> &nbsp;
 				{{ noti.fromUsers.join(', ') }} {{ noti.fromUsers.length>1 ? 'have' : 'has' }} liked your post "{{ noti.post.title }}"
 			</div>
+			
 			<div ng-if="noti.type==='likeComment'">
 				<span class="glyphicon glyphicon-heart"></span> &nbsp;
 				{{ noti.fromUsers.join(', ') }} {{ noti.fromUsers.length>1 ? 'have' : 'has' }} liked your comment "{{ noti.comment.text }}" on post "{{ noti.post.title }}"

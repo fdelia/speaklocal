@@ -94,29 +94,29 @@
     });
   });
 
-  Meteor.publish('conversations-new', function() {
-    if (!this.userId) return null;
-    var userIds = getAllUserIdsForUser(this.userId);
+  // Meteor.publish('conversations-new', function() {
+  //   if (!this.userId) return null;
+  //   var userIds = getAllUserIdsForUser(this.userId);
 
-    // only convs with unseenMsg > 0
-    return Conversations.find({
-      $or: [{
-        userId: {
-          $in: userIds
-        },
-        unseenMsgsFrom: {
-          $gt: 0
-        }
-      }, {
-        toUser: {
-          $in: userIds
-        },
-        unseenMsgsTo: {
-          $gt: 0
-        }
-      }]
-    });
-  });
+  //   // only convs with unseenMsg > 0
+  //   return Conversations.find({
+  //     $or: [{
+  //       userId: {
+  //         $in: userIds
+  //       },
+  //       unseenMsgsFrom: {
+  //         $gt: 0
+  //       }
+  //     }, {
+  //       toUser: {
+  //         $in: userIds
+  //       },
+  //       unseenMsgsTo: {
+  //         $gt: 0
+  //       }
+  //     }]
+  //   });
+  // });
 
 
 
@@ -148,14 +148,14 @@
     });
   });
 
-  Meteor.publish('notifications2-new', function() {
-    if (!this.userId) return null;
+  // Meteor.publish('notifications2-new', function() {
+  //   if (!this.userId) return null;
 
-    return Notifications2.find({
-      to: this.userId,
-      seen: 0
-    });
-  });
+  //   return Notifications2.find({
+  //     to: this.userId,
+  //     seen: 0
+  //   });
+  // });
 
 
   // *** DEV ***

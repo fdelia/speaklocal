@@ -2,10 +2,14 @@
   'use strict';
 
   angular.module('app').controller('StreamCtrl', StreamCtrl);
-  StreamCtrl.$inject = ['$scope', '$meteor', '$stateParams', 'speakLocal', '$state'];
+  StreamCtrl.$inject = ['$scope', '$meteor', 'speakLocal', '$state'];
 
-  function StreamCtrl($scope, $meteor, $stateParams, speakLocal, $state) {
-    $scope.stateParamsId = $stateParams.id; // for ng-hide
+  function StreamCtrl($scope, $meteor, speakLocal, $state) {
+    // $scope.stateParamsId = $stateParams.id; // for ng-hide
+    $scope.stateParamsId = $state.params.id; // for ng-hide
+    console.log('StreamCtrl');
+    // console.log('stateParams: '+$stateParams.id);
+    // console.log($state.params);
 
     // "pagination"/limitation of posts
     $scope.posts = [];
@@ -13,9 +17,10 @@
       skip: 0,
       limit: 10 // posts per page
     }
-    if ($stateParams.id) opts.limit = 0; // else post wont show
+    if ($state.params.id) opts.limit = 0; // else post wont show
     // if only one post should be displayed, other params don't apply anymore
-    if ($stateParams.id) opts.postId = $stateParams.id
+    // if ($state.params.id) opts.postId = $state.params.id
+    //   console.log(opts.postId);
 
     $scope.alerts = [];
     $scope.addAlert = addAlert;
@@ -181,9 +186,9 @@
       var initialization = true;
 
       // only show one post or all
-      if ($stateParams.id)
+      if ($state.params.id)
         $scope.posts = [Posts.findOne({
-          _id: $stateParams.id
+          _id: $state.params.id
         })];
       else
         $scope.posts = $scope.posts.concat(Posts.find({}, {

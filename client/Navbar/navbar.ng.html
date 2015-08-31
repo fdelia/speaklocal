@@ -3,28 +3,28 @@
   <nav class="navbar navbar-default">
 	
 	  <ul class="nav navbar-nav">
-	  	<li ng-class="{active: routeIsStream()}"><a href="/#/">
+	  	<li ng-class="{active: routeIsStream()}"><a ui-sref="stream">
         <span class="glyphicon glyphicon-home"></span>
       </a></li>
       
-	  	<li ng-class="{active: routeIs('/notifications')}" ng-show="$root.currentUser">
+	  	<li ui-sref-active="active" ng-show="$root.currentUser">
         	<div class="noti_bubble" ng-show="notiCounter>0">{{ notiCounter }}</div>
-        	<a href="/#/notifications">
+        	<a ui-sref="notificationList">
             <span class="glyphicon glyphicon-bell"></span>
           </a>
       </li>
 
 	  	<li ng-class="{active: routeIsMessage()}" ng-show="$root.currentUser">
 	  		<div class="noti_bubble" ng-show="msgCounter>0">{{ msgCounter }}</div>
-	  		<a href="/#/messages">
+	  		<a ui-sref="conversationList">
           <span class="glyphicon glyphicon-envelope"></span>
         </a></li>
 
-      <li ng-class="{active: routeIsUserlist()}" ng-show="$root.currentUser"><a href="/#/users">
+      <li ng-class="{active: routeIsUserlist()}" ng-show="$root.currentUser"><a ui-sref="userList">
         <span class="glyphicon glyphicon-user"></span>
       </a></li>
 
-	  	<li ng-class="{active: routeIs('/user/'+currentUser.username)}" ng-show="$root.currentUser"><a href="/#/user/{{currentUser.username}}">
+	  	<li ng-class="{active: routeIs('/user/'+currentUser.username)}" ng-show="$root.currentUser"><a ui-sref="user({id:currentUser.username})">
         <span class="glyphicon glyphicon-cog"></span>
       </a></li>
 	  	
@@ -34,7 +34,6 @@
       	<a href="" ng-click="switchAnoMode()">
       		<span class="glyphicon glyphicon-volume-up" ng-hide="anoMode"></span>
           <span class="glyphicon glyphicon-volume-off" ng-show="anoMode"></span>
-      		<!-- <input type="checkbox" ng-check="anoMode" ng-model="anoMode" disabled> -->
           <small>
             <span ng-show="anoMode">anonymous</span>
             <span ng-hide="anoMode">normal</span>
@@ -42,8 +41,8 @@
       	</a>
       </li>
 
-      <li ng-class="{active: routeIs('/about')}">
-      	<a href="/#/about">
+      <li ui-sref-active="active">
+      	<a ui-sref="about">
       		<span class="glyphicon glyphicon-info-sign"></span>
       	</a>
       </li>

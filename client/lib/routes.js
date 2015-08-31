@@ -5,7 +5,7 @@
     function($urlRouterProvider, $stateProvider) {
 
       $stateProvider
-        .state('stream', {
+        .state('stream', { // aka post.list
           url: '/',
           templateUrl: 'client/Stream/posts.ng.html',
           controller: 'StreamCtrl',
@@ -14,9 +14,19 @@
               return speakLocalData.subscribeAll();
             }]
           }
-
         })
-        .state('post', {
+        // .state('post.list', {
+        //   url: '/',
+        //   templateUrl: 'client/Stream/posts.ng.html',
+        //   // controller: 'StreamCtrl'/*,
+        //   resolve: {
+        //     'subscribtion': ['speakLocalData', function(speakLocalData) {
+        //       return speakLocalData.subscribeAll();
+        //     }]
+        //   }
+
+        // })
+        .state('post', { // post.details
           url: '/post/:id',
           templateUrl: 'client/Stream/posts.ng.html',
           controller: 'StreamCtrl',
@@ -29,7 +39,7 @@
             }]
           }
         })
-        .state('notifications', {
+        .state('notificationList', {
           url: '/notifications',
           templateUrl: 'client/Notifications/notifications.ng.html',
           controller: 'NotiCtrl',
@@ -55,10 +65,10 @@
             }]
           }
         })
-        .state('userlist', {
+        .state('userList', {
           url: '/users',
           templateUrl: 'client/Users/userlist.ng.html',
-          controller: 'UserlistCtrl',
+          controller: 'UserListCtrl',
           controllerAs: 'vm',
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
@@ -69,10 +79,10 @@
             }]
           }
         })
-        .state('conversations', {
+        .state('conversationList', {
           url: '/messages',
-          templateUrl: 'client/Conversations/conversations.ng.html',
-          controller: 'ConversationsCtrl',
+          templateUrl: 'client/Conversations/conversationList.ng.html',
+          controller: 'ConversationListCtrl',
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
               return $meteor.requireUser();

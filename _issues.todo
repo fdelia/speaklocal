@@ -1,4 +1,6 @@
 Issues:
+ ☐ bring code to level "how it's done" (concerning angular)
+   ☐ route.js: children states like post.list and post.detail including ui-sref-active (didn't work for now: switching between children states and -active didn't add the class)
  ☐ navbar.controller.js: routeIsUserlist(): currentUser sometimes set too late and then undefined (there's a hack for now)
  ☐ user.controller.js: bio is not updated -> use profile.bio, also in server.methods.js
  ✔ meteor.collections.js: finish limiting of published rows for remaining views, see all // TODO s @done (15-08-29 17:04)

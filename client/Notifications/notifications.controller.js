@@ -94,6 +94,7 @@
 		function removeNoti(type, onId) {
 			Meteor.call('removeNoti', type, onId, function(err, res) {
 				// console.log(res);
+				// $state.go to post
 			});
 		}
 	}
