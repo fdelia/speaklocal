@@ -3,10 +3,11 @@ Issues:
    ☐ route.js: children states like post.list and post.detail including ui-sref-active (didn't work for now: switching between children states and -active didn't add the class)
  ☐ stream: computing of posts is a bit slow... (it's the updatePosts() function)
    ☐ halfway the same for state 'notifications' and 'conversations'
+ ☐ posts: reset form after adding new post
  ☐ navbar.controller.js: routeIsUserlist(): currentUser sometimes set too late and then undefined (there's a hack for now)
  ☐ user.controller.js: bio is not updated -> use profile.bio, also in server.methods.js
  ✔ meteor.collections.js: finish limiting of published rows for remaining views, see all // TODO s @done (15-08-29 17:04)
- ☐ remove all logs on server when finished
+ ✔ remove all logs on server when finished @done (15-09-01 18:11)
  ☐ meteor.methods.js: addPost: too much is escaped, should only escape basic html chars
  ☐ meteor.methods.js: addComment: same as above
  ☐ after adding a post, if liked right away, it's not updated in the view of the user who added the post. the issue is resolved after commenting on the post, reloading the controller.
@@ -19,7 +20,7 @@ Issues:
  ☐ CSS: remove userShortCut img styles, add bootstrap col-xx-x in templates instead
  ☐ FSCollection: add filter, doesn't work
  ☐ user.controller.js: upload user image, cropping doesnt work (img-crop directive)
- ☐ Angular: make app more moduler with app.controllers, app.services etc
+ ✔ Angular: make app more moduler with app.controllers, app.services etc @done (15-09-01 18:12)
  ✔ CSS badges looks @done (15-08-28 18:57)
  ☐ userShortCut directive: the returned image and name should be in separate links, because of hover effect
  ✔ notifications: after a noti has been "seen", recommenting / liking doesnt make the noti "unseen" @done (15-08-28 18:13)

@@ -2,9 +2,9 @@
   'use strict';
 
   angular.module('app').controller('PostsCtrl', PostsCtrl);
-  PostsCtrl.$inject = ['$scope', '$meteor', 'speakLocal', '$state'];
+  PostsCtrl.$inject = ['$scope', 'speakLocal', '$state', 'PostsService'];
 
-  function PostsCtrl($scope, $meteor, speakLocal, $state) {
+  function PostsCtrl($scope, speakLocal, $state, PostsService) {
     // $scope.stateParamsId = $stateParams.id; // for ng-hide
     $scope.stateParamsId = $state.params.id; // for ng-hide
 
@@ -15,9 +15,6 @@
       limit: 10 // posts per page
     }
     if ($state.params.id) opts.limit = 0; // else post wont show
-    // if only one post should be displayed, other params don't apply anymore
-    // if ($state.params.id) opts.postId = $state.params.id
-    //   console.log(opts.postId);
 
     $scope.alerts = [];
     $scope.addAlert = addAlert;
@@ -28,7 +25,7 @@
     $scope.likeUnlikePost = likeUnlikePost;
     $scope.likeUnlikeComment = likeUnlikeComment;
 
-    $scope.formatTime = speakLocal.timeAgo;
+    $scope.timeAgo = speakLocal.timeAgo;
     $scope.isThisUser = isThisUser;
     $scope.sendMsgTo = sendMsgTo;
     $scope.loadMorePosts = loadMorePosts;
@@ -40,66 +37,60 @@
 
     loadPosts();
 
-    function addComment(title, text) {
+    function addComment(postId, text) {
       if (!$scope.currentUser) return false;
-      if (!text) {
-        $scope.addAlert('warning', 'Please add some text');
-        return false;
-      }
-      Meteor.call('addComment', title, text, function(err, res) {
-        if (err) $scope.addAlert('warning', err);
-        else $scope.$apply();
-      });
+
+      PostsService.addComment(postId, text)
+        .then(function(data) {
+
+        }, function(err) {
+          $scope.addAlert('warning', err);
+        });
+
     };
+
+    // function reset(){
+    //   $scope.title= '';
+    //   $scope.text='';
+    // }
 
     function addPost(title, text) {
       if (!$scope.currentUser) return false;
 
-      if (!title) {
-        $scope.addAlert('warning', 'Please add a title');
-        return false;
-      }
-      if (!text) {
-        $scope.addAlert('warning', 'Please add some text');
-        return false;
-      }
-
-      Meteor.call('addPost', title, text, function(err, res) {
-        if (err) $scope.addAlert('warning', err);
-        else {
+      PostsService.addPost(title, text)
+        .then(function(data) {
+          // TODO rest form (current solution not optimal (eg. if an error occurs, input is lost))
           $scope.title = '';
           $scope.text = '';
-          $scope.$apply();
-        }
-      });
+          // $scope.newPost.$setPristine();
+          // $scope.$apply();
+        }, function(err) {
+          $scope.addAlert('warning', err);
+        });
+
     };
 
     function likeUnlikePost(postId) {
       if (!$scope.currentUser) return false;
-      Meteor.call('likeUnlikePostComment', 'post', postId, function(err, res) {
-        if (err) $scope.addAlert('warning', err);
-        else $scope.$apply();
-      });
 
-      // test
-      // Meteor.call('likeUnlikePost2', postId, function(err, res) {
-      //   console.log(res);
-      //   $scope.$apply();
-      // });
+      PostsService.likeUnlikePost(postId)
+        .then(function(data) {
+
+        }, function(err) {
+          $scope.addAlert('warning', err);
+        });
     };
 
     function likeUnlikeComment(commentId) {
       if (!$scope.currentUser) return false;
-      Meteor.call('likeUnlikePostComment', 'comment', commentId, function(err, res) {
-        if (err) $scope.addAlert('warning', err);
-        else $scope.$apply();
-      });
 
-      // test need index to like comment   
-      //  Meteor.call('likeUnlikeComment2', postId, commentIndex, function(err, res){
-      //   console.log(res);
-      //   $scope.$apply();
-      // });
+      PostsService.likeUnlikeComment(commentId)
+        .then(function(data) {
+
+        }, function(err) {
+          $scope.addAlert('warning', err);
+        });
+
     };
 
     function isThisUser(userId) {
@@ -107,14 +98,15 @@
       return userId === $scope.currentUser._id;
     };
 
-    // unfinished, get number of remaining rows/posts from server
+    // TODO 
     function hideLoadMore() {
-      return opts.skip === $scope.posts.length;
+      return false;
     }
 
     // starts a conversation if there is none, postId needed for anoProfile of user
     function sendMsgTo(userId, postId) {
       if (!$scope.currentUser) return false;
+      // TODO to a service
       // getConv from server
       // returns convId
       // locate to this conv
@@ -173,12 +165,6 @@
 
     // TODO move to a data service
     function loadPosts() {
-      // this callback thing is kind of messy
-
-      // console.log('subbed to posts: ' + Posts.find().fetch().length);
-      // console.log('subbed to anoUsers: ' + AnonymousUsers.find().fetch().length);
-      // console.log('subbed to comments: ' + Comments.find().fetch().length);
-      // console.log('subbed to likes: ' + Likes.find().fetch().length);
 
       var initialization = true;
 
@@ -199,10 +185,6 @@
 
       updatePosts(null);
 
-      // to add: this feature
-      $scope.posts.forEach(function(el, i) {
-        el.spam = 0;
-      });
 
       Posts.find().observe({
         // take changed because the post is updated after creation to add userId
@@ -216,7 +198,7 @@
             post.user = speakLocal.getUser(post.userId);
             // trick to resubscribe and renew cursors (adding the new post)
             opts.limit += 1;
-            $meteor.subscribe('comments', opts);
+            // $meteor.subscribe('comments', opts);
 
             // Problem: see Comments observeChanges added
             $scope.posts.splice(0, 0, post);
@@ -243,7 +225,7 @@
 
           // trick to resubscribe and renew cursors (adding the new comment)
           opts.limit += 1;
-          $meteor.subscribe('likes', opts);
+          // $meteor.subscribe('likes', opts);
 
           if ($scope.currentUser && comment.userId !== $scope.currentUser._id) {
             $scope.$apply();

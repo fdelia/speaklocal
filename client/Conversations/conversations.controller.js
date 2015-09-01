@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('app').controller('ConversationsCtrl', ConversationsCtrl);
-	ConversationsCtrl.$inject = ['$scope', 'speakLocal', 'ConversationService'];
+	ConversationsCtrl.$inject = ['$scope', 'speakLocal', 'ConversationsService'];
 
-	function ConversationsCtrl($scope, speakLocal, ConversationService) {
+	function ConversationsCtrl($scope, speakLocal, ConversationsService) {
 		$scope.timeAgo = speakLocal.timeAgo;
 		$scope.loadMoreConvs = loadMoreConvs;
 		
@@ -32,7 +32,7 @@
 		}
 
 		function loadConversationList(){
-			$scope.convs = ConversationService.listConvs($scope.currentUser._id, limit);
+			$scope.convs = ConversationsService.listConvs($scope.currentUser._id, limit);
 		}
 
 	}

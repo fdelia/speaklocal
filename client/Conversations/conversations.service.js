@@ -1,10 +1,10 @@
 (function() {
 	'use strict';
 
-	angular.module('app').factory('ConversationService', ConversationService);
-	ConversationService.$inject = ['$q', 'speakLocal'];
+	angular.module('app').factory('ConversationsService', ConversationsService);
+	ConversationsService.$inject = ['$q', 'speakLocal'];
 
-	function ConversationService($q, speakLocal) {
+	function ConversationsService($q, speakLocal) {
 		var obj = {
 			setConvAsSeen: setConvAsSeen,
 			sendMessage: sendMessage,

@@ -9,12 +9,12 @@ const KITTEN_NAMES = 'Caliente,Salsa,Chili,Paprika,Tamale,Sunset,Frosty,Icy,Pear
 Meteor.methods({
   // anoMode
   anoModeGet: function() {
-    if (!Meteor.user()) return null;
+    if (!Meteor.user()) throw new Meteor.Error('not-allowed', 'Please log in');
 
     return Meteor.user().anoMode ? 1 : 0;
   },
   anoModeSet: function(anoMode) {
-    if (!Meteor.user()) return false;
+    if (!Meteor.user()) throw new Meteor.Error('not-allowed', 'Please log in');
 
     // validation
     if (anoMode) anoMode = 1;
@@ -33,19 +33,17 @@ Meteor.methods({
 
   // post
   addPost: function(title, text) {
-    if (!Meteor.user()) return false;
-    if (!title || typeof title !== 'string') return false;
-    if (!text || typeof text !== 'string') return false;
+    if (!Meteor.user()) throw new Meteor.Error('not-allowed', 'Please log in');
+    if (!title || typeof title !== 'string') throw new Meteor.Error('illegal-arguments', 'Missing argument');
+    if (!text || typeof text !== 'string') throw new Meteor.Error('illegal-arguments', 'Missing argument');
 
     // basic validation
     // TODO escapes also "
     title = _.escape(title).trim();
     text = _.escape(text).trim();
 
-    // first make post, then the user thing, because postId is needed
+    // first make post, then the user thing, because postId is needed to create anonymous users
     var post = {
-      // userId: user._id,
-      // author: user.username,
       title: title,
       text: text,
       createdAt: Date.now(),
@@ -96,24 +94,23 @@ Meteor.methods({
 
   // comment
   addComment: function(postId, text) {
-    if (!Meteor.user()) return false;
-    if (!postId) return false;
-    if (!text || typeof text !== 'string') return false;
+    if (!Meteor.user()) throw new Meteor.Error('not-allowed', 'Please log in');
+    if (!postId) throw new Meteor.Error('illegal-arguments', 'Missing argument');
+    if (!text || typeof text !== 'string') throw new Meteor.Error('illegal-arguments', 'Missing argument');
 
 
     var post = Posts.findOne({
       _id: postId
     });
-    if (!post) return false;
+    if (!post) throw new Meteor.Error('illegal-arguments', 'Wrong argument, post not found');
 
+    // TODO validate text (remove html), but don't escape too much
     text = _.escape(text).trim();
     var user = getThisUserOnPost(postId);
 
-    // TODO validate text (remove html)
     var comment = {
       postId: postId,
       userId: user._id,
-      // author: user.username,
       createdAt: Date.now(),
       text: text,
       likes: 0
@@ -210,7 +207,9 @@ Meteor.methods({
   // },
 
   likeUnlikePostComment: function(type, id) {
-    if (!Meteor.user()._id) return 'not allowed';
+    if (!Meteor.user()._id) throw new Meteor.Error('not-allowed', 'Please log in');
+    if (!type) throw new Meteor.Error('illegal-arguments', 'Missing argument');
+    if (!id) throw new Meteor.Error('illegal-arguments', 'Missing argument');
 
     // check if id is valid (from a post/comment)
     if (type === 'post') {

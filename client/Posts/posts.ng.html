@@ -14,13 +14,14 @@
 		<user-shortcut ng-if="currentUser" user="currentUser" img-only="1" ano-mode="anoMode"></user-shortcut>
 	</div>
 	<div class="col-md-11 col-sm-11 col-xs-10">
-		<form class="new-post"
-		      ng-submit="addPost(title, text)"
+		<form class="new-post" name="newPost"
+		      ng-submit="addPost(title, text); title=''; text=''; "
 		      >
 		  <input ng-model="title" type="text" class="form-control"
 		         name="title" placeholder="Add a title..." />
 	     <textarea ng-model="text" msd-elastic ng-model-options="{ debounce: 1000 }" name="text" class="form-control" placeholder="What's going on? ..."></textarea>
 	     <button class="btn btn-primary" type="submit">Create Post</button>
+	     <!-- <button class="btn btn-primary" type="reset" ng-click="reset()">Reset</button> -->
 		</form>
 	</div>
 </div>

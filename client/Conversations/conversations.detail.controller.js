@@ -2,23 +2,23 @@
 	'use strict';
 
 	angular.module('app').controller('ConversationsDetailCtrl', ConversationsDetailCtrl);
-	ConversationsDetailCtrl.$inject = ['$scope', '$meteor', '$stateParams', 'speakLocal', 'ConversationService'];
+	ConversationsDetailCtrl.$inject = ['$scope', '$meteor', '$state', 'speakLocal', 'ConversationsService'];
 
-	function ConversationsDetailCtrl($scope, $meteor, $stateParams, speakLocal, ConversationService) {
+	function ConversationsDetailCtrl($scope, $meteor, $state, speakLocal, ConversationsService) {
 		var vm = this;
 
-		var convId = $stateParams.id;
+		var convId = $state.params.id;
 		vm.timeAgo = speakLocal.timeAgo;
 		vm.sendMessage = sendMessage;
 
 		// reset notifications
-		ConversationService.setConvAsSeen(convId); // .then()
+		ConversationsService.setConvAsSeen(convId); // .then()
 
 		// only subscribtion needed here
 		$meteor.subscribe('messages').then(function() {
 
-			vm.conv = ConversationService.getConvWithAuthors($scope.currentUser._id, convId);
-			vm.msgs = ConversationService.listMessages(convId);
+			vm.conv = ConversationsService.getConvWithAuthors($scope.currentUser._id, convId);
+			vm.msgs = ConversationsService.listMessages(convId);
 
 		});
 
