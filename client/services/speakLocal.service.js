@@ -21,10 +21,6 @@
 
 		// *** MUST BE SUBSCRIBED TO ANOUSERS AND ALLUSERDATA TO WORK ***
 		function getUser(userId) {
-			// if (userId === undefined) {
-			// 	console.error('userId is undefined');
-			// 	return null;
-			// }
 			if (!userId) {
 				console.error('no userId given');
 				return null;

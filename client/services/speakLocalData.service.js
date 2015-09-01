@@ -15,6 +15,8 @@
 		function subscribeAll() {
 			var def = $q.defer();
 
+			var s = Date.now();
+
 			// Meteor docs say that there won't be a resubscribtion
 			// But it's a bit faster when a second subscribtion is not even tried
 
@@ -37,6 +39,7 @@
 								$meteor.subscribe('notifications2').then(function() {
 									$meteor.subscribe('conversations').then(function() {
 
+										console.log('subscribeAll '+(Date.now()-s));
 										def.resolve('all subscribed');
 										subscribed = true;
 

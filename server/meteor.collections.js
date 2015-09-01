@@ -16,7 +16,6 @@
 
 
 
-
   // no user identification needed for these
 
   Meteor.publish('posts', function(opts) {
@@ -70,7 +69,7 @@
       _id: this.userId
     }, {
       fields: {
-        'profile.bio': 1
+        'profile': 1
       }
     });
   });
@@ -137,7 +136,7 @@
       }]
     });
   });
-  
+
 
 
   Meteor.publish('notifications2', function() {

@@ -18,11 +18,11 @@
 
 		<span class="post-comment-counter">{{ post.comments.length }}</span>
 
-		<span class="glyphicon glyphicon-heart" ng-class="{liked: post.userHasLiked}" data-toggle="tooltip" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"></span> 
+		<span class="glyphicon glyphicon-heart" ng-class="{liked: post.userHasLiked}" data-toggle="tooltip" ng-attr-title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"></span> 
 
-		<span class="post-like-counter" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}">{{ post.likes.length }}</span>
+		<span class="post-like-counter" ng-attr-title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}">{{ post.likes.length }}</span>
 
-		<a class="post-like" ng-click="likeUnlikePost(post._id)" href="" title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"> {{ post.userHasLiked ? 'Unlike' : 'Like' }}</a>
+		<a class="post-like" ng-click="likeUnlikePost(post._id)" href="" ng-attr-title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"> {{ post.userHasLiked ? 'Unlike' : 'Like' }}</a>
 
 		<a href="" ng-click="sendMsgTo(post.userId, post._id)" ng-hide="post.userId == $root.currentUser._id || isThisUser(post.user.isUser)">Message</a>
 
@@ -47,11 +47,11 @@
 			</div>
 			<div class="comment-text" ng-bind-html="comment.text | linky"></div>
 			<div class="comment-panel"><small>
-				<span class="glyphicon glyphicon-heart" ng-class="{liked: comment.userHasLiked}" data-toggle="tooltip" title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}"></span> 
+				<span class="glyphicon glyphicon-heart" ng-class="{liked: comment.userHasLiked}" data-toggle="tooltip" ng-attr-title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}"></span> 
 				
-				<span class="comment-like-counter" title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}">{{ comment.likes.length }}</span>
+				<span class="comment-like-counter" ng-attr-title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}">{{ comment.likes.length }}</span>
 				
-				<a class="comment-like" ng-click="likeUnlikeComment(comment._id)" href="" title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}"> {{ comment.userHasLiked ? 'Unlike' : 'Like' }}</a>
+				<a class="comment-like" ng-click="likeUnlikeComment(comment._id)" href="" ng-attr-title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}"> {{ comment.userHasLiked ? 'Unlike' : 'Like' }}</a>
 
 				<a href="" ng-click="sendMsgTo(comment.user._id, post._id)" ng-hide="comment.userId == $root.currentUser._id || isThisUser(comment.user.isUser)">Message</a>
 			</small></div>

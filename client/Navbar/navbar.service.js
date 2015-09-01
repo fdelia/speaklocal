@@ -8,8 +8,8 @@
 		var obj = {
 			returnNotiCounter: returnNotiCounter,
 			returnNewConvCounter: returnNewConvCounter,
-				getAnoMode: getAnoMode,
-				switchAnoMode: switchAnoMode
+			getAnoMode: getAnoMode,
+			switchAnoMode: switchAnoMode
 		};
 
 		// var anoMode = false;
@@ -18,6 +18,10 @@
 			return Notifications2.find({
 				// to: this.userId, // is already done on server
 				seen: 0
+			}, {
+				fields: {
+					seen: 1
+				}
 			}).fetch().length;
 		}
 
@@ -41,6 +45,11 @@
 						$gt: 0
 					}
 				}]
+			}, {
+				fields: {
+					unseenMsgsTo: 1,
+					unseenMsgsFrom: 1
+				}
 			}).fetch();
 
 			convs.forEach(function(conv) {
@@ -68,7 +77,7 @@
 			return def.promise;
 		}
 
-		function switchAnoMode(){
+		function switchAnoMode() {
 			return speakLocal.switchAnoMode();
 		}
 

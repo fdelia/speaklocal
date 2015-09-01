@@ -165,16 +165,16 @@
 
     // TODO move to a data service
     function loadPosts() {
-
+      var sL = Date.now();
       var initialization = true;
 
       // only show one post or all
       if ($state.params.id)
-        $scope.posts = [Posts.findOne({
+        var posts = [Posts.findOne({
           _id: $state.params.id
         })];
       else
-        $scope.posts = $scope.posts.concat(Posts.find({}, {
+        var posts = $scope.posts.concat(Posts.find({}, {
           sort: {
             'createdAt': -1
           },
@@ -254,6 +254,10 @@
         var likes = Likes.find({
           on: comment._id,
           type: 'comment'
+        }, {
+          fields: {
+            createdAt: 0
+          }
         }).fetch();
 
         comment.userHasLiked = 0;
@@ -274,6 +278,10 @@
         var likes = Likes.find({
           on: post._id,
           type: 'post'
+        }, {
+          fields: {
+            createdAt: 0
+          }
         }).fetch();
 
         post.userHasLiked = 0;
@@ -297,16 +305,18 @@
        *  set likes for each comment (incl. username)
        */
       function updatePosts(likeObj) {
+        var s = Date.now();
         // for performance
         if (likeObj && likeObj.type === 'comment') var likedComment = Comments.findOne({
           _id: likeObj.on
         });
 
-        $scope.posts.map(function(post) {
+        for (var i = 0; i < posts.length; i += 1) {
+          var post = posts[i];
 
           // for performance
-          if (likeObj && likeObj.type === 'post' && post._id !== likeObj.on) return true; // continue
-          if (likedComment && likedComment.postId !== post._id) return true; // continue
+          if (likeObj && likeObj.type === 'post' && post._id !== likeObj.on) continue;
+          if (likedComment && likedComment.postId !== post._id) continue;
 
           post.user = speakLocal.getUser(post.userId);
           post.comments = Comments.find({
@@ -314,21 +324,26 @@
           }, {
             sort: {
               createdAt: 1
-            }
+            },
+            fields: {} // all fields
           }).fetch();
 
-          post.comments.map(function(comment) {
-            if (likeObj && likeObj.type === 'comment' && post._id !== comment.postId) return true; // continue
+          for (var j = 0; j < post.comments.length; j += 1) {
+            var comment = post.comments[j];
+            
+            if (likeObj && likeObj.type === 'comment' && post._id !== comment.postId) continue;
             comment.user = speakLocal.getUser(comment.userId);
 
             comment.likes = [];
             setCommentLikes(comment);
-          });
+          }
 
           setPostLikes(post);
 
-        });
+        }
 
+        $scope.posts = posts;
+        console.log('updatePosts ' + (Date.now() - s));
       }
 
 

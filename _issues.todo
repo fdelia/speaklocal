@@ -1,4 +1,5 @@
 Issues:
+ ☐ queries: only get fields that are used (performance)
  ☐ bring code to level "how it's done" (concerning angular)
    ☐ route.js: children states like post.list and post.detail including ui-sref-active (didn't work for now: switching between children states and -active didn't add the class)
  ☐ stream: computing of posts is a bit slow... (it's the updatePosts() function)

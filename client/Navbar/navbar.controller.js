@@ -60,6 +60,7 @@
     // subscribe here since there is no 'resolve' - navbar is no state
     speakLocalData.subscribeAll()
       .then(function(data) {
+        // console.log('navbar subscribtion');
 
         var initialization = true; // wegen $apply
         Notifications2.find({
