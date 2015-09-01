@@ -1,8 +1,10 @@
+<div ui-view><!-- needed for child state -->
+
 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
 	{{alert.msg}}
 </alert>
 
-<div ng-show="showWelcomeMsg()" ng-include="'client/Stream/welcome.ng.html'"></div>
+<div ng-show="showWelcomeMsg()" ng-include="'client/Posts/welcome.ng.html'"></div>
     
 <div class="new-post row" ng-hide="stateParamsId !== undefined || !currentUser">
 
@@ -29,9 +31,13 @@
 
 <br>
 
-<div class="" ng-repeat="post in posts" ng-include src="'client/Stream/post.ng.html'">
+<div class="" ng-repeat="post in posts" ng-include src="'client/Posts/posts.detail.ng.html'">
 </div>
 
 <ul class="pager" ng-hide="posts.length === 0 || hideLoadMore()">
 	<li><a href="" ng-click="loadMorePosts()">Load more posts</a></li>
 </ul>
+
+
+
+</div>

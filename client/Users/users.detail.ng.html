@@ -86,23 +86,23 @@
 				<small class="text-muted pull-right">&nbsp; {{ timeAgo(activity.createdAt) }} ago</small>
 
 				<div ng-if="activity.title">
-					<a ui-sref="post({id: activity._id})">
+					<a ui-sref="posts.detail({id: activity._id})">
 						Wrote post "{{ activity.title }}"
 					</a>
 				</div>
 				<div ng-if="activity.postId">
-					<a ui-sref="post({id: activity.postId})">
+					<a ui-sref="posts.detail({id: activity.postId})">
 						Wrote comment "{{ activity.text }}"
 					</a>
 				</div>
 				<div ng-if="activity.on">
 					<span ng-if="activity.type === 'post'">
-						<a ui-sref="post({id: activity.on})">
+						<a ui-sref="posts.detail({id: activity.on})">
 							Liked post "{{ activity.post.title }}"
 						</a>
 					</span>
 					<span ng-if="activity.type === 'comment'">
-						<a ui-sref="post({id: activity.post._id})">
+						<a ui-sref="posts.detail({id: activity.post._id})">
 							Liked comment "{{ activity.comm.text }}"
 						</a>
 					</span>

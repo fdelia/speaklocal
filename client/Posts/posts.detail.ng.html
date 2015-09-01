@@ -8,7 +8,7 @@
 		<user-shortcut user="post.user" show-you="isThisUser(post.user.isUser)"></user-shortcut>
 	</div>
 	<div class="post-title lead">
-		<a ui-sref="post({id: post._id})">{{ post.title }}</a>
+		<a ui-sref="posts.detail({id: post._id})">{{ post.title }}</a>
 	</div>
 	<p class="post-text" ng-bind-html="post.text | linky"></p>
 

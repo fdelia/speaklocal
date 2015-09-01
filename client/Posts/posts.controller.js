@@ -1,15 +1,12 @@
 (function() {
   'use strict';
 
-  angular.module('app').controller('StreamCtrl', StreamCtrl);
-  StreamCtrl.$inject = ['$scope', '$meteor', 'speakLocal', '$state'];
+  angular.module('app').controller('PostsCtrl', PostsCtrl);
+  PostsCtrl.$inject = ['$scope', '$meteor', 'speakLocal', '$state'];
 
-  function StreamCtrl($scope, $meteor, speakLocal, $state) {
+  function PostsCtrl($scope, $meteor, speakLocal, $state) {
     // $scope.stateParamsId = $stateParams.id; // for ng-hide
     $scope.stateParamsId = $state.params.id; // for ng-hide
-    console.log('StreamCtrl');
-    // console.log('stateParams: '+$stateParams.id);
-    // console.log($state.params);
 
     // "pagination"/limitation of posts
     $scope.posts = [];

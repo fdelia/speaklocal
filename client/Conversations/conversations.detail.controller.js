@@ -1,10 +1,10 @@
 (function() {
 	'use strict';
 
-	angular.module('app').controller('ConversationCtrl', ConversationCtrl);
-	ConversationCtrl.$inject = ['$scope', '$meteor', '$stateParams', 'speakLocal', 'ConversationService'];
+	angular.module('app').controller('ConversationsDetailCtrl', ConversationsDetailCtrl);
+	ConversationsDetailCtrl.$inject = ['$scope', '$meteor', '$stateParams', 'speakLocal', 'ConversationService'];
 
-	function ConversationCtrl($scope, $meteor, $stateParams, speakLocal, ConversationService) {
+	function ConversationsDetailCtrl($scope, $meteor, $stateParams, speakLocal, ConversationService) {
 		var vm = this;
 
 		var convId = $stateParams.id;

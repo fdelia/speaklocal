@@ -1,3 +1,4 @@
+<div ui-view><!-- needed for child state -->
 
 <div ng-show="convs.length === 0" class="post panel panel-default">No messages.</div>
 
@@ -10,7 +11,7 @@
 			:
 
 			<!-- <div class="noti_bubble" ng-show="conv.unseenMsgs>0">{{ conv.unseenMsgs }}</div> -->
-			<a ui-sref="conversation({id: conv._id})">
+			<a ui-sref="conversations.detail({id: conv._id})">
 				<span class="glyphicon glyphicon-envelope"></span> 
 				{{ conv.lastMsg }}
 			</a>
@@ -22,3 +23,5 @@
 <ul class="pager" ng-hide="convs.length === 0" >
 	<li><a href="" ng-click="loadMoreConvs()">Load more</a></li>
 </ul>
+
+</div>

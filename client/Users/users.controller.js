@@ -1,10 +1,10 @@
 (function() {
 	'use strict';
 
-	angular.module('app').controller('UserListCtrl', UserListCtrl);
-	UserListCtrl.$inject = ['$meteor'];
+	angular.module('app').controller('UsersCtrl', UsersCtrl);
+	UsersCtrl.$inject = ['$meteor'];
 
-	function UserListCtrl($meteor) {
+	function UsersCtrl($meteor) {
 		var vm = this;
 
 		// $meteor.subscribe('allUserData').then(function() {

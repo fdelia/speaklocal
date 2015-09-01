@@ -3,28 +3,33 @@
   <nav class="navbar navbar-default">
 	
 	  <ul class="nav navbar-nav">
-	  	<li ng-class="{active: routeIsStream()}"><a ui-sref="stream">
-        <span class="glyphicon glyphicon-home"></span>
-      </a></li>
+	  	<li ui-sref-active="active">
+        <a ui-sref="posts">
+          <span class="glyphicon glyphicon-home"></span>
+        </a>
+      </li>
       
 	  	<li ui-sref-active="active" ng-show="$root.currentUser">
         	<div class="noti_bubble" ng-show="notiCounter>0">{{ notiCounter }}</div>
-        	<a ui-sref="notificationList">
+        	<a ui-sref="notifications">
             <span class="glyphicon glyphicon-bell"></span>
           </a>
       </li>
 
-	  	<li ng-class="{active: routeIsMessage()}" ng-show="$root.currentUser">
+	  	<li ui-sref-active="active" ng-show="$root.currentUser">
 	  		<div class="noti_bubble" ng-show="msgCounter>0">{{ msgCounter }}</div>
-	  		<a ui-sref="conversationList">
+	  		<a ui-sref="conversations">
           <span class="glyphicon glyphicon-envelope"></span>
-        </a></li>
+        </a>
+      </li>
 
-      <li ng-class="{active: routeIsUserlist()}" ng-show="$root.currentUser"><a ui-sref="userList">
-        <span class="glyphicon glyphicon-user"></span>
-      </a></li>
+      <li ng-class="{active: routeIsUserlist()}" ng-show="$root.currentUser">
+        <a ui-sref="users">
+          <span class="glyphicon glyphicon-user"></span>
+        </a>
+      </li>
 
-	  	<li ng-class="{active: routeIs('/user/'+currentUser.username)}" ng-show="$root.currentUser"><a ui-sref="user({id:currentUser.username})">
+	  	<li ng-class="{active: routeIsCurrentUser()}" ng-show="$root.currentUser"><a ui-sref="users.detail({id:currentUser.username})">
         <span class="glyphicon glyphicon-cog"></span>
       </a></li>
 	  	

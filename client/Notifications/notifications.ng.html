@@ -7,7 +7,7 @@
 
 <div class="list-group">
 
-		<a ui-sref="post({id: noti.post._id})" ng-click="removeNoti(noti.type, noti.on)" ng-repeat="noti in notifications" class="list-group-item" ng-class="{'list-group-item-info': !noti.seen}">
+		<a ui-sref="posts.detail({id: noti.post._id})" ng-click="removeNoti(noti.type, noti.on)" ng-repeat="noti in notifications" class="list-group-item" ng-class="{'list-group-item-info': !noti.seen}">
 		<small class="text-muted pull-right">{{ timeAgo(noti.updatedAt) }} ago</small>
 			<div ng-if="noti.type==='comment'">
 				<span class="glyphicon glyphicon-comment"></span> &nbsp;

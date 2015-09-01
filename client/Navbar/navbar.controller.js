@@ -2,29 +2,20 @@
   'use strict';
 
   angular.module('app').controller('NavbarCtrl', NavbarCtrl);
-  NavbarCtrl.$inject = ['$scope', '$location', '$document', '$state', 'speakLocalData', 'NavbarService']
+  NavbarCtrl.$inject = ['$scope', '$document', '$state', 'speakLocalData', 'NavbarService']
 
-  function NavbarCtrl($scope, $location, $document, $state, speakLocalData, NavbarService) {
-
-    // TODO solve this with nested states and ui-sref-active
-    $scope.routeIs = function(routeName) {
-      return $location.path() === routeName;
-    };
-
+  function NavbarCtrl($scope, $document, $state, speakLocalData, NavbarService) {
     $scope.routeIsUserlist = function() {
-      if (!$scope.currentUser) return; // TODO cheap hack b\c error messages, 
+      if (!$scope.currentUser) return; // TODO cheap hack b\c error messages
       // currentUser is set too late, even if it works like this
-      return ($location.path().indexOf('/user/') >= 0 && $location.path().indexOf($scope.currentUser.username) === -1) || $location.path().indexOf('/users') >= 0;
+      return $state.current.name === 'users' || $state.current.name === 'users.detail' && $state.params.id !== $scope.currentUser.username;
+      // return ($location.path().indexOf('/user/') >= 0 && $location.path().indexOf($scope.currentUser.username) === -1) || $location.path().indexOf('/users') >= 0;
     };
 
-    $scope.routeIsStream = function() {
-      return $location.path().indexOf('/post/') >= 0 || $location.path() === '/';
-    };
-
-    $scope.routeIsMessage = function() {
-      return $location.path().indexOf('/message/') >= 0 || $location.path() === '/messages';
-    };
-
+    $scope.routeIsCurrentUser = function(){
+      if (!$scope.currentUser) return; // TODO cheap hack b\c error messages, 
+      return $state.current.name === 'users.detail' && $state.params.id === $scope.currentUser.username;
+    }
 
     NavbarService.getAnoMode().then(function(res) {
       $scope.anoMode = res;
@@ -41,7 +32,6 @@
       // console.log('Got keypress:', e.which);
       // $rootScope.$broadcast('keypress', e);
       // $rootScope.$broadcast('keypress:' + e.which, e);
-      console.log($state.current.name);
 
       // ALT + a
       if (e.which === 229) {
@@ -50,16 +40,16 @@
       }
       // ALT + q
       if (e.which === 339)
-        $state.go('stream');
+        $state.go('posts');
       // ALT + w
       if (e.which === 8721)
-        $state.go('notificationList');
+        $state.go('notifications');
       // ALT + e
       if (e.which === 8364)
-        $state.go('conversationList');
+        $state.go('conversations');
       // ALT + r
       if (e.which === 174)
-        $state.go('userList');
+        $state.go('users');
 
     });
 
