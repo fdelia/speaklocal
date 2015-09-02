@@ -15,7 +15,7 @@ I uploaded it on [meteor.com (deploy)](http://speaklocal.meteor.com). However, t
 
 ## Main Issues (so far)
 
-~~* **No tests.** The only usable packet seems `sanjo:jasmine`, but the bugs to start working with it are too many. (client-unit-mode: test files are not reloaded after editing, client-integration-mode: 'module not found'-bug) This is very disappointing actually and no-go for me.~~
+* Ok, testing works. But it's full of workarounds and not so intuitive.
 
 * Long initial loading time: 4-6 seconds because of the meteor subscribtions. Haven't found a practical solution so far. 
 * State change to `posts` (click on the home icon in the navbar) is a bit slow too. Main originator is a posts-query with sort(), which takes about 500ms.

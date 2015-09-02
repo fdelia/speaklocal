@@ -1,9 +1,10 @@
 describe('PostsService', function() {
   beforeEach(module('app'));
 
-  var PostsService, speakLocalData, rootScope;
-  beforeEach(inject(function($rootScope, _PostsService_, _speakLocalData_) {
-    rootScope = $rootScope;
+  var PostsService, speakLocalData, $timeout, $rootScope;
+  beforeEach(inject(function(_$timeout_, _$rootScope_, _PostsService_, _speakLocalData_) {
+    $timeout = _$timeout_;
+    $rootScope = _$rootScope_;
     PostsService = _PostsService_;
     speakLocalData = _speakLocalData_;
   }));
@@ -13,20 +14,19 @@ describe('PostsService', function() {
     expect(PostsService).not.toBeNull();
   });
 
-  it('addPost', function() {
-    // console.log(speakLocalData.subscribeAll());
-    var res = null;
-    speakLocalData.subscribeAll().then(function(data) {
-      // PostsService.addPost('', 'test')
-      res = data;
+  it('addPost', function(done) {
+    speakLocalData.subscribeAll()
+    .then(function(data) {
+      expect(res).not.toBeNull();
       console.log('subscribed '+res);
     }, function(err){
       console.log('error '+err);
     });
 
-    console.log(PostsService.loadPosts());
-    console.log(res);
-    expect(res).not.toBeNull();
+    $rootScope.$apply();
+    done();
+
+    // expect(res).not.toBeNull();
   });
 
 });
