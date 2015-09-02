@@ -2,14 +2,16 @@
 	'use strict';
 
 	angular.module('app').controller('UsersCtrl', UsersCtrl);
-	UsersCtrl.$inject = ['$meteor'];
+	UsersCtrl.$inject = ['UsersService'];
 
-	function UsersCtrl($meteor) {
+	function UsersCtrl(UsersService) {
 		var vm = this;
 
-		// $meteor.subscribe('allUserData').then(function() {
-		vm.users = Meteor.users.find().fetch();
-		// });
+		// TODO add pagination
+
+		vm.users = UsersService.getUsers();
+
+
 	}
 
 })();

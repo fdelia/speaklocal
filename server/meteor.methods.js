@@ -225,7 +225,7 @@ Meteor.methods({
       var post = Posts.findOne({
         _id: comment.postId
       });
-    } else return false;
+    } else throw new Meteor.Error('should-not-happen', 'Something went wrong...');
 
     console.log('like/unlike ' + type + ' : ' + id);
 
@@ -279,12 +279,12 @@ Meteor.methods({
 
   // message
   sendMessage: function(convId, text) {
-    if (!text) return false;
-    if (!convId) return false;
+    if (!text) throw new Meteor.Error('illegal-arguments', 'Missing argument');
+    if (!convId) throw new Meteor.Error('illegal-arguments', 'Missing argument');
     var conv = Conversations.findOne({
       _id: convId
     });
-    if (!conv) return false;
+    if (!conv) throw new Meteor.Error('illegal-arguments', 'Conversation not found for given id');
 
     // find out which user is which
     // being first sender
@@ -300,7 +300,7 @@ Meteor.methods({
       var toUser = getAnyProfile(conv.userId);
       conv.unseenMsgsFrom += 1;
     }
-    if (!fromUser || !toUser) return false;
+    if (!fromUser || !toUser) throw new Meteor.Error('illegal-arguments', 'User not found');
 
     var m = {
       convId: conv._id,
@@ -339,9 +339,9 @@ Meteor.methods({
     // if none found create one
     // postId is only used for anoProfile and if the conv is new
 
-    if (!toUserId) return false;
+    if (!toUserId) throw new Meteor.Error('illegal-arguments', 'Missing argument');
     var toUser = getAnyProfile(toUserId);
-    if (!toUser) return false;
+    if (!toUser) throw new Meteor.Error('illegal-arguments', 'User not found for given id');
 
     var fromUser = getThisUserOnPost(postId);
 
@@ -377,11 +377,11 @@ Meteor.methods({
   },
 
   seenConversation: function(convId) {
-    if (!convId) return false;
+    if (!convId) throw new Meteor.Error('illegal-arguments', 'Missing argument');
     var conv = Conversations.findOne({
       _id: convId
     }); // add access selection?
-    if (!conv) return false;
+    if (!conv) throw new Meteor.Error('illegal-arguments', 'Conversation not found for given id');
 
     console.log('seen conv ' + convId);
 
@@ -405,9 +405,9 @@ Meteor.methods({
   },
 
   updateProfile: function(userId, username, bio) {
-    if (userId !== Meteor.user()._id) return false;
-    if (username.trim().length < 3) return false;
-    if (bio.length > 2000) return false; // or crop it
+    if (userId !== Meteor.user()._id) throw new Meteor.Error('illegal-arguments', 'Missing argument');
+    if (username.trim().length < 3) throw new Meteor.Error('illegal-arguments', 'Missing argument');
+    if (bio.trim().length < 3 || bio.length > 2000) throw new Meteor.Error('illegal-arguments', 'Missing argument');
 
     username = _.escape(username).trim();
     bio = _.escape(bio).trim();
@@ -467,8 +467,7 @@ Meteor.methods({
     var user = Meteor.users.findOne({
       _id: userId
     });
-    if (!user)
-      this.error(new Meteor.Error('illegal-arguments', 'User not found for userId'));
+    if (!user) throw new Meteor.Error('illegal-arguments', 'Missing argument');
 
     // get all ids of posts and comments from this user
     var postIds = Posts.find({
@@ -489,7 +488,7 @@ Meteor.methods({
       }
     }).fetch().length;
 
- 
+
     return numberOfLikes;
   }
 
@@ -501,7 +500,7 @@ Meteor.methods({
  * Server side getUser function, don't publish data to client
  */
 function getThisUserOnPost(postId) {
-  if (!postId) Meteor.error(500, 'no postId given');
+  if (!postId) throw new Meteor.Error('illegal-arguments', 'Missing argument');
 
   var user;
   if (Meteor.user().anoMode) user = getAnoProfileForThisUser(postId, null);
@@ -511,7 +510,7 @@ function getThisUserOnPost(postId) {
 }
 
 function getThisUserOnTalkgTo(userId) {
-  if (!userId) Meteor.error(500, 'no userId given');
+  if (!userId) throw new Meteor.Error('illegal-arguments', 'Missing argument');
 
   var user;
   if (Meteor.user().anoMode) user = getAnoProfileForThisUser(null, userId);
@@ -545,11 +544,7 @@ function getAnoProfileForThisUser(postId, toUserId) {
   console.log('getAnoProfileForThisUser , ' + postId + ' , ' + toUserId);
 
   // if new post, create profile
-  if (!postId && !toUserId) {
-    Meteor.error(500, 'need either postId or toUserId to get anoUser');
-    return false;
-    // return createAnoUser(null);
-  }
+  if (!postId && !toUserId) throw new Meteor.Error('illegal-arguments', 'Missing argument (need either postId or toUserId)');
   if (postId) {
     var anoUser = AnonymousUsers.findOne({
       talkgOnPost: postId,
@@ -590,10 +585,8 @@ function getAllUserIdsForThisUser() {
 }
 
 function createAnoUser(postId, toUserId) {
-  if (!postId && !toUserId) {
-    Meteor.error(500, 'need either postId or toUserId to create new anoUser');
-    return false;
-  }
+  if (!postId && !toUserId) throw new Meteor.Error('illegal-arguments', 'Missing argument (need either postId oder toUserId)');
+  console.log('createAnoUser');
 
   // random name: look at names given from postId
   // choose one of the set of left names
@@ -614,7 +607,6 @@ function createAnoUser(postId, toUserId) {
   username = leftNames[Math.floor(Math.random() * leftNames.length)];
   console.log('new AnoProfile with username ' + username);
 
-  console.log('createAnoUser');
   var id = AnonymousUsers.insert({
     username: username,
     isUser: Meteor.user()._id,
@@ -692,7 +684,7 @@ function notifyUser(toUserId, elId, type) {
     if (existingNoti.seen === 0) return false;
     var newUserIds = existingNoti.userIds.slice(0);
     newUserIds.push(fromUser._id);
-    
+
     return Notifications2.update({
       _id: existingNoti._id
     }, {

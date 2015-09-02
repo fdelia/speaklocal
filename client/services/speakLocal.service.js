@@ -1,6 +1,8 @@
 (function() {
 	'use strict';
 
+	// Helper Class
+	
 	// this should be more than one service
 	// (one for data handling, one for users and anoMode, one for helper functions)
 

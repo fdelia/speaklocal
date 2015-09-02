@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('app').controller('UserCtrl', UserCtrl);
-	UserCtrl.$inject = ['$scope', '$stateParams', 'speakLocal', '$meteor'];
+	UserCtrl.$inject = ['$scope', '$state', 'speakLocal', 'UsersService'];
 
-	function UserCtrl($scope, $stateParams, speakLocal, $meteor) {
+	function UserCtrl($scope, $state, speakLocal, UsersService) {
 		$scope.timeAgo = speakLocal.timeAgo;
 
 		$scope.alerts = [];
@@ -20,90 +20,23 @@
 		$scope.addImages = addImages;
 		$scope.saveCroppedImage = saveCroppedImage;
 
-		$scope.$meteorSubscribe('allUserData').then(function() {
+		var username = $state.params.id;
+		$scope.user = UsersService.getUserByUsername(username);
 
-			var username = $stateParams.id;
-			$scope.user = Meteor.users.findOne({
-				username: username
+		if (!$scope.user) {
+			$scope.addAlert('danger', 'User not found.');
+			return false;
+		}
+
+		$scope.activities = $scope.activities.concat(UsersService.getActivities($scope.user._id));
+
+		// count likes that this user received
+		UsersService.countLikesFromUser($scope.user._id)
+			.then(function(data) {
+				$scope.numberOfLikes = data;
+			}, function(err) {
+
 			});
-
-
-			if (!$scope.user) {
-				$scope.addAlert('danger', 'User not found.');
-				return false;
-			}
-
-
-			// count likes that this user received
-			Meteor.call('countLikesFromUser', $scope.user._id, function(err, res) {
-				$scope.numberOfLikes = res;
-			});
-
-
-			// build user activity list
-			var opts = {
-				userId: $scope.user._id
-			};
-
-			var activityLog = {};
-
-
-			// get all "activity elements"
-			var allElements = Posts.find({
-				userId: $scope.user._id
-			}).fetch();
-			allElements = allElements.concat(Comments.find({
-				userId: $scope.user._id
-			}).fetch());
-			allElements = allElements.concat(Likes.find({
-				userId: $scope.user._id
-			}).fetch());
-
-			for (var i in allElements) {
-				var el = allElements[i];
-				activityLog[el.createdAt] = el;
-			}
-
-			// sort by date
-			function compareNumbers(a, b) {
-				return b - a;
-			}
-			var sortedKeys = Object.keys(activityLog);
-			sortedKeys.sort(compareNumbers);
-
-			for (var i = 0; i < 20; i += 1) {
-				var key = sortedKeys[i];
-				if (!key) break;
-
-				// add aditional data
-
-				// only for likes (only likes have .on)
-				if (activityLog[key].on) {
-
-					if (activityLog[key].type === 'post') {
-						// subscribtion problem
-						activityLog[key].post = Posts.findOne({
-							_id: activityLog[key].on
-						});
-					}
-
-					if (activityLog[key].type === 'comment') {
-						activityLog[key].comm = Comments.findOne({
-							_id: activityLog[key].on
-						});
-						if (!activityLog[key].comm || !activityLog[key].comm.postId) return;
-						activityLog[key].post = Posts.findOne({
-							_id: activityLog[key].comm.postId
-						});
-					}
-				}
-				$scope.activities.push(activityLog[key]);
-			}
-
-
-
-
-		});
 
 
 		function addAlert(type, msg) {
@@ -118,13 +51,13 @@
 		};
 
 		function updateUser(username, bio) {
-			// TODO bio is not being set -> profile.bio
-			Meteor.call('updateProfile', $scope.currentUser._id, username, bio, function(err, res) {
-				console.log(res);
-			});
-
+			UsersService.updateUser($scope.user._id, username, bio)
+				.then(function(data) {
+					$scope.addAlert('success', 'Successfully updated.');
+				}, function(err) {
+					$scope.addAlert('warning', 'Error: ' + err.reason);
+				});
 		}
-
 
 		// image upload
 		$scope.image = {
@@ -150,22 +83,18 @@
 		}
 
 		function saveCroppedImage() {
-			// TODO myCroppdeImage is always empty
+			// TODO myCroppedImage is always empty
 			// work around for the moment
 			console.log($scope.image.croppedImg);
 			$scope.image.croppedImg = $scope.image.orgImg;
 
 			if ($scope.image.croppedImg !== '') {
-				Meteor.call('updateUserImage', $scope.image.croppedImg, function(err, res) {
-
-					if (err) {
-						$scope.addAlert('danger', 'Error: ' + err.reason);
-						// $scope.$apply(); // why is this needed here?
-					} else {
+				UsersService.updateUserImage($scope.image.croppedImg)
+					.then(function(data) {
 						$scope.addAlert('success', 'Profile image was successfully uploaded.');
-					}
-				});
-
+					}, function(err) {
+						$scope.addAlert('danger', 'Error: ' + err.reason);
+					});
 			} else {
 				console.error('myCroppedImage === ""');
 			}

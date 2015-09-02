@@ -1,7 +1,7 @@
 Issues:
  ☐ really need tests: a lot of small things in the UI are buggy
  ☐ posts.js: from notis, click a notification, now click on stream in navbar. it won't load the state
- ☐ queries: only get fields that are used (performance)
+ ✔ queries: only get fields that are used (performance) @done (15-09-02 16:33)
  ☐ bring code to level "how it's done" (concerning angular)
    ☐ route.js: children states like post.list and post.detail including ui-sref-active (didn't work for now: switching between children states and -active didn't add the class)
  ☐ stream: computing of posts is a bit slow... (it's the updatePosts() function)
@@ -14,13 +14,16 @@ Issues:
  ☐ meteor.methods.js: addPost: too much is escaped, should only escape basic html chars
  ☐ meteor.methods.js: addComment: same as above
  ☐ after adding a post, if liked right away, it's not updated in the view of the user who added the post. the issue is resolved after commenting on the post, reloading the controller.
+
+ ☐ users: add pagination
+ ☐ users.detail: add pagination for activities
  ✔ user activity: unfinished, not showing user comments and likes @done (15-08-17 18:51)
  ☐ user activity: active since (user.createdAt)
  ☐ user activity: limit by date
  ✔ error: tried to load angular more than once??? it's even there after removing all of my code (and some packages), issue with packages/angularjs_angular and packages/angular_angular, both get loaded @done (15-08-29 14:07)
  ☐ createUser: add createdAt and updatedAdd
- ☐ throwing error from server to client doesn't work, not sure if done right
- ☐ CSS: remove userShortCut img styles, add bootstrap col-xx-x in templates instead
+ ☐ throwing error from server in Meteor.pubslih doesn't work, not sure if done right
+ ✔ CSS: remove userShortCut img styles, add bootstrap col-xx-x in templates instead @done (15-09-02 16:32)
  ☐ FSCollection: add filter, doesn't work
  ☐ user.controller.js: upload user image, cropping doesnt work (img-crop directive)
  ✔ Angular: make app more moduler with app.controllers, app.services etc @done (15-09-01 18:12)
@@ -42,8 +45,8 @@ To add:
  ✔ navbar: http://stackoverflow.com/questions/14656567/meteor-subscribe-to-a-count for counting new messages and notifications @done (15-08-10 19:01)
 
 Testing:
- ☐ install velocity:html-reporter
- ☐ install sanjo:jasmine
+ ☐ add velocity:html-reporter
+ ☐ add sanjo:jasmine
 
 
 
