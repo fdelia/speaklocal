@@ -74,6 +74,12 @@
 
 		// if postId is undefined, load all posts (normal view)
 		function loadPosts(postId, opts) {
+			// default opts
+			opts = _.extend({
+				skip: 0,
+				limit: 0
+			}, opts);
+
 			// show one post only or all
 			if (postId)
 				var posts = [Posts.findOne({
