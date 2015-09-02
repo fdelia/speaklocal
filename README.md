@@ -17,6 +17,8 @@ I uploaded it on [meteor.com (deploy)](http://speaklocal.meteor.com). However, t
 
 * Ok, testing works. But it's full of workarounds and not so intuitive.
 
+I find it a bit disappointing to waste that much time on stackoverflow and blog posts just to make tests work... In my opinion tests should work out of the box.
+
 * Long initial loading time: 4-6 seconds because of the meteor subscribtions. Haven't found a practical solution so far. 
 * State change to `posts` (click on the home icon in the navbar) is a bit slow too. Main originator is a posts-query with sort(), which takes about 500ms.
 
