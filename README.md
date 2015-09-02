@@ -4,7 +4,7 @@
 An imitation of the old [spocal.net](http://www.spocal.net).
 **This is not professional work.**
 It's unfinished work: It has more or less "full" functionality, but isn't scalable and some things are missing (e.g. good error handling).
-I uploaded it [here](http://speaklocal.meteor.com). However, the server of speaklocal.meteor.com is free and very slow.
+I uploaded it on [meteor.com (deploy)](http://speaklocal.meteor.com). However, the server of speaklocal.meteor.com is free and feels a bit slow.
 
 ## Installation
 
@@ -13,9 +13,12 @@ I uploaded it [here](http://speaklocal.meteor.com). However, the server of speak
 * In main folder start the server with `meteor`
 * Go to http://localhost:3000
 
-## Usage
+## Main Issues (so far)
 
-...
+* Long initial loading time: 4-6 seconds because of the meteor subscribtions. Haven't found a practical solution so far. This happens 
+* State change to `posts` (click on the home icon in the navbar) is a bit slow too. Main originator is a posts-query with sort(), which takes about 500ms.
+
+Both issues didn't bother before adding several tousands of test rows to the db.
 
 ## Contributing
 

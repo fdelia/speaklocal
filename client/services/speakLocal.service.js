@@ -20,24 +20,34 @@
 
 
 		// *** MUST BE SUBSCRIBED TO ANOUSERS AND ALLUSERDATA TO WORK ***
-		function getUser(userId) {
+		function getUser(userId, reduced) {
 			if (!userId) {
 				console.error('no userId given');
 				return null;
 			}
+			if (reduced) var fields = {
+				username: 1,
+				profile: 1, 
+				isAno: 1
+			};
+			else var fields = {};
 
 			var user = AnonymousUsers.findOne({
 				_id: userId
+			}, {
+				fields: fields
 			});
 
 			if (user === undefined) {
 				user = Meteor.users.findOne({
 					_id: userId
+				}, {
+					fields: fields
 				});
 			}
 
 			// user may still be undefined (if wrong userId)
-			return user; 
+			return user;
 		}
 
 		function getAllUserIdsForThisUser(currentUserId) {

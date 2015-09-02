@@ -24,7 +24,7 @@
 
 
 		function sendMessage(text) {
-			ConversationService.sendMessage(convId, text)
+			ConversationsService.sendMessage(convId, text)
 				.then(function(data) {
 					// $scope.$apply(); // not sure if necessary
 				}, function(err) {

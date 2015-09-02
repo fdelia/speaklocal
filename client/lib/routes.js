@@ -11,6 +11,7 @@
           controller: 'PostsCtrl',
           resolve: {
             'subscribtion': ['speakLocalData', function(speakLocalData) {
+              console.log('posts');
               return speakLocalData.subscribeAll();
             }]
           }
@@ -21,6 +22,7 @@
           controller: 'PostsCtrl',
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
+              console.log('posts.detail');
               return $meteor.requireUser();
             }]
           }

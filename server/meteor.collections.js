@@ -18,19 +18,22 @@
 
   // no user identification needed for these
 
-  Meteor.publish('posts', function(opts) {
-    return Posts.find();
+  Meteor.publish('posts', function(unlimited) {
+    // var limit = unlimited ? 0 : 30;
+
+    return Posts.find({}, {
+    });
   });
 
-  Meteor.publish('comments', function(opts) {
+  Meteor.publish('comments', function() {
     return Comments.find();
   });
 
-  Meteor.publish('likes', function(opts) {
+  Meteor.publish('likes', function() {
     return Likes.find();
   });
 
-  Meteor.publish('anoUsers', function(opts) {
+  Meteor.publish('anoUsers', function() {
     return AnonymousUsers.find({}, {
       fields: {
         isUser: 0,
