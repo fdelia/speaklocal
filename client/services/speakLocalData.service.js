@@ -11,11 +11,11 @@
 		};
 
 		var subscribed = false;
-		var unlimitedPostsBefore = false;
+		// var postsLimitBefore = false;
 
-		function subscribeAll(unlimitedPosts) {
+		function subscribeAll(postsLimit) {
 			var def = $q.defer();
-			var unlimitedPosts = unlimitedPosts ? true : false;
+			// postsLimit = postsLimit ? postsLimit : 30;
 
 			var s = Date.now();
 
@@ -28,7 +28,7 @@
 				return def.promise;
 			}
 
-			$meteor.subscribe('posts', unlimitedPosts).then(function() {
+			$meteor.subscribe('posts').then(function() {
 				$meteor.subscribe('comments').then(function() {
 					$meteor.subscribe('likes').then(function() {
 
@@ -43,7 +43,7 @@
 										console.log('subscribeAll ' + (Date.now() - s));
 										def.resolve('all subscribed');
 										subscribed = true;
-										unlimitedPostsBefore = unlimitedPosts;
+										// postsLimitBefore = postsLimit;
 
 									});
 								});

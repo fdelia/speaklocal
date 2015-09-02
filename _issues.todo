@@ -1,5 +1,5 @@
 Issues:
- ☐ really need tests: a lot of small things on the UI are buggy
+ ☐ really need tests: a lot of small things in the UI are buggy
  ☐ posts.js: from notis, click a notification, now click on stream in navbar. it won't load the state
  ☐ queries: only get fields that are used (performance)
  ☐ bring code to level "how it's done" (concerning angular)

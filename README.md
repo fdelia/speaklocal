@@ -15,10 +15,10 @@ I uploaded it on [meteor.com (deploy)](http://speaklocal.meteor.com). However, t
 
 ## Main Issues (so far)
 
-* Long initial loading time: 4-6 seconds because of the meteor subscribtions. Haven't found a practical solution so far. This happens 
+* Long initial loading time: 4-6 seconds because of the meteor subscribtions. Haven't found a practical solution so far. 
 * State change to `posts` (click on the home icon in the navbar) is a bit slow too. Main originator is a posts-query with sort(), which takes about 500ms.
 
-Both issues didn't bother before adding several tousands of test rows to the db.
+Both issues didn't bother before adding several tousands of test rows to the db. I tried to solve it with limits in Meteor.publish() and extra Meteor.publish()'s for all needs, but the solution is not convincing.
 
 ## Contributing
 

@@ -18,12 +18,24 @@
 
   // no user identification needed for these
 
-  Meteor.publish('posts', function(unlimited) {
-    // var limit = unlimited ? 0 : 30;
+  Meteor.publish('posts', function(limit) {
+    limit = parseInt(limit) ? parseInt(limit) : 0;
 
     return Posts.find({}, {
+      // limit: limit
     });
   });
+
+  // Meteor.publish('posts-by-user', function(userId) {
+  //   var user = Meteor.users.find({
+  //     _id: userId
+  //   });
+  //   if (!user) throw Meteor.Error('illegal-arguments');
+
+  //   return Posts.find({
+  //     userId: userId
+  //   });
+  // });
 
   Meteor.publish('comments', function() {
     return Comments.find();
