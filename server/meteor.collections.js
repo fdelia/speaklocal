@@ -18,11 +18,23 @@
 
   // no user identification needed for these
 
+  // TODO add limit, in a non-messy way
+
   Meteor.publish('posts', function(limit) {
     limit = parseInt(limit) ? parseInt(limit) : 0;
 
     return Posts.find({}, {
-      // limit: limit
+      // limit: limit,
+      sort: {
+        createdAt: -1
+      },
+      fields: {
+        userId: 1,
+        title: 1,
+        text: 1,
+        createdAt: 1,
+        likes: 1
+      }
     });
   });
 
@@ -37,19 +49,36 @@
   //   });
   // });
 
-  Meteor.publish('comments', function() {
-    return Comments.find();
+  Meteor.publish('comments', function(limit) {
+    limit = parseInt(limit) ? parseInt(limit) : 0;
+
+    return Comments.find({}, {
+      // limit: limit,
+      sort: {
+        createdAt: 1
+      }
+    });
   });
 
-  Meteor.publish('likes', function() {
-    return Likes.find();
+  Meteor.publish('likes', function(limit) {
+    limit = parseInt(limit) ? parseInt(limit) : 0;
+
+    return Likes.find({}, {
+      // limit: limit,
+      fields: {
+        createdAt: 0
+      }
+    });
   });
 
   Meteor.publish('anoUsers', function() {
     return AnonymousUsers.find({}, {
       fields: {
-        isUser: 0,
+        isUser: 0, // IMPORTANT! isUser should not be sent (private information)
         createdAt: 0
+      },
+      sort: {
+        createdAt: -1
       }
     });
   });
@@ -58,7 +87,7 @@
     return Meteor.users.find({}, {
       fields: {
         'username': 1,
-        // 'emails': 1,
+        // 'emails': 1, // dev only
         'profile': 1
       }
     });
@@ -69,11 +98,15 @@
   // publish to anonymous profiles of the user, to recognice what the user owns
   // the only difference is that these profiles have the field isUser set
   Meteor.publish('userAnoProfiles', function(opts) {
+    // TODO add limit
     return AnonymousUsers.find({
       isUser: this.userId
     }, {
       fields: {
         createdAt: 0 // not necessary
+      },
+      sort: {
+        createdAt: -1
       }
     });
   });
@@ -91,9 +124,10 @@
 
 
 
-  Meteor.publish('conversations', function() {
+  Meteor.publish('conversations', function(limit) {
     if (!this.userId) return null;
     var userIds = getAllUserIdsForUser(this.userId);
+    limit = parseInt(limit) ? parseInt(limit) : 0;
 
     return Conversations.find({
       $or: [{
@@ -105,33 +139,18 @@
           $in: userIds
         }
       }]
+    }, {
+      // limit: limit,
+      sort: {
+        updatedAt: -1
+      },
+      fields: {
+        fromUserObj: 0,
+        toUserObj: 0,
+        createdAt: 0
+      }
     });
   });
-
-  // Meteor.publish('conversations-new', function() {
-  //   if (!this.userId) return null;
-  //   var userIds = getAllUserIdsForUser(this.userId);
-
-  //   // only convs with unseenMsg > 0
-  //   return Conversations.find({
-  //     $or: [{
-  //       userId: {
-  //         $in: userIds
-  //       },
-  //       unseenMsgsFrom: {
-  //         $gt: 0
-  //       }
-  //     }, {
-  //       toUser: {
-  //         $in: userIds
-  //       },
-  //       unseenMsgsTo: {
-  //         $gt: 0
-  //       }
-  //     }]
-  //   });
-  // });
-
 
 
   Meteor.publish('messages', function() {
@@ -149,16 +168,23 @@
           $in: userIds
         }
       }]
+    }, {
+      sort: {
+        createdAt: 1
+      }
     });
   });
 
 
 
-  Meteor.publish('notifications2', function() {
+  Meteor.publish('notifications2', function(limit) {
     if (!this.userId) return null;
+    limit = parseInt(limit) ? parseInt(limit) : 0;
 
     return Notifications2.find({
       to: this.userId
+    }, {
+      // limit: limit
     });
   });
 

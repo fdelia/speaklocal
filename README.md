@@ -15,12 +15,12 @@ I uploaded it on [meteor.com (deploy)](http://speaklocal.meteor.com). However, t
 
 ## Main Issues (so far)
 
-* Ok, testing works. But it's full of workarounds and not so intuitive.
+* Ok, testing works. But it's full of workarounds and not so intuitive (e.g. testing a promise).
 
 I find it a bit disappointing to waste that much time on stackoverflow and blog posts just to make tests work... In my opinion tests should work out of the box.
 
 * Long initial loading time: 4-6 seconds because of the meteor subscribtions. Haven't found a practical solution so far. 
-* State change to `posts` (click on the home icon in the navbar) is a bit slow too. Main originator is a posts-query with sort(), which takes about 500ms.
+* That's a small issue: State change to `posts` (click on the home icon in the navbar) is a bit slow too. Main originator is a posts-query with sort(), which takes about 500ms. The same queries executed in the mongodb shell take all <5ms.
 
 Both issues didn't bother before adding several tousands of test rows to the db. I tried to solve it with limits in Meteor.publish() and extra Meteor.publish()'s for all needs, but the solution is not convincing.
 

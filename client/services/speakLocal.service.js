@@ -30,7 +30,8 @@
 			if (reduced) var fields = {
 				username: 1,
 				profile: 1, 
-				isAno: 1
+				isAno: 1,
+				isUser: 1
 			};
 			else var fields = {};
 

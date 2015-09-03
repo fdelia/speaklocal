@@ -96,7 +96,8 @@
 						userId: 1,
 						title: 1,
 						text: 1,
-						createdAt: 1
+						createdAt: 1,
+						likes: 1
 					}
 				}).fetch();
 			// it's slow till here, seems from the query above, from 'sort'
@@ -133,10 +134,10 @@
 					comment.user = speakLocal.getUser(comment.userId, true);
 
 					comment.likes = [];
-					setCommentLikes(comment);
+					setCommentLikes(comment, currentUser);
 				}
 
-				setPostLikes(post);
+				setPostLikes(post, currentUser);
 
 			}
 
@@ -162,6 +163,7 @@
 					console.error('user not defined for comment like and userId ' + el.userId);
 					return true;
 				}
+				
 				if (user.isUser !== undefined || (currentUser && user.username === currentUser.username)) comment.userHasLiked = 1;
 				return user.username;
 			});

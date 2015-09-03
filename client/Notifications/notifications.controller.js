@@ -2,25 +2,30 @@
 	'use strict';
 
 	angular.module('app').controller('NotiCtrl', NotiCtrl);
-	NotiCtrl.$inject = ['$scope', 'speakLocal', '$state'];
+	NotiCtrl.$inject = ['$scope', 'speakLocal', '$state', 'NotificationsService'];
 
-	function NotiCtrl($scope, speakLocal, $state) {
+	function NotiCtrl($scope, speakLocal, $state, NotificationsService) {
 		// subscription is needed to find posts/comments below
 		$scope.timeAgo = speakLocal.timeAgo;
 		$scope.loadMoreNotifs = loadMoreNotifs;
-		$scope.markAllAsSeen = markAllAsSeen;
 
-		$scope.loadNotifs = loadNotifs;
+		$scope.markAllAsSeen = markAllAsSeen;
 		$scope.removeNoti = removeNoti;
 
 		var limit = 20;
 		var loadPerPage = 20;
 		
+		loadNotifs();
+
 		var initialization = true;
 		Notifications2.find().observeChanges({
 			added: function(id, el) {
 				if (!initialization)
 					loadNotifs();
+			},
+			changed: function(id, el){
+				if (!initialization)
+					loadNotifs();	
 			}
 		});
 		initialization = false;
@@ -28,75 +33,28 @@
 
 		function loadMoreNotifs() {
 			limit += loadPerPage;
-			$scope.loadNotifs();
+			loadNotifs();
 		}
 
 		function markAllAsSeen() {
-			for (var i in $scope.notifications) {
+			for (var i=0; i<$scope.notifications.length; i+=1) {
 				var noti = $scope.notifications[i];
-
-				Meteor.call('removeNoti', noti.type, noti.on, function(err, res) {});
+				if (noti.seen === 0)
+					removeNoti(noti.type, noti.on);
 			}
 
-			// todo: should wait to finish all the calls
-			// is needed b/c notiController is not reactive (doesnt need to be)
-			$state.go($state.current, {}, {
-				reload: true
-			});
+			// TODO addAlert success
+		}
+
+		function removeNoti(type, onId) {
+			NotificationsService.unmarkNotification(type, onId);
+					//.then(function(data){}, function(err){});
 		}
 
 		function loadNotifs() {
-
-			$scope.notifications = Notifications2.find({}, {
-				sort: {
-					// 'createdAt': -1
-					'updatedAt': -1
-				},
-				limit: limit
-			}).fetch();
-
-
-			$scope.notifications.map(function(noti) {
-
-				noti.fromUsers = _.uniq(noti.userIds.map(function(userId) {
-					var user = speakLocal.getUser(userId);
-					if (!user) { // precaution
-						// delete notiGrouped[ind];
-						console.error('Notification: user not found');
-						return;
-					}
-					return user.username;
-				}));
-
-				noti.post = Posts.findOne({
-					_id: noti.onPost
-				});
-
-				if (noti.type === 'likeComment') {
-					noti.comment = Comments.findOne({
-						_id: noti.on
-					});
-					if (!noti.comment) {
-						console.error('comment not received. not published?');
-						return true; // continue
-					}
-				}
-
-				if (noti._id == '5gn5RgqY9XSyZytcn')
-					console.log($scope.notifications);
-
-			});
-
-
+			$scope.notifications = NotificationsService.loadNotifications(limit);
 		}
-		$scope.loadNotifs();
 
-		function removeNoti(type, onId) {
-			Meteor.call('removeNoti', type, onId, function(err, res) {
-				// $state.go to post
-			});
-		}
 	}
-	// ]);
 
 })();

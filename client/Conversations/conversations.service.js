@@ -41,6 +41,9 @@
 			}, {
 				sort: {
 					'createdAt': 1
+				},
+				fields: {
+					convId: 0
 				}
 			}).fetch();
 

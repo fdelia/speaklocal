@@ -123,7 +123,7 @@
 
     function loadMorePosts() {
       opts.skip = $scope.posts.length;
-      $scope.loadPosts();
+      loadPosts();
     };
 
     function openCreateAccountDialog() {

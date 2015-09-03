@@ -50,6 +50,8 @@ Testing:
 
 
 
+Notes:
+  db.posts.find().sort({'createdAt':-1}).limit(10).explain('executionStats')
 
 
 

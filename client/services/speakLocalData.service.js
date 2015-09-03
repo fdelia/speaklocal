@@ -13,9 +13,19 @@
 		var subscribed = false;
 		// var postsLimitBefore = false;
 
-		function subscribeAll(postsLimit) {
+		function subscribeAll(opts) {
 			var def = $q.defer();
-			// postsLimit = postsLimit ? postsLimit : 30;
+			
+			// TODO limits not yet in use
+			opts = _.extend({
+				postsLimit: 100,
+				commentsLimit: 100,
+				likesLimit: 500,
+
+				notifsLimit: 100,
+				convsLimit: 100
+			}, opts);
+
 
 			var s = Date.now();
 
@@ -24,21 +34,23 @@
 
 			// Skip second subscribtion (if params unchanged)
 			if (subscribed) {
+				// TODO watch if a limit has changed
 				def.resolve('already subscribed');
 				return def.promise;
 			}
 
-			$meteor.subscribe('posts').then(function() {
-				$meteor.subscribe('comments').then(function() {
-					$meteor.subscribe('likes').then(function() {
+			$meteor.subscribe('posts', opts.postsLimit).then(function() {
+				$meteor.subscribe('comments', opts.commentsLimit).then(function() {
+					$meteor.subscribe('likes', opts.likesLimit).then(function() {
+						console.log('after post comments likes ' + (Date.now() - s));
 
 						$meteor.subscribe('allUserData').then(function() {
 							$meteor.subscribe('anoUsers').then(function() {
 								$meteor.subscribe('userAnoProfiles').then(function() {});
+								console.log('after anoProfiles ' + (Date.now() - s));
 
-
-								$meteor.subscribe('notifications2').then(function() {
-									$meteor.subscribe('conversations').then(function() {
+								$meteor.subscribe('notifications2', opts.notifsLimit).then(function() {
+									$meteor.subscribe('conversations', opts.convsLimit).then(function() {
 
 										console.log('subscribeAll ' + (Date.now() - s));
 										def.resolve('all subscribed');

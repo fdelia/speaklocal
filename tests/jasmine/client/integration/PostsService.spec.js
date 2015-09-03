@@ -15,16 +15,24 @@ describe('PostsService', function() {
   });
 
   it('addPost', function(done) {
+    var res;
+
     speakLocalData.subscribeAll()
     .then(function(data) {
-      expect(res).not.toBeNull();
+      res = data;
+      // expect(res).not.toBeNull();
       console.log('subscribed '+res);
-    }, function(err){
+
+      done();
+    }).catch(function(err){
       console.log('error '+err);
+
     });
 
+    expect(res).toBeUndefined();
     $rootScope.$apply();
-    done();
+    expect(res).not.toBeUndefined();
+    // done();
 
     // expect(res).not.toBeNull();
   });
