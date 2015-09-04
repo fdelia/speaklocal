@@ -22,6 +22,32 @@
 
   Meteor.publish('posts', function(limit) {
     limit = parseInt(limit) ? parseInt(limit) : 0;
+    var self = this;
+
+    // Posts.find({}, {
+    //   limit: 10,
+    //   sort: {
+    //     createdAt: -1
+    //   },
+    //   fields: {
+    //     userId: 1,
+    //     title: 1,
+    //     text: 1,
+    //     createdAt: 1,
+    //     likes: 1
+    //   }
+    // }).observeChanges({
+    //   added: function(id, el) {
+    //     el['xxx'] = 1;
+    //     self.added('posts', id, el); 
+    //   },
+    //   changed: function(id, el) {
+    //     el['xxx'] = 1;
+    //   },
+    //   removed: function(id, el) {
+    //     el['xxx'] = 1;
+    //   }
+    // });
 
     return Posts.find({}, {
       // limit: limit,
@@ -125,7 +151,10 @@
 
 
   Meteor.publish('conversations', function(limit) {
-    if (!this.userId) return null;
+    if (!this.userId) {
+      this.error(Meteor.Error('not-allowed', 'please log in'));
+      return null;
+    }
     var userIds = getAllUserIdsForUser(this.userId);
     limit = parseInt(limit) ? parseInt(limit) : 0;
 
@@ -154,7 +183,10 @@
 
 
   Meteor.publish('messages', function() {
-    if (!this.userId) return null;
+    if (!this.userId) {
+      this.error(Meteor.Error('not-allowed', 'please log in'));
+      return null;
+    }
 
     var userIds = getAllUserIdsForUser(this.userId);
 
@@ -178,7 +210,10 @@
 
 
   Meteor.publish('notifications2', function(limit) {
-    if (!this.userId) return null;
+    if (!this.userId) {
+      this.error(Meteor.Error('not-allowed', 'please log in'));
+      return null;
+    }
     limit = parseInt(limit) ? parseInt(limit) : 0;
 
     return Notifications2.find({

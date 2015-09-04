@@ -166,6 +166,12 @@
     var initialization = true;
 
     Posts.find().observe({
+      // added: function(post) {
+      //   if ($scope.posts.length <= 10)
+      //     $scope.posts = $scope.posts.concat(post);
+      // },
+
+      
       // take changed because the post is updated after creation to add userId
       changed: function(post, oldPost) {
         // insert only if the post is new (not during initialization)
