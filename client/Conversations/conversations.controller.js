@@ -7,7 +7,8 @@
 	function ConversationsCtrl($scope, speakLocal, ConversationsService) {
 		$scope.timeAgo = speakLocal.timeAgo;
 		$scope.loadMoreConvs = loadMoreConvs;
-		
+		$scope.showLoadMoreButton = true;
+
 		var limit = 20;
 		var loadPerPage = 20;
 
@@ -26,13 +27,21 @@
 		});
 		initialization = false;
 
-		function loadMoreConvs(){
+		function loadMoreConvs() {
 			limit += loadPerPage;
 			loadConversationList();
 		}
 
-		function loadConversationList(){
-			$scope.convs = ConversationsService.listConvs($scope.currentUser._id, limit);
+		function loadConversationList() {
+			// load one more to see if there are more
+			var convs = ConversationsService.listConvs($scope.currentUser._id, limit + 1);
+			if (convs.length > limit) {
+				// only remove one if there is one too much
+				convs = convs.slice(0, limit);
+				$scope.showLoadMoreButton = true;
+			} else $scope.showLoadMoreButton = false;
+
+			$scope.convs = convs;
 		}
 
 	}

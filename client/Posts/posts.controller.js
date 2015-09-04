@@ -5,7 +5,6 @@
   PostsCtrl.$inject = ['$scope', 'speakLocal', '$state', 'PostsService'];
 
   function PostsCtrl($scope, speakLocal, $state, PostsService) {
-    // $scope.stateParamsId = $stateParams.id; // for ng-hide
     $scope.stateParamsId = $state.params.id; // for ng-hide
 
     // "pagination"/limitation of posts
@@ -29,10 +28,10 @@
     $scope.isThisUser = isThisUser;
     $scope.sendMsgTo = sendMsgTo;
     $scope.loadMorePosts = loadMorePosts;
-    $scope.hideLoadMore = hideLoadMore;
 
     $scope.showWelcomeMsg = showWelcomeMsg;
     $scope.openCreateAccountDialog = openCreateAccountDialog;
+    $scope.showLoadMoreButton = true;
 
     loadPosts();
 
@@ -57,7 +56,6 @@
           $scope.title = '';
           $scope.text = '';
           // $scope.newPost.$setPristine();
-          // $scope.$apply();
         }, function(err) {
           $scope.addAlert('warning', err);
         });
@@ -92,15 +90,10 @@
       return userId === $scope.currentUser._id;
     };
 
-    // TODO 
-    function hideLoadMore() {
-      return $state.params.id ? true : false;
-    }
-
     // starts a conversation if there is none, postId needed for anoProfile of user
     function sendMsgTo(userId, postId) {
       if (!$scope.currentUser) return false;
-  
+
       PostsService.getConversation(userId, postId)
         .then(function(data) { // data = conversation
           $state.go('conversations.detail', {
@@ -152,10 +145,19 @@
     };
 
     function loadPosts() {
-      var posts = $scope.posts.concat(PostsService.loadPosts($state.params.id, opts));
+      // load one more to see if there is more
+      var opts2 = _.clone(opts);
+      opts2.limit += 1;
+
+      var posts = $scope.posts.concat(PostsService.loadPosts($state.params.id, opts2));
+      if (!$state.params.id && opts.limit && posts.length > opts.limit) {
+        // remove the last one only if we have loaded one too much
+        posts = posts.slice(0, -1);
+        $scope.showLoadMoreButton = true;
+      } else $scope.showLoadMoreButton = false;
+
       $scope.posts = PostsService.updatePosts(posts);
     }
-
 
 
 

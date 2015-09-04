@@ -35,7 +35,7 @@
 <div class="" ng-repeat="post in posts" ng-include src="'client/Posts/posts.detail.ng.html'">
 </div>
 
-<ul class="pager" ng-hide="posts.length === 0 || hideLoadMore()">
+<ul class="pager" ng-show="showLoadMoreButton && !stateParamsId">
 	<li><a href="" ng-click="loadMorePosts()">Load more posts</a></li>
 </ul>
 
