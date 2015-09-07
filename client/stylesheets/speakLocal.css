@@ -112,6 +112,8 @@ a.no-spam:hover {color: green;}
 
 .list-group-item a {display: inline-block;}
 
+/*.loading-gif {height: 250px;}*/
+
 /* another hack, in future make own login/registration template */
 a.login-close-text, .accounts-dialog .additional-link-container a {
     color: #428bca !important; padding: 0 !important;
@@ -228,4 +230,91 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 /* Xperia */
 @media screen and (-webkit-device-pixel-ratio:3) {
  .navbar {font-size: 1.3em;}   
+}
+
+
+
+.shape{
+    margin: 36px;
+    float: left;
+    border-style: solid;
+    border-width: 20px 20px 20px 20px;
+    /*border-color: transparent transparent #1EB287 #1EB287;*/
+    position: relative;
+    transform: rotateZ(180deg);
+    transform-origin: 20px;
+}
+
+.shape::after{
+    content: "";
+    position: absolute;
+    float: left;
+    border-style: solid;
+    border-width: 20px 20px 20px 20px;
+    border-color: #1EB287 #1EB287 transparent transparent;
+    right: -19px;
+    bottom: -21px;
+    transform: rotate3d(1,1,0,0deg);
+}
+
+@keyframes shapeshift {
+    0%   { 
+        border-color: transparent transparent #1EB287 #1EB287;
+        transform: rotateZ(180deg);
+        border-radius: 0px;         
+    }
+
+    33% { 
+        border-color: transparent transparent #158BC5 #158BC5;
+        transform:rotateZ(270deg) skewY(-15deg)skewX(-15deg);
+        border-radius: 0px;
+    }
+    
+    67% { 
+        border-color: transparent transparent #D25E51 #D25E51;
+        transform: rotateZ(315deg);
+        border-radius: 30px;
+    }
+
+    100% { 
+        border-color: transparent transparent #1EB287 #1EB287;
+        transform: rotateZ(540deg);
+        border-radius: 0px;
+    }
+}
+
+@keyframes shapeshiftafter {
+    0%   { 
+        border-color: #1EB287 #1EB287 transparent transparent;
+        transform: rotate3d(1,1,0,0deg);
+        border-radius: 0px;
+    }
+
+    33% { 
+        border-color: #158BC5 #158BC5 transparent transparent;
+        transform: rotate3d(1,1,0,90deg);
+        border-radius: 0px;
+    }
+
+    67% { 
+        border-color: #D25E51 #D25E51 transparent transparent;
+        transform: rotate3d(1,1,0,0deg);
+        border-radius: 30px;
+
+    }
+
+    100% { 
+        border-color: #1EB287 #1EB287 transparent transparent;
+        transform: rotate3d(1,1,0,0deg);
+        border-radius: 0px;
+
+    }
+}
+
+.animate {
+    animation: shapeshift 1.5s infinite;
+}
+
+.animate::after {
+    animation: shapeshiftafter 1.5s infinite;
 }

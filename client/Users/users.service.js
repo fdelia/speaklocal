@@ -75,9 +75,10 @@
 			}
 			var sortedKeys = Object.keys(activityLog);
 			sortedKeys.sort(compareNumbers);
+			var maxLength = Math.min(sortedKeys.length, 20);
 
 			// TODO add pagination here
-			for (var i = 0; i < 20; i += 1) {
+			for (var i = 0; i < maxLength; i += 1) {
 				var key = sortedKeys[i];
 				// if (!key) break;
 
