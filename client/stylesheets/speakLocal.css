@@ -17,38 +17,23 @@
 }
 
 @media (min-width: 768px) {
-.navbar-nav #login-buttons a {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
+    .navbar-nav #login-buttons a {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
 
 }
 
 @media (max-width: 768px) {
-.navbar-nav #login-buttons a {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  line-height: 20px;
-}
+    .navbar-nav #login-buttons a {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      line-height: 20px;
+    }
 
 }
 
-/*.navbar {font-size: 1.1em;}*/
-.navbar-default,
-.nav {
-    background-color: #3c8dbc;
-    /*border-color: #3c8dbc;*/
-    border: 0;
-    border-radius: 0px;
-}
 
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav>.active>a:hover,
- .navbar-default .navbar-nav>.active>a:focus {
-    background-color: #5caddc;  
-}
-.navbar-default .navbar-nav > li > a,
-.navbar-default .navbar-nav > .active > a,
 #login-buttons a {
   color: rgba(255, 255, 255, 0.8);
 }
@@ -64,8 +49,9 @@
 
 
 html, body, .meta-content {min-height: 100%;}
+.meteor-include {padding: 0 !important;}
 
-.navbar {margin-bottom: 0;}
+/* this is for mobile view */
 .navbar-nav {margin: 0;}
 .navbar-nav>li {float: left;}
 

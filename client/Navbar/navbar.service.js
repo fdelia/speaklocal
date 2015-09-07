@@ -48,7 +48,9 @@
 			}, {
 				fields: {
 					unseenMsgsTo: 1,
-					unseenMsgsFrom: 1
+					unseenMsgsFrom: 1,
+					toUser: 1,
+					userId: 1
 				}
 			}).fetch();
 
