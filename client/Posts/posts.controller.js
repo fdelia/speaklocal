@@ -156,7 +156,7 @@
         $scope.showLoadMoreButton = true;
       } else $scope.showLoadMoreButton = false;
 
-      $scope.posts = PostsService.updatePosts(posts);
+      $scope.posts = PostsService.updatePosts(posts, null, $scope.currentUser);
     }
 
 

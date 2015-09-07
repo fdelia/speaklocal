@@ -158,6 +158,7 @@
 			comment.likes = likes.map(function(el) {
 				// if (!el.userId) return; // unclear why this must be, maybe DB has strange inputs from dev
 
+				// get the liking user
 				var user = speakLocal.getUser(el.userId, true);
 				if (!user) { // if user deleted etc.
 					console.error('user not defined for comment like and userId ' + el.userId);
