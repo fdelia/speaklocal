@@ -1,17 +1,20 @@
 
 # Speak Local(ly)
 
-An imitation of the old [spocal.net](http://www.spocal.net).
-**This is not professional work.**
-It's unfinished work: It has more or less "full" functionality, but isn't scalable and some things are missing (e.g. good error handling).
-I uploaded it on [meteor.com (deploy)](http://speaklocal.meteor.com). However, the server of speaklocal.meteor.com is free and feels a bit slow.
+An imitation of the old [spocal.net](http://www.spocal.net). It's unfinished work: Some functionality is missing.
+
+I uploaded it on [meteor.com (deploy)](http://speaklocal.meteor.com). However, the server of speaklocal.meteor.com is free and is a little bit slow.
 
 ## Installation
 
-* Download files
 * Install meteor
+* Download files
 * In main folder start the server with `meteor`
-* Go to http://localhost:3000
+* Go to [http://localhost:3000](http://localhost:3000)
+
+## Frameworks
+
+Built with AngularJs (1.x), MeteorJs and Bootstrap.
 
 ## Main Issues (so far)
 
@@ -19,7 +22,7 @@ I uploaded it on [meteor.com (deploy)](http://speaklocal.meteor.com). However, t
 
 I find it a bit disappointing to waste that much time on stackoverflow and blog posts just to make tests work... In my opinion tests should work out of the box.
 
-_There is a [hack](https://forums.meteor.com/t/caching-subscription-ids-in-minimongo-to-vastly-simplify-client-side-querying/6166) to avoid the next two points. It makes a small mess in the code, but resolves the performance problems (I tried it out). However, I didn't want to invest more time into this project - so I left it as it was._
+_There is a [hack](https://forums.meteor.com/t/caching-subscription-ids-in-minimongo-to-vastly-simplify-client-side-querying/6166) to avoid the next two points (discussion about it [here](https://forums.meteor.com/t/subscrbe-is-too-slow/5326)). It makes the code a bit less legible, but resolves the performance problems (I tried it out). However, I didn't want to invest more time into this project - so I left it as it was._
 
 * Long initial loading time: 4-6 seconds because of the meteor subscribtions. Haven't found a practical solution so far. 
 * That's a small issue: State change to `posts` (click on the home icon in the navbar) is a bit slow too. Main originator is a posts-query with sort(), which takes about 500ms. The same queries executed in the mongodb shell take all <5ms.

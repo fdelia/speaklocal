@@ -22,32 +22,6 @@
 
   Meteor.publish('posts', function(limit) {
     limit = parseInt(limit) ? parseInt(limit) : 0;
-    var self = this;
-
-    // Posts.find({}, {
-    //   limit: 10,
-    //   sort: {
-    //     createdAt: -1
-    //   },
-    //   fields: {
-    //     userId: 1,
-    //     title: 1,
-    //     text: 1,
-    //     createdAt: 1,
-    //     likes: 1
-    //   }
-    // }).observeChanges({
-    //   added: function(id, el) {
-    //     el['xxx'] = 1;
-    //     self.added('posts', id, el); 
-    //   },
-    //   changed: function(id, el) {
-    //     el['xxx'] = 1;
-    //   },
-    //   removed: function(id, el) {
-    //     el['xxx'] = 1;
-    //   }
-    // });
 
     return Posts.find({}, {
       // limit: limit,
@@ -64,16 +38,6 @@
     });
   });
 
-  // Meteor.publish('posts-by-user', function(userId) {
-  //   var user = Meteor.users.find({
-  //     _id: userId
-  //   });
-  //   if (!user) throw Meteor.Error('illegal-arguments');
-
-  //   return Posts.find({
-  //     userId: userId
-  //   });
-  // });
 
   Meteor.publish('comments', function(limit) {
     limit = parseInt(limit) ? parseInt(limit) : 0;
@@ -223,31 +187,88 @@
     });
   });
 
-  // Meteor.publish('notifications2-new', function() {
-  //   if (!this.userId) return null;
 
-  //   return Notifications2.find({
-  //     to: this.userId,
-  //     seen: 0
+
+  // NEW WITH HACK bc. of performance issues
+
+
+  // for posts-view aka. stream
+  // include comments, likes and anoUsers
+  // function embedIntoPostsByLimit(id, post) {
+  //   post.comments = Comments.find({
+  //     postId: id
+  //   }, {
+  //     sort: {
+  //       createdAt: 1
+  //     }
   //   });
+
+  //   // TODO embed likes and anoUsers
+    
+  //   return post;
+  // }
+  // Meteor.publish('posts-by-limit', function(limit) {
+  //   var self = this;
+  //   limit = parseInt(limit) ? parseInt(limit) : 0;
+
+  //   var cursor = Posts.find({}, {
+  //     limit: limit,
+  //     sort: {
+  //       createdAt: -1
+  //     },
+  //     fields: {
+  //       userId: 1,
+  //       title: 1,
+  //       text: 1,
+  //       createdAt: 1,
+  //       likes: 1
+  //     }
+  //   });
+
+  //   cursor.observeChanges({
+  //     added: function(id, el) {
+  //       self.added('posts-by-limit', id, embedIntoPostsByLimit(id, el));
+  //     },
+  //     changed: function(id, el) {
+  //       self.changed('posts-by-limit', id, embedIntoPostsByLimit(id, el));
+  //     },
+  //     removed: function(id, el) {
+  //       self.removed('posts-by-limit', id, embedIntoPostsByLimit(id, el));
+  //     }
+  //   });
+
+  //   return cursor;
   // });
 
+  // // for activity-view
+  // Meteor.publish('posts-by-user', function(userId) {});
 
-  // *** DEV ***
-  // test
-  // Meteor.publish('posts2', function(opts) {
-  //   if (!opts) opts = {};
-  //   if (!opts.skip) opts.skip = 0;
-  //   if (!opts.limit) opts.limit = 20;
+  // // for activity-view
+  // Meteor.publish('comments-by-user', function(userId) {
 
+  // });
 
-  //   return Posts2.find({}, {
-  //     sort: {
-  //       'createdAt': -1
-  //     },
-  //     skip: opts.skip,
-  //     limit: opts.limit
-  //   });
+  // // for activity-view
+  // Meteor.publish('likes-by-user', function(userId) {
+
+  // });
+
+  // // for notifications-view
+  // // embed anoUsers
+  // Meteor.publish('notifications-by-limit', function(limit) {
+
+  // });
+
+  // // for conversations-view
+  // // embed anoUsers
+  // Meteor.publish('conversations-by-limit', function(limit) {
+
+  // });
+
+  // // for conversation-view
+  // // embed messages and anoUsers
+  // Meteor.publish('conversation-by-id', function(convId) {
+
   // });
 
 
