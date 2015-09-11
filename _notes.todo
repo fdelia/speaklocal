@@ -31,6 +31,8 @@ Issues:
  ☐ userShortCut directive: the returned image and name should be in separate links, because of hover effect
  ✔ notifications: after a noti has been "seen", recommenting / liking doesnt make the noti "unseen" @done (15-08-28 18:13)
  ☐ when in a conversation: mark the new messages as read
+ ✔ css: rounded corners of posts @done (15-09-11 19:48)
+ ☐ not logged in: hide like / message - links
 
 
 
@@ -43,25 +45,13 @@ To add:
  ☐ link preview
  ☐ meteor add meteorhacks:fast-render
  ✔ navbar: http://stackoverflow.com/questions/14656567/meteor-subscribe-to-a-count for counting new messages and notifications @done (15-08-10 19:01)
+ ☐ use this package for related subscribtions: https://atmospherejs.com/reywood/publish-composite
 
 Testing:
  ☐ add velocity:html-reporter
  ☐ add sanjo:jasmine
 
 
-
 Notes:
   db.posts.find().sort({'createdAt':-1}).limit(10).explain('executionStats')
 
-
-
-
-
-
-
-Suggestions for model changes:
-  only subscribe to users, anoUsers, anoUserProfiles and posts
-  
-  if posts are published not for stream, don't send comments and likes field
-
-  also save messages in conversation (but that doesnt affect performance)

@@ -18,6 +18,8 @@ Built with AngularJs (1.x), MeteorJs and Bootstrap.
 
 ## Main Issues (so far)
 
+* Meteor (MongoDB) cursor has no .hasNext()??? Since it's not a MongoDB cursor... I don't want to fetch all the docs just to know if there are any result rows.
+
 * Ok, testing works. But it's full of workarounds and not so intuitive (e.g. testing a promise).
 
 I find it a bit disappointing to waste that much time on stackoverflow and blog posts just to make tests work... In my opinion tests should work out of the box.

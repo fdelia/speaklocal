@@ -149,14 +149,20 @@
       var opts2 = _.clone(opts);
       opts2.limit += 1;
 
-      var posts = $scope.posts.concat(PostsService.loadPosts($state.params.id, opts2));
-      if (!$state.params.id && opts.limit && posts.length > opts.limit) {
-        // remove the last one only if we have loaded one too much
-        posts = posts.slice(0, -1);
-        $scope.showLoadMoreButton = true;
-      } else $scope.showLoadMoreButton = false;
+      PostsService.loadPosts2($state.params.id, opts2)
+        .then(function(data) {
 
-      $scope.posts = PostsService.updatePosts(posts, null, $scope.currentUser);
+          // var posts = $scope.posts.concat(PostsService.loadPosts($state.params.id, opts2));
+          var posts = $scope.posts.concat(data);
+          console.log('posts.length', posts.length);
+          if (!$state.params.id && opts.limit && posts.length > opts.limit) {
+            // remove the last one only if we have loaded one too much
+            posts = posts.slice(0, -1);
+            $scope.showLoadMoreButton = true;
+          } else $scope.showLoadMoreButton = false;
+
+          $scope.posts = PostsService.updatePosts(posts, null, $scope.currentUser);
+        });
     }
 
 
@@ -171,7 +177,7 @@
       //     $scope.posts = $scope.posts.concat(post);
       // },
 
-      
+
       // take changed because the post is updated after creation to add userId
       changed: function(post, oldPost) {
         // insert only if the post is new (not during initialization)
@@ -181,8 +187,9 @@
           post.spam = 0;
           post.likes = [];
           post.user = speakLocal.getUser(post.userId, true);
+
           // trick to resubscribe and renew cursors (adding the new post)
-          opts.limit += 1;
+          // opts.limit += 1;
           // $meteor.subscribe('comments', opts);
 
           // Problem: see Comments observeChanges added
@@ -209,7 +216,7 @@
         PostsService.updatePosts($scope.posts, pseudoLike, $scope.currentUser);
 
         // trick to resubscribe and renew cursors (adding the new comment)
-        opts.limit += 1;
+        // opts.limit += 1;
         // $meteor.subscribe('likes', opts);
 
         if ($scope.currentUser && comment.userId !== $scope.currentUser._id) {
@@ -233,7 +240,6 @@
     });
 
     initialization = false;
-
 
   }
 

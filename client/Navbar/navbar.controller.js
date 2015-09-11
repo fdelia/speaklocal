@@ -58,7 +58,7 @@
     // RED BULLET POINTS
 
     // subscribe here since there is no 'resolve' - navbar is no state
-    speakLocalData.subscribeAll()
+    speakLocalData.subscribeNavbar({})
       .then(function(data) {
         // console.log('navbar subscribtion');
 

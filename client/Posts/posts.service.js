@@ -2,18 +2,20 @@
 	'use strict';
 
 	angular.module('app').factory('PostsService', PostsService);
-	PostsService.$inject = ['$q', 'speakLocal'];
+	PostsService.$inject = ['$q', 'speakLocal', 'speakLocalData'];
 
-	function PostsService($q, speakLocal) {
-		var obj = {
+	function PostsService($q, speakLocal, speakLocalData) {
+		var service = {
 			addComment: addComment,
 			addPost: addPost,
 			likeUnlikePost: likeUnlikePost,
 			likeUnlikeComment: likeUnlikeComment,
 			loadPosts: loadPosts,
+			loadPosts2: loadPosts2,
 			getConversation: getConversation,
 			updatePosts: updatePosts
 		};
+		return service;
 
 		function addComment(postId, text) {
 			var def = $q.defer();
@@ -77,8 +79,10 @@
 			// default opts
 			opts = _.extend({
 				skip: 0,
-				limit: 0
+				limit: 0,
+				postId: postId
 			}, opts);
+
 
 			// show one post only or all
 			if (postId)
@@ -103,6 +107,47 @@
 			// it's slow till here, seems from the query above, from 'sort'
 
 			return posts;
+		}
+
+		function loadPosts2(postId, opts) {
+			// default opts
+			opts = _.extend({
+				skip: 0,
+				limit: 0,
+				postId: postId
+			}, opts);
+
+			var def = $q.defer();
+
+			speakLocalData.subscribePosts(opts)
+				.then(function(res) {
+
+					// show one post only or all
+					if (postId)
+						var posts = [Posts.findOne({
+							_id: postId
+						})];
+					else
+						var posts = Posts.find({}, {
+							sort: {
+								'createdAt': -1
+							},
+							skip: opts.skip,
+							limit: opts.limit,
+							fields: {
+								userId: 1,
+								title: 1,
+								text: 1,
+								createdAt: 1,
+								likes: 1
+							}
+						}).fetch();
+					// it's slow till here, seems from the query above, from 'sort'
+
+					def.resolve(posts);
+				});
+
+			return def.promise;
 		}
 
 		function updatePosts(posts, likeObj, currentUser) {
@@ -164,7 +209,7 @@
 					console.error('user not defined for comment like and userId ' + el.userId);
 					return true;
 				}
-				
+
 				if (user.isUser !== undefined || (currentUser && user.username === currentUser.username)) comment.userHasLiked = 1;
 				return user.username;
 			});
@@ -207,8 +252,6 @@
 
 			return def.promise;
 		}
-
-		return obj;
 
 	}
 

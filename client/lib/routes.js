@@ -10,9 +10,9 @@
           templateUrl: 'client/Posts/posts.ng.html',
           controller: 'PostsCtrl',
           resolve: {
-            'subscribtion': ['speakLocalData', function(speakLocalData) {
-              return speakLocalData.subscribeAll();
-            }]
+            // 'subscribtion': ['speakLocalData', function(speakLocalData) {
+            //   return speakLocalData.subscribeAll();
+            // }]
           }
         })
         .state('posts.detail', {
