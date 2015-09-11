@@ -33,6 +33,7 @@
     $scope.openCreateAccountDialog = openCreateAccountDialog;
     $scope.showLoadMoreButton = true;
 
+    var loadingPosts = true;
     loadPosts();
 
     function addComment(postId, text) {
@@ -116,7 +117,7 @@
 
     function loadMorePosts() {
       opts.skip = $scope.posts.length;
-      loadPosts();
+      if (!loadingPosts) loadPosts();
     };
 
     function openCreateAccountDialog() {
@@ -146,15 +147,17 @@
 
     function loadPosts() {
       // load one more to see if there is more
-      var opts2 = _.clone(opts);
+      var opts2 = _.clone(opts); // clone to leave original unchanged
       opts2.limit += 1;
+      // this is a hack to prohibit two subscribtions going on at once, it messes up the received data. it may be a bug
+      loadingPosts = true;
 
       PostsService.loadPosts2($state.params.id, opts2)
         .then(function(data) {
+          loadingPosts = false;
 
           // var posts = $scope.posts.concat(PostsService.loadPosts($state.params.id, opts2));
           var posts = $scope.posts.concat(data);
-          console.log('posts.length', posts.length);
           if (!$state.params.id && opts.limit && posts.length > opts.limit) {
             // remove the last one only if we have loaded one too much
             posts = posts.slice(0, -1);
@@ -188,10 +191,6 @@
           post.likes = [];
           post.user = speakLocal.getUser(post.userId, true);
 
-          // trick to resubscribe and renew cursors (adding the new post)
-          // opts.limit += 1;
-          // $meteor.subscribe('comments', opts);
-
           // Problem: see Comments observeChanges added
           $scope.posts.splice(0, 0, post);
           if ($scope.currentUser && post.userId !== $scope.currentUser._id)
@@ -214,10 +213,6 @@
         };
 
         PostsService.updatePosts($scope.posts, pseudoLike, $scope.currentUser);
-
-        // trick to resubscribe and renew cursors (adding the new comment)
-        // opts.limit += 1;
-        // $meteor.subscribe('likes', opts);
 
         if ($scope.currentUser && comment.userId !== $scope.currentUser._id) {
           $scope.$apply();

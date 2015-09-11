@@ -34,10 +34,10 @@
         resolve: {
           'currentUser': ['$meteor', function($meteor) {
             return $meteor.requireUser();
-          }],
-          'subscribtion': ['speakLocalData', function(speakLocalData) {
-            return speakLocalData.subscribeAll();
-          }]
+          }]//,
+          // 'subscribtion': ['speakLocalData', function(speakLocalData) {
+          //   return speakLocalData.subscribeAll();
+          // }]
         }
       })
 

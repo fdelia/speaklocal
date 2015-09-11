@@ -54,15 +54,19 @@
 
 		function loadNotifs() {
 			// load one more to see if there are more
-			var notifications = NotificationsService.loadNotifications(limit + 1);
-			if (notifications.length > limit) {
-				// only remove one if there is one too much
-				notifications = notifications.slice(0, limit);
-				$scope.showLoadMoreButton = true;
-			} else $scope.showLoadMoreButton = false;
+			NotificationsService.loadNotifications2(limit + 1)
+				.then(function(notifications) {
 
-			$scope.notifications = notifications;
+					// var notifications = NotificationsService.loadNotifications(limit + 1);
+					if (notifications.length > limit) {
+						// only remove one if there is one too much
+						notifications = notifications.slice(0, limit);
+						$scope.showLoadMoreButton = true;
+					} else $scope.showLoadMoreButton = false;
 
+					$scope.notifications = notifications;
+
+				});
 		}
 
 	}

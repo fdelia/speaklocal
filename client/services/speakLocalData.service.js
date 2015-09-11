@@ -9,6 +9,7 @@
 		var service = {
 			subscribeAll: subscribeAll,
 			subscribePosts: subscribePosts,
+			subscribeNotifications: subscribeNotifications,
 			subscribeNavbar: subscribeNavbar
 		};
 		return service;
@@ -19,19 +20,17 @@
 
 		function subscribePosts(opts) {
 			var def = $q.defer();
-			// dev
-			// opts.skip = 0;
-			// opts.limit = 10;
-			// opts.postId = null;
-
 			$meteor.subscribe('lastPosts', opts.skip, opts.limit, opts.postId).then(function() {
-				// console.log('sub to lastPosts');
-				// console.log(Posts.find().fetch());
-				// console.log(AnonymousUsers.find().fetch());
-
 				def.resolve('subscribed');
 			});
+			return def.promise;
+		}
 
+		function subscribeNotifications(opts){
+			var def = $q.defer();
+			$meteor.subscribe('lastNotifications', opts.skip, opts.limit).then(function(){
+				def.resolve('subscribed');
+			});
 			return def.promise;
 		}
 

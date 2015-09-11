@@ -220,8 +220,11 @@
 
 
   function anyUserWithId(id, _this) {
+    if (typeof id !== 'string') var matchId = {$in: id};
+    else var matchId = id;
+
     var userCursor = Meteor.users.find({
-      _id: id
+      _id: matchId
     }, {
       fields: {
         'username': 1,
@@ -235,7 +238,7 @@
     // the difference between this and the next cursor is
     // that the field userId is only sent when userId == this.userId (from the logged in user)
     userCursor = AnonymousUsers.find({
-      _id: id
+      _id: matchId
     }, {
       fields: {
         isUser: 0, // IMPORTANT! isUser should not be sent (private information)
@@ -258,7 +261,7 @@
     userCursor = AnonymousUsers.find({
       // !this one has to be set and will be sent!
       isUser: _this.userId,
-      _id: id
+      _id: matchId
     }, {
       fields: {
         createdAt: 0 // not necessary
@@ -282,6 +285,10 @@
     });
   }
 
+  // function elOfNoti(noti){
+
+  // }
+
 
   // state "posts" and "posts.detail"
   Meteor.publishComposite('lastPosts', function(skip, limit, postId) {
@@ -296,8 +303,6 @@
         if (postId) params = {
           _id: postId
         };
-
-        console.log(skip+', '+limit);
 
         return Posts.find(params, {
           skip: skip,
@@ -366,16 +371,61 @@
     }
   });
 
-
+  // state "notifications"
   Meteor.publishComposite('lastNotifications', function(skip, limit) {
     return {
+      // notifications
       find: function() {
+        if (!this.userId) {
+          this.error(Meteor.Error('not-allowed', 'please log in'));
+          return null;
+        }
         skip = valInt(skip);
         limit = valInt(limit);
 
-
-      }
+        return Notifications2.find({
+          to: this.userId
+        }, {
+          // skip: skip,
+          limit: limit,
+          sort: {
+            'updatedAt': -1
+          }
+        });
+      },
+      children: [{
+        // noti -> element(post/comment)
+        find: function(noti) {
+          switch (noti.type) {
+            case 'comment':
+            case 'likeComment':
+              return Comments.find({
+                _id: noti.on
+              }, {});
+            case 'likePost':
+              return Posts.find({
+                _id: noti.on
+              }, {});
+            default:
+              return null;
+          }
+        }
+      }, {
+        // noti -> user
+        find: function(noti){
+          return anyUserWithId(noti.userIds, this);
+        }
+      }]
     }
   });
+
+
+  // state "conversations" and "conversations.detail"
+
+
+  // state "users" and "users.detail"
+
+
+
 
 })();
