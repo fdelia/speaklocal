@@ -71,7 +71,8 @@
   // For navbar
   Meteor.publish('notifications2', function(limit) {
     if (!this.userId) {
-      this.error(Meteor.Error('not-allowed', 'please log in'));
+      // TODO should be solved in controller, throws error if not logged in
+      // this.error(Meteor.Error('not-allowed', 'please log in'));
       return null;
     }
     limit = valInt(limit);

@@ -24,7 +24,7 @@
 
 		<a class="post-like" ng-click="likeUnlikePost(post._id)" href="" ng-attr-title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"> {{ post.userHasLiked ? 'Unlike' : 'Like' }}</a>
 
-		<a href="" ng-click="sendMsgTo(post.userId, post._id)" ng-hide="post.userId == $root.currentUser._id || isThisUser(post.user.isUser)">Message</a>
+		<a href="" ng-click="sendMsgTo(post.userId, post._id)" ng-hide="!currentUser || post.userId == $root.currentUser._id || isThisUser(post.user.isUser)">Message</a>
 
 		<!--<small class="pull-right">
 			<a href="" class="spam">
@@ -51,9 +51,9 @@
 				
 				<span class="comment-like-counter" ng-attr-title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}">{{ comment.likes.length }}</span>
 				
-				<a class="comment-like" ng-click="likeUnlikeComment(comment._id)" href="" ng-attr-title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}"> {{ comment.userHasLiked ? 'Unlike' : 'Like' }}</a>
+				<a class="comment-like" ng-hide="!currentUser" ng-click="likeUnlikeComment(comment._id)" href="" ng-attr-title="{{ comment.likes ? (comment.likes.join(', ') + ' liked this') : '' }}"> {{ comment.userHasLiked ? 'Unlike' : 'Like' }}</a>
 
-				<a href="" ng-click="sendMsgTo(comment.user._id, post._id)" ng-hide="comment.userId == $root.currentUser._id || isThisUser(comment.user.isUser)">Message</a>
+				<a href="" ng-click="sendMsgTo(comment.user._id, post._id)" ng-hide="!currentUser || comment.userId == $root.currentUser._id || isThisUser(comment.user.isUser)">Message</a>
 			</small></div>
 		</div>
 	</div>
