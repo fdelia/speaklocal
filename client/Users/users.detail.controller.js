@@ -20,23 +20,32 @@
 		$scope.addImages = addImages;
 		$scope.saveCroppedImage = saveCroppedImage;
 
+		// not soo beautiful...
 		var username = $state.params.id;
-		$scope.user = UsersService.getUserByUsername(username);
-
-		if (!$scope.user) {
-			$scope.addAlert('danger', 'User not found.');
-			return false;
-		}
-
-		$scope.activities = $scope.activities.concat(UsersService.getActivities($scope.user._id));
-
-		// count likes that this user received
-		UsersService.countLikesFromUser($scope.user._id)
+		UsersService.getUserByUsername(username)
 			.then(function(data) {
-				$scope.numberOfLikes = data;
-			}, function(err) {
+				$scope.user = data;
+				console.log($scope.user);
+				
+				if (!$scope.user) {
+					$scope.addAlert('danger', 'User not found.');
+					return false;
+				}
 
+
+				// count likes that this user received
+				UsersService.countLikesFromUser($scope.user._id)
+					.then(function(data) {
+						$scope.numberOfLikes = data;
+					}, function(err) {
+
+					});
+
+
+				// do this here because it needs to be subscribed
+				$scope.activities = $scope.activities.concat(UsersService.getActivities($scope.user._id));
 			});
+		// $scope.user = UsersService.getUserByUsername(username);
 
 
 		function addAlert(type, msg) {

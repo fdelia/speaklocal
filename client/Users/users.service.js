@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('app').factory('UsersService', UsersService);
-	UsersService.$inject = ['speakLocal', '$q'];
+	UsersService.$inject = ['$q', 'speakLocal', 'speakLocalData'];
 
-	function UsersService(speakLocal, $q) {
+	function UsersService($q, speakLocal, speakLocalData) {
 		var obj = {
 			getUsers: getUsers,
 			getUserByUsername: getUserByUsername,
@@ -15,21 +15,31 @@
 		};
 
 		function getUsers() {
-			return Meteor.users.find().fetch();
+			// TODO integrate skip & limit
+			var opts = {
+				skip: 0,
+				limit: 0
+			}
 
-			// hm, done like this because kind of all service functions are promises
-			// var def = $q.defer();
-
-			// var users = Meteor.users.find().fetch();
-			// def.resolve(users);
-
-			// return def.promise;
+			var def = $q.defer();
+			speakLocalData.subscribeUserList(opts)
+				.then(function() {
+					var users = Meteor.users.find().fetch();
+					def.resolve(users);
+				});
+			return def.promise;
 		}
 
 		function getUserByUsername(username) {
-			return Meteor.users.findOne({
-				username: username
-			});
+			var def = $q.defer();
+			speakLocalData.subscribeUserByUsername(username)
+				.then(function() {
+					var user = Meteor.users.findOne({
+						username: username
+					});
+					def.resolve(user);
+				});
+			return def.promise;
 		}
 
 		function countLikesFromUser(userId) {
@@ -125,7 +135,7 @@
 			return def.promise;
 		}
 
-		function updateUser(userId, username, bio){
+		function updateUser(userId, username, bio) {
 			var def = $q.defer();
 
 			// TODO bio is not being set -> profile.bio

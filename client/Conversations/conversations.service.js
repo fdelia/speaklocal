@@ -2,16 +2,19 @@
 	'use strict';
 
 	angular.module('app').factory('ConversationsService', ConversationsService);
-	ConversationsService.$inject = ['$q', 'speakLocal'];
+	ConversationsService.$inject = ['$q', 'speakLocal', 'speakLocalData'];
 
-	function ConversationsService($q, speakLocal) {
-		var obj = {
+	function ConversationsService($q, speakLocal, speakLocalData) {
+		var service = {
 			setConvAsSeen: setConvAsSeen,
 			sendMessage: sendMessage,
 			listMessages: listMessages,
-			getConvWithAuthors: getConvWithAuthors,
-			listConvs: listConvs
+			getConvWithAuthors2: getConvWithAuthors2,
+			listConvs2: listConvs2
 		};
+
+		return service;
+
 
 		function setConvAsSeen(convId) {
 			var def = $q.defer();
@@ -49,74 +52,94 @@
 
 		}
 
-		function getConvWithAuthors(currentUserId, convId){
-			var conv = Conversations.findOne({
-				_id: convId
-			});
-
-			if (!conv) {
-				// display some error
-				console.error('conversation not found');
-				return null;
+		function getConvWithAuthors2(currentUserId, convId) {
+			if (!convId && typeof convId === 'string') {
+				console.error('convId is not given or not a string');
+				return false;
 			}
 
-			var userIds = speakLocal.getAllUserIdsForThisUser(currentUserId);
+			var def = $q.defer();
+			
+			speakLocalData.subscribeConvWithAuthors(convId)
+				.then(function() {
+					var conv = Conversations.findOne({
+						_id: convId
+					});
 
-			if (userIds.indexOf(conv.userId) !== -1) {
-				conv.fromUserObj = speakLocal.getUser(conv.userId);
-				conv.toUserObj = speakLocal.getUser(conv.toUser);
-				// conv.unseenMsgs = conv.unseenMsgsFrom;
-			}
-			if (userIds.indexOf(conv.toUser) !== -1) {
-				conv.fromUserObj = speakLocal.getUser(conv.toUser);
-				conv.toUserObj = speakLocal.getUser(conv.userId);
-				// conv.unseenMsgs = conv.unseenMsgsTo;
-			}
-			if (!conv.fromUserObj || !conv.toUserObj) {
-				console.error('an user profile was not found');
-			}
+					if (!conv) {
+						// display some error
+						console.error('conversation not found');
+						return null;
+					}
 
-			return conv;
+					var userIds = speakLocal.getAllUserIdsForThisUser(currentUserId);
+
+					if (userIds.indexOf(conv.userId) !== -1) {
+						conv.fromUserObj = speakLocal.getUser(conv.userId);
+						conv.toUserObj = speakLocal.getUser(conv.toUser);
+						// conv.unseenMsgs = conv.unseenMsgsFrom;
+					}
+					if (userIds.indexOf(conv.toUser) !== -1) {
+						conv.fromUserObj = speakLocal.getUser(conv.toUser);
+						conv.toUserObj = speakLocal.getUser(conv.userId);
+						// conv.unseenMsgs = conv.unseenMsgsTo;
+					}
+					if (!conv.fromUserObj || !conv.toUserObj) {
+						console.error('an user profile was not found');
+					}
+
+					def.resolve(conv);
+				});
+
+			return def.promise;
 		}
 
-		function listConvs(currentUserId, limit) {
-			var convs = Conversations.find({}, {
-				sort: {
-					'updatedAt': -1
-				},
+		function listConvs2(currentUserId, limit) {
+			var def = $q.defer();
+
+			var opts = {
 				limit: limit
-			}).fetch();
+			};
 
-			var userIds = speakLocal.getAllUserIdsForThisUser(currentUserId);
+			speakLocalData.subscribeConversations(opts)
+				.then(function() {
+					var convs = Conversations.find({}, {
+						sort: {
+							'updatedAt': -1
+						},
+						limit: limit
+					}).fetch();
 
-			convs.map(function(conv) {
+					var userIds = speakLocal.getAllUserIdsForThisUser(currentUserId);
 
-				if (userIds.indexOf(conv.userId) !== -1) {
-					conv.fromUserObj = speakLocal.getUser(conv.userId);
-					conv.toUserObj = speakLocal.getUser(conv.toUser);
-					conv.unseenMsgs = conv.unseenMsgsFrom;
-				}
-				if (userIds.indexOf(conv.toUser) !== -1) {
-					conv.fromUserObj = speakLocal.getUser(conv.toUser);
-					conv.toUserObj = speakLocal.getUser(conv.userId);
-					conv.unseenMsgs = conv.unseenMsgsTo;
-				}
-				if (!conv.fromUserObj) {
-					console.error('an user profile was not found, id: ' + conv.userId);
-					return true; // continue
-				}
-				if (!conv.toUserObj) {
-					console.error('an user profile was not found, id: ' + conv.toUser);
-					return true; // continue
-				}
+					convs.map(function(conv) {
 
-			});
+						if (userIds.indexOf(conv.userId) !== -1) {
+							conv.fromUserObj = speakLocal.getUser(conv.userId);
+							conv.toUserObj = speakLocal.getUser(conv.toUser);
+							conv.unseenMsgs = conv.unseenMsgsFrom;
+						}
+						if (userIds.indexOf(conv.toUser) !== -1) {
+							conv.fromUserObj = speakLocal.getUser(conv.toUser);
+							conv.toUserObj = speakLocal.getUser(conv.userId);
+							conv.unseenMsgs = conv.unseenMsgsTo;
+						}
+						if (!conv.fromUserObj) {
+							console.error('an user profile was not found, id (fromUser): ' + conv.userId);
+							return true; // continue
+						}
+						if (!conv.toUserObj) {
+							console.error('an user profile was not found, id (toUser): ' + conv.toUser);
+							return true; // continue
+						}
 
-			return convs;
+					});
+
+					def.resolve(convs);
+				});
+
+			return def.promise;
 		}
-
-		return obj;
-
 	}
 
 })();

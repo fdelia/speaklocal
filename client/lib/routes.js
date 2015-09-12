@@ -9,11 +9,7 @@
           url: '/',
           templateUrl: 'client/Posts/posts.ng.html',
           controller: 'PostsCtrl',
-          resolve: {
-            // 'subscribtion': ['speakLocalData', function(speakLocalData) {
-            //   return speakLocalData.subscribeAll();
-            // }]
-          }
+          resolve: {}
         })
         .state('posts.detail', {
           url: 'posts/:id',
@@ -34,10 +30,7 @@
         resolve: {
           'currentUser': ['$meteor', function($meteor) {
             return $meteor.requireUser();
-          }]//,
-          // 'subscribtion': ['speakLocalData', function(speakLocalData) {
-          //   return speakLocalData.subscribeAll();
-          // }]
+          }]
         }
       })
 
@@ -50,9 +43,6 @@
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
               return $meteor.requireUser();
-            }],
-            'subscribtion': ['speakLocalData', function(speakLocalData) {
-              return speakLocalData.subscribeAll();
             }]
           }
         })
@@ -70,9 +60,6 @@
           resolve: {
             'currentUser': ['$meteor', function($meteor) {
               return $meteor.requireUser();
-            }],
-            'subscribtion': ['speakLocalData', function(speakLocalData) {
-              return speakLocalData.subscribeAll();
             }]
           }
         })

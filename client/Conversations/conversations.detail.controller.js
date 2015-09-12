@@ -15,12 +15,15 @@
 		ConversationsService.setConvAsSeen(convId); // .then()
 
 		// only subscribtion needed here
-		$meteor.subscribe('messages').then(function() {
+		// $meteor.subscribe('messages').then(function() {
+		// vm.conv = ConversationsService.getConvWithAuthors($scope.currentUser._id, convId);
 
-			vm.conv = ConversationsService.getConvWithAuthors($scope.currentUser._id, convId);
-			vm.msgs = ConversationsService.listMessages(convId);
-
-		});
+		ConversationsService.getConvWithAuthors2($scope.currentUser._id, convId)
+			.then(function(data) {
+				vm.conv = data;
+				vm.msgs = ConversationsService.listMessages(convId);
+			});
+		// });
 
 
 		function sendMessage(text) {

@@ -9,7 +9,10 @@
 
 		// TODO add pagination
 
-		vm.users = UsersService.getUsers();
+		UsersService.getUsers()
+			.then(function(data) {
+				vm.users = data;
+			});
 
 
 	}

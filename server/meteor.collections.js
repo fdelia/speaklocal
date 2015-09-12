@@ -1,8 +1,6 @@
 (function() {
   'use strict';
 
-
-
   function getAllUserIdsForUser(userId) {
     var userIds = AnonymousUsers.find({
       isUser: userId
@@ -27,93 +25,7 @@
   }
 
 
-
-  // no user identification needed for these
-
-  // TODO add limit, in a non-messy way
-
-  Meteor.publish('posts', function(limit) {
-    limit = valInt(limit);
-
-    return Posts.find({}, {
-      // limit: limit,
-      sort: {
-        createdAt: -1
-      },
-      fields: {
-        userId: 1,
-        title: 1,
-        text: 1,
-        createdAt: 1,
-        likes: 1
-      }
-    });
-  });
-
-
-  Meteor.publish('comments', function(limit) {
-    limit = valInt(limit);
-
-    return Comments.find({}, {
-      // limit: limit,
-      sort: {
-        createdAt: 1
-      }
-    });
-  });
-
-  Meteor.publish('likes', function(limit) {
-    limit = valInt(limit);
-
-    return Likes.find({}, {
-      // limit: limit,
-      fields: {
-        createdAt: 0
-      }
-    });
-  });
-
-  Meteor.publish('anoUsers', function() {
-    return AnonymousUsers.find({}, {
-      fields: {
-        isUser: 0, // IMPORTANT! isUser should not be sent (private information)
-        createdAt: 0
-      },
-      sort: {
-        createdAt: -1
-      }
-    });
-  });
-
-  Meteor.publish('allUserData', function() {
-    return Meteor.users.find({}, {
-      fields: {
-        'username': 1,
-        // 'emails': 1, // dev only
-        'profile': 1
-      }
-    });
-  });
-
-  // user identification needed from here
-
-  // publish to anonymous profiles of the user, to recognice what the user owns
-  // the only difference is that these profiles have the field isUser set
-  Meteor.publish('userAnoProfiles', function(opts) {
-    return AnonymousUsers.find({
-      // !this one has to be set and will be sent!
-      isUser: this.userId
-    }, {
-      fields: {
-        createdAt: 0 // not necessary
-      },
-      sort: {
-        createdAt: -1
-      }
-    });
-  });
-
-
+  // Profile data of this user
   Meteor.publish('userData', function() {
     return Meteor.users.find({
       _id: this.userId
@@ -124,8 +36,7 @@
     });
   });
 
-
-
+  // For navbar
   Meteor.publish('conversations', function(limit) {
     if (!this.userId) {
       this.error(Meteor.Error('not-allowed', 'please log in'));
@@ -157,34 +68,7 @@
     });
   });
 
-
-  Meteor.publish('messages', function() {
-    if (!this.userId) {
-      this.error(Meteor.Error('not-allowed', 'please log in'));
-      return null;
-    }
-
-    var userIds = getAllUserIdsForUser(this.userId);
-
-    return Messages.find({
-      $or: [{
-        userId: {
-          $in: userIds
-        }
-      }, {
-        toUser: {
-          $in: userIds
-        }
-      }]
-    }, {
-      sort: {
-        createdAt: 1
-      }
-    });
-  });
-
-
-
+  // For navbar
   Meteor.publish('notifications2', function(limit) {
     if (!this.userId) {
       this.error(Meteor.Error('not-allowed', 'please log in'));
@@ -218,9 +102,13 @@
 
   */
 
+  // TODO put sent fields of every collection in one place
+
 
   function anyUserWithId(id, _this) {
-    if (typeof id !== 'string') var matchId = {$in: id};
+    if (typeof id !== 'string') var matchId = {
+      $in: id
+    };
     else var matchId = id;
 
     var userCursor = Meteor.users.find({
@@ -237,6 +125,25 @@
 
     // the difference between this and the next cursor is
     // that the field userId is only sent when userId == this.userId (from the logged in user)
+
+    // only if user logged in
+    if (_this.userId) {
+      userCursor = AnonymousUsers.find({
+        // !this one has to be set and will be sent!
+        isUser: _this.userId,
+        _id: matchId
+      }, {
+        fields: {
+          createdAt: 0 // not necessary
+        },
+        sort: {
+          createdAt: -1
+        }
+      });
+
+      if (userCursor.fetch().length > 0) return userCursor;
+    }
+
     userCursor = AnonymousUsers.find({
       _id: matchId
     }, {
@@ -249,29 +156,6 @@
       }
     });
 
-    if (userCursor.fetch().length > 0) return userCursor;
-
-    // if user not logged in
-    if (!_this.userId) {
-      console.error('no thisUserId given');
-      _this.error(Meteor.Error('not-allowed', 'please log in'));
-      return;
-    }
-
-    userCursor = AnonymousUsers.find({
-      // !this one has to be set and will be sent!
-      isUser: _this.userId,
-      _id: matchId
-    }, {
-      fields: {
-        createdAt: 0 // not necessary
-      },
-      sort: {
-        createdAt: -1
-      }
-    });
-
-    // console.log(userCursor.fetch().length);
     return userCursor;
   }
 
@@ -412,7 +296,7 @@
         }
       }, {
         // noti -> user
-        find: function(noti){
+        find: function(noti) {
           return anyUserWithId(noti.userIds, this);
         }
       }]
@@ -420,12 +304,174 @@
   });
 
 
-  // state "conversations" and "conversations.detail"
+  // state "conversations"
+  Meteor.publishComposite('lastConversations', function(skip, limit) {
+    return {
+      // conversations
+      find: function() {
+        if (!this.userId) {
+          this.error(Meteor.Error('not-allowed', 'please log in'));
+          return null;
+        }
+        skip = valInt(skip);
+        limit = valInt(limit);
+        var userIds = getAllUserIdsForUser(this.userId);
 
+        return Conversations.find({
+          $or: [{
+            userId: {
+              $in: userIds
+            }
+          }, {
+            toUser: {
+              $in: userIds
+            }
+          }]
+        }, {
+          limit: limit,
+          sort: {
+            updatedAt: -1
+          },
+          fields: {
+            fromUserObj: 0,
+            toUserObj: 0,
+            createdAt: 0
+          }
+        });
+
+      },
+      children: [{
+        // conversation -> from user
+        find: function(conv) {
+          return anyUserWithId(conv.userId, this);
+        }
+      }, {
+        // conversation -> to user
+        find: function(conv) {
+          return anyUserWithId(conv.toUser, this);
+        }
+      }]
+    }
+  });
+
+
+  // state "conversations.details"
+  Meteor.publishComposite('convWithAuthors', function(convId) {
+    return {
+      // Conversation
+      find: function() {
+        return Conversations.find({
+          _id: convId
+        }, {
+          limit: 1,
+          sort: {
+            updatedAt: -1
+          },
+          fields: {
+            fromUserObj: 0,
+            toUserObj: 0,
+            createdAt: 0
+          }
+        });
+      },
+      children: [{
+        // conversation -> users
+        find: function(conv) {
+          return anyUserWithId(conv.userId, this);
+        }
+      }, {
+        find: function(conv) {
+          return anyUserWithId(conv.toUser, this);
+        }
+      }, {
+        // conversation -> messages
+        find: function(conv) {
+          if (!this.userId) {
+            this.error(Meteor.Error('not-allowed', 'please log in'));
+            return null;
+          }
+
+          var userIds = getAllUserIdsForUser(this.userId);
+
+          // this user is either sender or receiver
+          return Messages.find({
+            $or: [{
+              userId: {
+                $in: userIds
+              }
+            }, {
+              toUser: {
+                $in: userIds
+              }
+            }]
+          }, {
+            sort: {
+              createdAt: 1
+            }
+          });
+        }
+      }, {
+        // conversation -> post
+        find: function(conv) {
+
+        }
+      }]
+    }
+  });
 
   // state "users" and "users.detail"
+  Meteor.publish('userList', function(skip, limit) {
+    skip = valInt(skip);
+    limit = valInt(limit);
 
+    return Meteor.users.find({}, {
+      skip: skip,
+      limit: limit,
+      fields: {
+        'username': 1,
+        // 'emails': 1, // dev only
+        'profile': 1
+      }
+    });
 
+  });
+
+  Meteor.publishComposite('userByUsername', function(username) {
+    return {
+      find: function() {
+        return Meteor.users.find({
+          username: username
+        }, {
+          limit: 1,
+          fields: {
+            'username': 1,
+            // 'emails': 1, // dev only
+            'profile': 1
+          }
+        });
+      },
+
+      children: [{
+        find: function(user) {
+          return Posts.find({
+            userId: user._id
+          });
+        }
+      }, {
+        find: function(user) {
+          return Comments.find({
+            userId: user._id
+          });
+        }
+      }, {
+        find: function(user) {
+          return Likes.find({
+            userId: user._id
+          });
+        }
+      }]
+    }
+  });
 
 
 })();

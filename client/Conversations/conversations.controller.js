@@ -14,18 +14,17 @@
 
 		loadConversationList();
 
-		var initialization = true;
+		var loadingConversations = true;
 		Conversations.find().observeChanges({
 			added: function(id, el) {
-				if (!initialization)
+				if (!loadingConversations)
 					loadConversationList();
 			},
 			changed: function(id, el) {
-				if (!initialization)
+				if (!loadingConversations)
 					loadConversationList();
 			}
 		});
-		initialization = false;
 
 		function loadMoreConvs() {
 			limit += loadPerPage;
@@ -34,14 +33,19 @@
 
 		function loadConversationList() {
 			// load one more to see if there are more
-			var convs = ConversationsService.listConvs($scope.currentUser._id, limit + 1);
-			if (convs.length > limit) {
-				// only remove one if there is one too much
-				convs = convs.slice(0, limit);
-				$scope.showLoadMoreButton = true;
-			} else $scope.showLoadMoreButton = false;
+			ConversationsService.listConvs2($scope.currentUser._id, limit + 1)
+				.then(function(data) {
+					var convs = data;
+					// var convs = ConversationsService.listConvs($scope.currentUser._id, limit + 1);
+					if (convs.length > limit) {
+						// only remove one if there is one too much
+						convs = convs.slice(0, limit);
+						$scope.showLoadMoreButton = true;
+					} else $scope.showLoadMoreButton = false;
 
-			$scope.convs = convs;
+					$scope.convs = convs;
+					loadingConversations = false; // mark end of loading
+				});
 		}
 
 	}

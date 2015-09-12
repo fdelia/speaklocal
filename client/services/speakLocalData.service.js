@@ -10,6 +10,10 @@
 			subscribeAll: subscribeAll,
 			subscribePosts: subscribePosts,
 			subscribeNotifications: subscribeNotifications,
+			subscribeConversations: subscribeConversations,
+			subscribeConvWithAuthors: subscribeConvWithAuthors,
+			subscribeUserList: subscribeUserList,
+			subscribeUserByUsername: subscribeUserByUsername,
 			subscribeNavbar: subscribeNavbar
 		};
 		return service;
@@ -26,15 +30,55 @@
 			return def.promise;
 		}
 
-		function subscribeNotifications(opts){
+		function subscribeNotifications(opts) {
 			var def = $q.defer();
-			$meteor.subscribe('lastNotifications', opts.skip, opts.limit).then(function(){
+			$meteor.subscribe('lastNotifications', opts.skip, opts.limit).then(function() {
 				def.resolve('subscribed');
 			});
 			return def.promise;
 		}
 
-		function subscribeNavbar(opts) {
+		function subscribeConversations(opts) {
+			var def = $q.defer();
+
+			$meteor.subscribe('lastConversations', opts.skip, opts.limit).then(function() {
+				def.resolve('subscribed');
+			});
+			return def.promise;
+		}
+
+		function subscribeConvWithAuthors(convId) {
+			var def = $q.defer();
+
+			$meteor.subscribe('convWithAuthors', convId).then(function() {
+				def.resolve('subscribed');
+			});
+			return def.promise;
+		}
+
+		function subscribeUserList(opts) {
+			opts = _.extend({
+				skip: 0,
+				limit: 0
+			}, opts);
+			var def = $q.defer();
+
+			$meteor.subscribe('userList', opts.skip, opts.limit).then(function() {
+				def.resolve('subscribed');
+			});
+			return def.promise;
+		}
+
+		function subscribeUserByUsername(username) {
+			var def = $q.defer();
+
+			$meteor.subscribe('userByUsername', username).then(function() {
+				def.resolve('subscribed');
+			});
+			return def.promise;
+		}
+
+		function subscribeNavbar() {
 			var def = $q.defer();
 
 			$meteor.subscribe('notifications2').then(function() {
@@ -47,9 +91,9 @@
 		}
 
 		function subscribeAll(opts) {
+			console.info('Attention: using depreciated subscribeAll in speakLocalData');
 			var def = $q.defer();
 
-			// TODO limits not yet in use
 			opts = _.extend({
 				postsLimit: 100,
 				commentsLimit: 100,
@@ -72,33 +116,33 @@
 				return def.promise;
 			}
 
-			$meteor.subscribe('posts', opts.postsLimit).then(function() {
-				$meteor.subscribe('comments', opts.commentsLimit).then(function() {
-					$meteor.subscribe('likes', opts.likesLimit).then(function() {
-						console.log('after post comments likes ' + (Date.now() - s));
+			// $meteor.subscribe('posts', opts.postsLimit).then(function() {
+			// $meteor.subscribe('comments', opts.commentsLimit).then(function() {
+			// $meteor.subscribe('likes', opts.likesLimit).then(function() {
+			// console.log('after post comments likes ' + (Date.now() - s));
 
-						$meteor.subscribe('allUserData').then(function() {
-							$meteor.subscribe('anoUsers').then(function() {
-								$meteor.subscribe('userAnoProfiles').then(function() {});
-								console.log('after anoProfiles ' + (Date.now() - s));
+			$meteor.subscribe('allUserData').then(function() {
+				$meteor.subscribe('anoUsers').then(function() {
+					$meteor.subscribe('userAnoProfiles').then(function() {});
+					console.log('after anoProfiles ' + (Date.now() - s));
 
-								$meteor.subscribe('notifications2', opts.notifsLimit).then(function() {
-									$meteor.subscribe('conversations', opts.convsLimit).then(function() {
+					$meteor.subscribe('notifications2', opts.notifsLimit).then(function() {
+						$meteor.subscribe('conversations', opts.convsLimit).then(function() {
 
-										console.log('subscribeAll ' + (Date.now() - s));
-										def.resolve('all subscribed');
-										subscribed = true;
-										// postsLimitBefore = postsLimit;
+							console.log('subscribeAll ' + (Date.now() - s));
+							def.resolve('all subscribed');
+							subscribed = true;
+							// postsLimitBefore = postsLimit;
 
-									});
-								});
-
-
-							});
 						});
 					});
+
+
 				});
 			});
+			// });
+			// });
+			// });
 
 			return def.promise;
 		}
