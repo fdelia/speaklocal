@@ -18,11 +18,11 @@
 
 		<span class="post-comment-counter">{{ post.comments.length }}</span>
 
-		<span class="glyphicon glyphicon-heart" ng-class="{liked: post.userHasLiked}" data-toggle="tooltip" ng-attr-title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"></span> 
+		<span class="glyphicon glyphicon-heart" ng-class="{liked: post.userHasLiked}" data-toggle="tooltip" ng-attr-title="{{ post.likes ? (post.likes.join(', ') + ' liked this') : ''}}"></span> 
 
-		<span class="post-like-counter" ng-attr-title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}">{{ post.likes.length }}</span>
+		<span class="post-like-counter" ng-attr-title="{{ post.likes ? (post.likes.join(', ') + ' liked this') : ''}}">{{ post.likes.length }}</span>
 
-		<a class="post-like" ng-click="likeUnlikePost(post._id)" href="" ng-attr-title="{{ post.liked ? (post.likes.join(', ') + ' liked this') : ''}}"> {{ post.userHasLiked ? 'Unlike' : 'Like' }}</a>
+		<a class="post-like" ng-click="likeUnlikePost(post._id)" href="" ng-attr-title="{{ post.likes ? (post.likes.join(', ') + ' liked this') : ''}}"> {{ post.userHasLiked ? 'Unlike' : 'Like' }}</a>
 
 		<a href="" ng-click="sendMsgTo(post.userId, post._id)" ng-hide="!currentUser || post.userId == $root.currentUser._id || isThisUser(post.user.isUser)">Message</a>
 
