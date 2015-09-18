@@ -1,12 +1,13 @@
 Issues:
+ ☐ speed up angular for mobile (e.g. one-way binding)
  ☐ really need tests: a lot of small things in the UI are buggy
- ☐ posts.js: from notis, click a notification, now click on stream in navbar. it won't load the state
+ ✔ posts.js: from notis, click a notification, now click on stream in navbar. it won't load the state @done (15-09-18 17:38)
  ✔ queries: only get fields that are used (performance) @done (15-09-02 16:33)
  ☐ bring code to level "how it's done" (concerning angular)
-   ☐ route.js: children states like post.list and post.detail including ui-sref-active (didn't work for now: switching between children states and -active didn't add the class)
- ☐ stream: computing of posts is a bit slow... (it's the updatePosts() function)
-   ☐ halfway the same for state 'notifications' and 'conversations'
- ☐ posts: reset form after adding new post
+   ✔ route.js: children states like post.list and post.detail including ui-sref-active (didn't work for now: switching between children states and -active didn't add the class) @done (15-09-18 17:38)
+ ✔ stream: computing of posts is a bit slow... (it's the updatePosts() function) @done (15-09-18 17:38)
+   ✔ halfway the same for state 'notifications' and 'conversations' @done (15-09-18 17:38)
+ ✔ posts: reset form after adding new post @done (15-09-18 17:38)
  ☐ navbar.controller.js: routeIsUserlist(): currentUser sometimes set too late and then undefined (there's a hack for now)
  ☐ user.controller.js: bio is not updated -> use profile.bio, also in server.methods.js
  ✔ meteor.collections.js: finish limiting of published rows for remaining views, see all // TODO s @done (15-08-29 17:04)
@@ -32,7 +33,7 @@ Issues:
  ✔ notifications: after a noti has been "seen", recommenting / liking doesnt make the noti "unseen" @done (15-08-28 18:13)
  ☐ when in a conversation: mark the new messages as read
  ✔ css: rounded corners of posts @done (15-09-11 19:48)
- ☐ not logged in: hide like / message - links
+ ✔ not logged in: hide like / message - links @done (15-09-18 17:39)
 
 
 

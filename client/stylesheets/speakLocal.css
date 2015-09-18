@@ -160,7 +160,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media only screen and (min-device-width: 320px) and (max-device-width: 568px)and (-webkit-min-device-pixel-ratio: 2) {
-    .navbar {font-size: 1.3em;}
+   /* .navbar {font-size: 1.3em;}*/
 }
 
 
@@ -168,8 +168,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) { 
-    .navbar {font-size: 1.3em;}
-
+   /* .navbar {font-size: 1.3em;}*/
 }
 
 
@@ -177,8 +176,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) { 
-    .navbar {font-size: 1.3em;}
-
+  /*  .navbar {font-size: 1.3em;}*/
 }
 
 
@@ -186,7 +184,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 2) {
- .navbar {font-size: 1.3em;}
+/* .navbar {font-size: 1.3em;}*/
 }
 
 
@@ -194,7 +192,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
- .navbar {font-size: 1.3em;}
+/* .navbar {font-size: 1.3em;}*/
 }
 
 
@@ -202,7 +200,7 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
- .navbar {font-size: 1.3em;}
+ /*.navbar {font-size: 1.3em;}*/
 }
 
 
@@ -210,16 +208,16 @@ a.login-close-text:hover, .accounts-dialog .additional-link-container a:hover {
 
 /* Portrait and Landscape */
 @media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
-.navbar {font-size: 1.3em;}
+/*.navbar {font-size: 1.3em;}*/
 }
 
 /* Xperia */
 @media screen and (-webkit-device-pixel-ratio:3) {
- .navbar {font-size: 1.3em;}   
+ /*.navbar {font-size: 1.3em;}   */
 }
 
 
-
+/* Loading animation */
 .shape{
     margin: 36px;
     float: left;

@@ -75,41 +75,6 @@
 		}
 
 		// if postId is undefined, load all posts (normal view)
-		// function loadPosts(postId, opts) {
-		// 	// default opts
-		// 	opts = _.extend({
-		// 		skip: 0,
-		// 		limit: 0,
-		// 		postId: postId
-		// 	}, opts);
-
-
-		// 	// show one post only or all
-		// 	if (postId)
-		// 		var posts = [Posts.findOne({
-		// 			_id: postId
-		// 		})];
-		// 	else
-		// 		var posts = Posts.find({}, {
-		// 			sort: {
-		// 				'createdAt': -1
-		// 			},
-		// 			skip: opts.skip,
-		// 			limit: opts.limit,
-		// 			fields: {
-		// 				userId: 1,
-		// 				title: 1,
-		// 				text: 1,
-		// 				createdAt: 1,
-		// 				likes: 1
-		// 			}
-		// 		}).fetch();
-		// 	// it's slow till here, seems from the query above, from 'sort'
-
-		// 	return posts;
-		// }
-
-		// if postId is undefined, load all posts (normal view)
 		function loadPosts2(postId, opts) {
 			// default opts
 			opts = _.extend({

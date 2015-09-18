@@ -24,7 +24,11 @@
 			var def = $q.defer();
 			speakLocalData.subscribeUserList(opts)
 				.then(function() {
-					var users = Meteor.users.find().fetch();
+					var users = Meteor.users.find({}, {
+						sort: {
+							'username': 1
+						}
+					}).fetch();
 					def.resolve(users);
 				});
 			return def.promise;

@@ -107,6 +107,7 @@
 
 
   function anyUserWithId(id, _this) {
+    if (!id) return null; // when new post is created, id is not set
     if (typeof id !== 'string') var matchId = {
       $in: id
     };
@@ -161,6 +162,7 @@
   }
 
   function likesOnId(id) {
+    if (!id) return null;
     return Likes.find({
       on: id
     }, {
