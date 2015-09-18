@@ -1,5 +1,6 @@
 Issues:
  ☐ speed up angular for mobile (e.g. one-way binding)
+ ☐ check if Meteor.status().connected and show error message if not (say that user should reload the page)
  ☐ really need tests: a lot of small things in the UI are buggy
  ✔ posts.js: from notis, click a notification, now click on stream in navbar. it won't load the state @done (15-09-18 17:38)
  ✔ queries: only get fields that are used (performance) @done (15-09-02 16:33)
