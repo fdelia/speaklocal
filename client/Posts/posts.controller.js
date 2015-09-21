@@ -21,6 +21,7 @@
 
     $scope.addComment = addComment;
     $scope.addPost = addPost;
+    $scope.deletePost = deletePost;
     $scope.likeUnlikePost = likeUnlikePost;
     $scope.likeUnlikeComment = likeUnlikeComment;
 
@@ -62,6 +63,18 @@
         });
 
     };
+
+    function deletePost(postId){
+      var r = confirm('Do you really want to delete the post?');
+      if (r === true){
+        PostsService.deletePost(postId)
+          .then(function(res){
+            $scope.addAlert('success', 'Post deleted.');
+          }, function(err){
+            $scope.addAlert('warning', 'Something went wrong. ('+err+')');
+          });
+      }
+    }
 
     function likeUnlikePost(postId) {
       if (!$scope.currentUser) return false;

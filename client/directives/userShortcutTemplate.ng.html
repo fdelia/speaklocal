@@ -6,18 +6,18 @@
 	    <a ui-sref="users.detail({id: user.username})" ng-if="! user.isAno && ! user.profile.userImageUrl">
 	        <!-- <span class="post-author-icon glyphicon glyphicon-user"></span> -->
 	        <img ng-src="/images/user.png" class="userImg" />
-	        {{ user.username }}
+	        {{ ::user.username }}
 	    </a>
 
 	    <a ui-sref="users.detail({id: user.username})" ng-if="! user.isAno && user.profile.userImageUrl">
 	        <!-- <span class="post-author-icon glyphicon glyphicon-user"></span> -->
-	        <img ng-src="{{ user.profile.userImageUrl }}" class="userImg" />
-	        {{ user.username }}
+	        <img ng-src="{{ ::user.profile.userImageUrl }}" class="userImg" />
+	        {{ ::user.username }}
 	    </a>
 
 	    <span ng-if="user.isAno">
 	        <img src="/images/kitten.jpg" class="img-rounded" />
-	        {{ user.username }} {{ showYou ? '(you)' : '' }}
+	        {{ ::user.username }} {{ ::showYou ? '(you)' : '' }}
 	    </span>
 	</span>
 

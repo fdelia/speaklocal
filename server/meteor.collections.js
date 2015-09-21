@@ -43,7 +43,9 @@
       return null;
     }
     var userIds = getAllUserIdsForUser(this.userId);
-    limit = valInt(limit);
+    // Query performance:
+    // The limit is arbitrary, after some amount of new notifications it won't show the older ones. 
+    var limit = 100; 
 
     return Conversations.find({
       $or: [{
@@ -56,10 +58,11 @@
         }
       }]
     }, {
-      // limit: limit,
+      limit: limit,
       sort: {
         updatedAt: -1
       },
+      // don't send these fields for performance
       fields: {
         fromUserObj: 0,
         toUserObj: 0,
@@ -68,19 +71,30 @@
     });
   });
 
-  // For navbar
-  Meteor.publish('notifications2', function(limit) {
+  // For navbar (not used for state "notifications", see below for it)
+  Meteor.publish('notifications2', function() {
     if (!this.userId) {
-      // TODO should be solved in controller, throws error if not logged in
+      // TODO should be solved in controller, throws error if not logged in yet
       // this.error(Meteor.Error('not-allowed', 'please log in'));
       return null;
     }
-    limit = valInt(limit);
+    // Query performance:
+    // The limit is arbitrary, after some amount of new notifications it won't show the older ones. 
+    var limit = 100; 
 
     return Notifications2.find({
-      to: this.userId
+      to: this.userId,
+      seen: 0
     }, {
-      // limit: limit
+      limit: limit,
+      sort: {
+        createdAt: -1
+      },
+      // don't send these fields for performance
+      fields: {
+        on: 0,
+        type: 0
+      }
     });
   });
 

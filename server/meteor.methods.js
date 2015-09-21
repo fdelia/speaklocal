@@ -5,7 +5,7 @@
 
 const KITTEN_NAMES = 'Caliente,Salsa,Chili,Paprika,Tamale,Sunset,Frosty,Icy,Pearl,Snowball,Snowflake,Midnight,Ebony,Shadow,Indigo,Grimalkin,Kitty'.split(',');
 
-
+// TODO make data service to tidy up code
 Meteor.methods({
   // anoMode
   anoModeGet: function() {
@@ -92,6 +92,29 @@ Meteor.methods({
     });
   },
 
+  deletePost: function(postId) {
+    if (!Meteor.user()) throw new Meteor.Error('not-allowed', 'Please log in');
+    if (!postId) throw new Meteor.Error('illegal-arguments', 'Missing argument');
+
+    // check if the post belongs to the current user
+    var post = Posts.findOne({
+      _id: postId,
+      userId: Meteor.user()._id
+    });
+
+    if (!post || post.length < 1) throw new Meteor.Error('not-allowed', 'No rights to delete post');
+
+
+    // TODO
+    // remove all dependencies (anoUsers, comments, likes, anoUsers of comments/likes)
+
+    var res = Posts.remove({
+      _id: postId
+    });
+
+    return res;
+  },
+
   // comment
   addComment: function(postId, text) {
     if (!Meteor.user()) throw new Meteor.Error('not-allowed', 'Please log in');
@@ -131,6 +154,27 @@ Meteor.methods({
     notifyUsersFromPost(postId, 'comment');
 
     return comment;
+  },
+
+  deleteComment: function(commentId) {
+    if (!Meteor.user()) throw new Meteor.Error('not-allowed', 'Please log in');
+    if (!commentId) throw new Meteor.Error('illegal-arguments', 'Missing argument');
+
+    // check if comment belongs to user
+    var comment = Comments.findOne({
+      _id: commentId,
+      userId: Meteor.user()._id
+    });
+
+    if (!comment || comment.length < 1) throw new Meteor.Error('not-allowed', 'No rights to delete post');
+
+    // TODO
+    // remove all dependencies (anoUsers, likes, anoUsers of likes)
+    var res = Comments.remove({
+      _id: commentId
+    });
+
+    return res;
   },
 
 
@@ -229,7 +273,11 @@ Meteor.methods({
 
     console.log('like/unlike ' + type + ' : ' + id);
 
-    // user can only like smth once, doesnt matter if anonymous or not
+    /* 
+      user can only like smth once
+      the user has to decide if he/she wants to like anonymously or not
+    */
+
     // search for normal user
     var user = Meteor.user();
     var existingLike = Likes.findOne({
@@ -417,7 +465,7 @@ Meteor.methods({
     }, {
       $set: {
         username: username,
-        bio: bio
+        'profile.bio': bio // TODO test if this gets updated
       }
     });
   },
@@ -539,20 +587,19 @@ function getAnyProfile(userId) {
   return user;
 }
 
-
+// returns anoUser for given postId *OR* given toUserId
 function getAnoProfileForThisUser(postId, toUserId) {
   console.log('getAnoProfileForThisUser , ' + postId + ' , ' + toUserId);
 
-  // if new post, create profile
   if (!postId && !toUserId) throw new Meteor.Error('illegal-arguments', 'Missing argument (need either postId or toUserId)');
   if (postId) {
     var anoUser = AnonymousUsers.findOne({
       talkgOnPost: postId,
       isUser: Meteor.user()._id
     });
-    // console.log('anoUser postId: ' + anoUser);
     if (anoUser) return anoUser;
     else {
+      // if new post, create anonymous profile
       var anoUser = createAnoUser(postId, null);
       // anoUser.talkgOnPost = postId;
       return anoUser;
@@ -565,6 +612,7 @@ function getAnoProfileForThisUser(postId, toUserId) {
     });
     if (anoUser) return anoUser;
     else {
+      // if new conversation, create anonymous profile
       var anoUser = createAnoUser(null, toUserId);
       // anoUser.talkgToUser = toUserId;
       return anoUser;
@@ -711,5 +759,4 @@ function notifyUser(toUserId, elId, type) {
   };
 
   return Notifications2.insert(noti);
-  // return Notifications.insert(noti);
 }

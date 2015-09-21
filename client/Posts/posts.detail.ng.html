@@ -1,14 +1,14 @@
 <div class="post panel panel-default container-fluid">
 	<div class="post-time pull-right text-muted">
-		<small>{{ timeAgo(post.createdAt) }} ago</small>
-		
+		<small>{{ ::timeAgo(post.createdAt) }} ago</small>
+		<a ng-show="post.userId === currentUser._id" title="delete post" ng-click="deletePost(post._id)" href=""><span class="glyphicon glyphicon-remove"> </span></a>
 	</div>
 	
 	<div class="post-author">
 		<user-shortcut user="post.user" show-you="isThisUser(post.user.isUser)"></user-shortcut>
 	</div>
 	<div class="post-title lead">
-		<a ui-sref="posts.detail({id: post._id})">{{ post.title }}</a>
+		<a ui-sref="posts.detail({id: post._id})">{{ ::post.title }}</a>
 	</div>
 	<p class="post-text" ng-bind-html="post.text | linky"></p>
 
@@ -41,7 +41,7 @@
 
 	<div class="post-comments">
 		<div class="comment" ng-repeat="comment in post.comments">
-			<div class="comment-time pull-right text-muted"><small>{{ timeAgo(comment.createdAt) }} ago</small></div>
+			<div class="comment-time pull-right text-muted"><small>{{ ::timeAgo(comment.createdAt) }} ago</small></div>
 			<div class="comment-author">
 				<user-shortcut user="comment.user" show-you="isThisUser(comment.user.isUser)"></user-shortcut>
 			</div>

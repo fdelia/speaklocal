@@ -1,7 +1,7 @@
 <div ui-view><!-- needed for child state -->
 
 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
-	{{alert.msg}}
+	{{ ::alert.msg}}
 </alert>
 
 <div ng-show="showWelcomeMsg()" ng-include="'client/Posts/welcome.ng.html'"></div>
@@ -33,6 +33,7 @@
 <br>
 
 <div class="" ng-repeat="post in posts" ng-include src="'client/Posts/posts.detail.ng.html'">
+	Loading posts...
 </div>
 
 <ul class="pager" ng-show="showLoadMoreButton && !stateParamsId">

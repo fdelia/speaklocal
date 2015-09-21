@@ -8,6 +8,7 @@
 		var service = {
 			addComment: addComment,
 			addPost: addPost,
+			deletePost: deletePost,
 			likeUnlikePost: likeUnlikePost,
 			likeUnlikeComment: likeUnlikeComment,
 			// loadPosts: loadPosts,
@@ -47,6 +48,18 @@
 					if (err) def.reject(err);
 					else def.resolve(res);
 				});
+
+			return def.promise;
+		}
+
+		function deletePost(postId){
+			var def = $q.defer();
+			if (!postId) def.reject('no post id');
+
+			Meteor.call('deletePost', postId, function(err, res){
+				if (err) def.reject(err);
+				else def.resolve(res);
+			});
 
 			return def.promise;
 		}
@@ -95,11 +108,11 @@
 						})];
 					else
 						var posts = Posts.find({}, {
+							skip: opts.skip,
+							limit: opts.limit,
 							sort: {
 								'createdAt': -1
 							},
-							skip: opts.skip,
-							limit: opts.limit,
 							fields: {
 								userId: 1,
 								title: 1,
