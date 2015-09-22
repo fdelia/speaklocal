@@ -21,7 +21,8 @@
 			}, {
 				fields: {
 					seen: 1
-				}
+				},
+				reactive: false
 			}).fetch().length;
 		}
 
@@ -51,7 +52,8 @@
 					unseenMsgsFrom: 1,
 					toUser: 1,
 					userId: 1
-				}
+				},
+				reactive: false
 			}).fetch();
 
 			console.log(convs);

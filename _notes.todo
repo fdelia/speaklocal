@@ -1,5 +1,7 @@
 Issues:
- ☐ speed up angular for mobile (e.g. one-way binding)
+ ☐ update to meteor 1.2
+ ☐ move to ES2015
+ ☐ speed up subscribtions bc of mobile
  ☐ make it more "reactive" (= react faster on click)
  ☐ show welcome msg and "load more" button only after loading
  ☐ check if Meteor.status().connected and show error message if not (say that user should reload the page after reconnection)
