@@ -105,6 +105,8 @@
 					if (postId)
 						var posts = [Posts.findOne({
 							_id: postId
+						}, {
+							reactive: false
 						})];
 					else
 						var posts = Posts.find({}, {
@@ -119,7 +121,8 @@
 								text: 1,
 								createdAt: 1,
 								likes: 1
-							}
+							},
+							reactive: false
 						}).fetch();
 					// it's slow till here, seems from the query above, from 'sort'
 
@@ -148,6 +151,7 @@
 					sort: {
 						createdAt: 1
 					},
+					reactive: false,
 					fields: {} // all fields
 				}).fetch();
 
@@ -175,7 +179,8 @@
 			}, {
 				fields: {
 					createdAt: 0
-				}
+				},
+				reactive: false
 			}).fetch();
 
 			comment.userHasLiked = 0;

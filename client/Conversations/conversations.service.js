@@ -47,7 +47,8 @@
 				},
 				fields: {
 					convId: 0
-				}
+				},
+				reactive: false
 			}).fetch();
 
 		}
@@ -64,6 +65,8 @@
 				.then(function() {
 					var conv = Conversations.findOne({
 						_id: convId
+					}, {
+						reactive: false
 					});
 
 					if (!conv) {
@@ -107,6 +110,7 @@
 						sort: {
 							'updatedAt': -1
 						},
+						reactive: false,
 						limit: limit
 					}).fetch();
 

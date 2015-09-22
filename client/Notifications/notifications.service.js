@@ -79,6 +79,7 @@
 						sort: {
 							'updatedAt': -1
 						},
+						reactive: false,
 						limit: limit
 					}).fetch();
 
@@ -96,11 +97,15 @@
 
 						noti.post = Posts.findOne({
 							_id: noti.onPost
+						}, {
+							reactive: false
 						});
 
 						if (noti.type === 'likeComment') {
 							noti.comment = Comments.findOne({
 								_id: noti.on
+							}, {
+								reactive: false
 							});
 							if (!noti.comment) {
 								console.error('comment not received. not published?');

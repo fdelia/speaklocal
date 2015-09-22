@@ -38,14 +38,16 @@
 			var user = AnonymousUsers.findOne({
 				_id: userId
 			}, {
-				fields: fields
+				fields: fields,
+				reactive: false
 			});
 
 			if (user === undefined) {
 				user = Meteor.users.findOne({
 					_id: userId
 				}, {
-					fields: fields
+					fields: fields,
+					reactive: false
 				});
 			}
 
@@ -56,6 +58,8 @@
 		function getAllUserIdsForThisUser(currentUserId) {
 			var userIds = AnonymousUsers.find({
 				isUser: currentUserId
+			}, {
+				reactive: false
 			}).fetch().map(function(obj) {
 				return obj._id;
 			});

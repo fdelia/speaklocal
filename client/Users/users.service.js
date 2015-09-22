@@ -27,7 +27,8 @@
 					var users = Meteor.users.find({}, {
 						sort: {
 							'username': 1
-						}
+						},
+						reactive: false
 					}).fetch();
 					def.resolve(users);
 				});
@@ -40,6 +41,8 @@
 				.then(function() {
 					var user = Meteor.users.findOne({
 						username: username
+					}, {
+						reactive: false
 					});
 					def.resolve(user);
 				});
@@ -69,12 +72,18 @@
 			// get all "activity elements"
 			var allElements = Posts.find({
 				userId: userId
+			}, {
+				reactive: false
 			}).fetch();
 			allElements = allElements.concat(Comments.find({
 				userId: userId
+			}, {
+				reactive: false
 			}).fetch());
 			allElements = allElements.concat(Likes.find({
 				userId: userId
+			}, {
+				reactive: false
 			}).fetch());
 
 			for (var i = 0; i < allElements.length; i += 1) {
@@ -104,16 +113,22 @@
 					if (activityLog[key].type === 'post') {
 						activityLog[key].post = Posts.findOne({
 							_id: activityLog[key].on
+						}, {
+							reactive: false
 						});
 					}
 
 					if (activityLog[key].type === 'comment') {
 						activityLog[key].comment = Comments.findOne({
 							_id: activityLog[key].on
+						}, {
+							reactive: false
 						});
 						if (!activityLog[key].comment || !activityLog[key].comment.postId) return;
 						activityLog[key].post = Posts.findOne({
 							_id: activityLog[key].comment.postId
+						}, {
+							reactive: false
 						});
 					}
 				}
