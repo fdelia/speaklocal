@@ -67,7 +67,8 @@
         fromUserObj: 0,
         toUserObj: 0,
         createdAt: 0
-      }
+      },
+      reactive: false
     });
   });
 
@@ -94,7 +95,8 @@
       fields: {
         on: 0,
         type: 0
-      }
+      },
+      reactive: false
     });
   });
 
@@ -169,7 +171,8 @@
       },
       sort: {
         createdAt: -1
-      }
+      },
+      reactive: false
     });
 
     return userCursor;
@@ -182,7 +185,8 @@
     }, {
       fields: {
         createdAt: 0
-      }
+      },
+      reactive: false
     });
   }
 
@@ -217,7 +221,8 @@
             text: 1,
             createdAt: 1,
             likes: 1
-          }
+          },
+          reactive: false
         });
       },
 
@@ -247,7 +252,8 @@
             }, {
               sort: {
                 createdAt: 1
-              }
+              },
+              reactive: false
             });
           },
           // post -> comment -> likes
@@ -291,7 +297,8 @@
           limit: limit,
           sort: {
             'updatedAt': -1
-          }
+          },
+          reactive: false
         });
       },
       children: [{
@@ -302,11 +309,11 @@
             case 'likeComment':
               return Comments.find({
                 _id: noti.on
-              }, {});
+              }, { reactive: false });
             case 'likePost':
               return Posts.find({
                 _id: noti.on
-              }, {});
+              }, { reactive: false });
             default:
               return null;
           }
@@ -353,7 +360,8 @@
             fromUserObj: 0,
             toUserObj: 0,
             createdAt: 0
-          }
+          },
+          reactive: false
         });
 
       },
@@ -388,7 +396,8 @@
             fromUserObj: 0,
             toUserObj: 0,
             createdAt: 0
-          }
+          },
+          reactive: false
         });
       },
       children: [{
@@ -424,7 +433,8 @@
           }, {
             sort: {
               createdAt: 1
-            }
+            },
+            reactive: false
           });
         }
       }, {
@@ -448,7 +458,8 @@
         'username': 1,
         // 'emails': 1, // dev only
         'profile': 1
-      }
+      },
+      reactive: false
     });
 
   });
@@ -464,7 +475,8 @@
             'username': 1,
             // 'emails': 1, // dev only
             'profile': 1
-          }
+          },
+          reactive: false
         });
       },
 
@@ -472,19 +484,19 @@
         find: function(user) {
           return Posts.find({
             userId: user._id
-          });
+          }, {reactive: false});
         }
       }, {
         find: function(user) {
           return Comments.find({
             userId: user._id
-          });
+          }, {reactive: false});
         }
       }, {
         find: function(user) {
           return Likes.find({
             userId: user._id
-          });
+          }, {reactive: false});
         }
       }]
     }

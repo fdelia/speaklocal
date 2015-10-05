@@ -56,8 +56,6 @@
 				reactive: false
 			}).fetch();
 
-			console.log(convs);
-
 			convs.forEach(function(conv) {
 				if (userIds.indexOf(conv.userId) !== -1)
 					msgCounter += conv.unseenMsgsFrom ? 1 : 0;

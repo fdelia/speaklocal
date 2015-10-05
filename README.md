@@ -21,7 +21,7 @@ Built with AngularJs (1.x), MeteorJs and Bootstrap.
 * Meteor (MongoDB) cursor has no .hasNext()??? Since it's not a MongoDB cursor... I don't want to fetch all the docs just to know if there are any result rows.
 * Same bucket: MongoDB has no case insensitive sort??? Duplicate a field, make it lower case and then sort is the way to go?? Aaaargh.
 
-* Ok, testing works halfway. It's full of workarounds and not so intuitive (e.g. testing a promise).
+* Ok, testing works halfway. It's full of workarounds and not so intuitive (e.g. testing a promise). I found [this](https://medium.com/@rasmushjulskov/how-to-test-your-meteor-app-with-velocity-and-cucumber-3c9290660258) article about testing meteor, which sums it up.
 
 I find it a bit disappointing to waste that much time on stackoverflow and blog posts just to make tests work... In my opinion tests should work out of the box.
 
