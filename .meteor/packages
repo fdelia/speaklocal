@@ -28,3 +28,4 @@ check
 blaze-html-templates
 standard-minifiers
 angular
+urigo:angular-blaze-template

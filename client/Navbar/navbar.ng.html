@@ -35,7 +35,10 @@
         <span class="glyphicon glyphicon-cog"></span>
       </a></li>
 	  	
-      <li><a class="meteor-include"><meteor-include src="loginButtons"></meteor-include></a></li>
+      <li>
+        <blaze-template name="loginButtons">
+        </blaze-template>
+      </li>
 
       <li ng-show="$root.currentUser" title="Anonymous?">
       	<a href="" ng-click="switchAnoMode()">

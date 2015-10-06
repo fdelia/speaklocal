@@ -1,11 +1,11 @@
 Issues:
- ☐ update to meteor 1.2
+ ✔ update to meteor 1.2 @done (15-10-06 12:32)
  ☐ move to ES2015
- ☐ speed up subscribtions bc of mobile
- ☐ make it more "reactive" (= react faster on click)
+ ☐ speed up subscribtions for mobile
+ ☐ make it more "reactive" (= react faster on click), maybe don't wait on server feedback, but display error if something goes wrong
  ☐ show welcome msg and "load more" button only after loading
  ☐ check if Meteor.status().connected and show error message if not (say that user should reload the page after reconnection)
- ☐ posting anonymously for first time publishes the new anoUser profile too late and is not displayed till some refresh happens (like/comment etc)
+ ☐ posting anonymously for first time publishes the new anoUser profile too late and it's not displayed till some refresh happens (like/comment etc)
  ☐ same when liking for first time anonymously
  ☐ really need tests: a lot of small things in the UI are buggy
  ☐ bring code to level "how it's done" (concerning angular)
