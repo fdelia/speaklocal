@@ -1,7 +1,7 @@
 <div class="post panel panel-default container-fluid">
 	<div class="post-time pull-right text-muted">
 		<small>{{ ::timeAgo(post.createdAt) }} ago</small>
-		<a ng-show="post.userId === currentUser._id" title="delete post" ng-click="deletePost(post._id)" href=""><span class="glyphicon glyphicon-remove"> </span></a>
+		<a ng-show="post.user._id === currentUser._id || post.user.isUser === currentUser._id" title="delete post" ng-click="deletePost(post._id)" href=""><span class="glyphicon glyphicon-remove"> </span></a>
 	</div>
 	
 	<div class="post-author">

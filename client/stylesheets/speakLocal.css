@@ -58,6 +58,7 @@ html, body, .meta-content {min-height: 100%;}
 /* this is for mobile view */
 .navbar-nav {margin: 0;}
 .navbar-nav>li {float: left;}
+.navbar-default .navbar-nav>.active>a {background-color: #338899 !important; color: white !important;}
 
 
 /* TODO Looks stupid */

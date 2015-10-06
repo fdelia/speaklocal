@@ -70,6 +70,11 @@
         PostsService.deletePost(postId)
           .then(function(res){
             $scope.addAlert('success', 'Post deleted.');
+
+            // remove from view
+            for (var i=0; i<$scope.posts.length; i++){
+              if ($scope.posts[i]._id === postId) {$scope.posts.splice(i,1); break;}
+            }
           }, function(err){
             $scope.addAlert('warning', 'Something went wrong. ('+err+')');
           });
@@ -120,13 +125,10 @@
 
 
     function showWelcomeMsg() {
-      return !$scope.currentUser; //&& !Session.get('seenWelcomeMsg');
+      // We want the welcome message to show if there are no posts yet,
+      // also prevents to show it before subscribtions are loaded
+      return $scope.posts.length > 0 && !$scope.currentUser; //&& !Session.get('seenWelcomeMsg');
     }
-
-    // function seenWelcomeMsg() {
-    //   Session.setPersistent('seenWelcomeMsg', true);
-    // }
-
 
     function loadMorePosts() {
       opts.skip = $scope.posts.length;

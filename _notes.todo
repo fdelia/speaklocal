@@ -3,7 +3,7 @@ Issues:
  ☐ move to ES2015
  ☐ speed up subscribtions for mobile
  ☐ make it more "reactive" (= react faster on click), maybe don't wait on server feedback, but display error if something goes wrong
- ☐ show welcome msg and "load more" button only after loading
+ ✔ show welcome msg and "load more" button only after loading @done (15-10-06 18:12)
  ☐ check if Meteor.status().connected and show error message if not (say that user should reload the page after reconnection)
  ☐ posting anonymously for first time publishes the new anoUser profile too late and it's not displayed till some refresh happens (like/comment etc)
  ☐ same when liking for first time anonymously
@@ -25,7 +25,8 @@ Issues:
  ☐ user.controller.js: upload user image, cropping doesnt work (img-crop directive)
  ☐ userShortCut directive: the returned image and name should be in separate links, because of hover effect
  ☐ when in a conversation: mark the new messages as read
-
+ ✔ deletePost: after success, remove it from view @done (15-10-06 18:03)
+ ✔ anoUser: if no usernames left, add random number @done (15-10-06 18:30)
 
 
 To add:

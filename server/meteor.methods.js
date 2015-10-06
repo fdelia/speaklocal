@@ -4,6 +4,7 @@
 
 
 const KITTEN_NAMES = 'Caliente,Salsa,Chili,Paprika,Tamale,Sunset,Frosty,Icy,Pearl,Snowball,Snowflake,Midnight,Ebony,Shadow,Indigo,Grimalkin,Kitty'.split(',');
+// const KITTEN_NAMES = ['Cliente']; // dev
 
 // TODO make data service to tidy up code
 Meteor.methods({
@@ -52,12 +53,6 @@ Meteor.methods({
       comments: []
     };
 
-    // var post2 = post; // test
-    // post2.likeUserIds = [];
-    // post2.comments = [];
-    // post2._id = Posts2.insert(post2); // test
-    // var user2 = getThisUserOnPost(post2._id); // test
-
     post._id = Posts.insert(post);
     var user = getThisUserOnPost(post._id);
 
@@ -68,15 +63,6 @@ Meteor.methods({
         userId: user._id
       }
     });
-
-    // Posts2.update({ // test
-    //   _id: post2._id
-    // }, {
-    //   $set: {
-    //     userId: user2._id,
-    //     user: user2
-    //   }
-    // });
 
     console.log('inserted post');
     if (Meteor.user().anoMode) AnonymousUsers.update({
@@ -99,7 +85,10 @@ Meteor.methods({
     // check if the post belongs to the current user
     var post = Posts.findOne({
       _id: postId,
-      userId: Meteor.user()._id
+      // userId: Meteor.user()._id
+      userId: {
+        $in: getAllUserIdsForThisUser()
+      }
     });
 
     if (!post || post.length < 1) throw new Meteor.Error('not-allowed', 'No rights to delete post');
@@ -139,17 +128,8 @@ Meteor.methods({
       likes: 0
     };
 
-    // test
-    // comment.index = post.comments ? post.comments.length: 0;
-    // Posts2.update({
-    //   _id: postId
-    // }, {
-    //   $push: {
-    //     comments: comment
-    //   }
-    // });
-
     comment._id = Comments.insert(comment);
+    console.log('inserted comment');
 
     notifyUsersFromPost(postId, 'comment');
 
@@ -194,61 +174,6 @@ Meteor.methods({
       multi: 1
     });
   },
-
-  // test
-  // likeUnlikePost2: function(postId) {
-  //   if (!Meteor.user()._id) return 'not allowed';
-
-  //   var post = Posts2.findOne({
-  //     _id: postId
-  //   });
-  //   if (!post) return 'not allowed';
-
-  //   // get correct user id (ano/normal)
-  //   var user = getThisUserOnPost(postId);
-
-  //   // check if already liked
-  //   var index = post.likeUserIds.indexOf(user._id);
-  //   if (index === -1) {
-  //     post.likeUserIds.push(user._id);
-  //   } else {
-  //     post.likeUserIds.splice(index, 1);
-  //   }
-
-  //   Posts2.update({
-  //     _id: postId
-  //   }, {
-  //     likeUserIds: post.likeUserIds
-  //   });
-
-  //   return post; // change that maybe
-  // },
-  // test
-  // likeUnlikeComment2: function(postId, commentIndex) {
-  //   if (!Meteor.user()._id) return 'not allowed';
-
-  //   var post = Posts2.findOne({
-  //     _id: postId
-  //   });
-  //   if (!post) return 'not allowed';
-  //   if (! post.comments[commentIndex]) return 'not allowed';
-
-  //   var user = getThisUserOnPost(postId);
-  //   var index = post.comments[commentIndex].likeUserIds.indexOf(user._id);
-  //   if (index === -1){
-  //     post.comments[commentIndex].likeUserIds.push(user._id);
-  //   } else {
-  //     post.comments[commentIndex].likeUserIds.splice(index, 1);
-  //   }
-
-  //   Posts2.update({
-  //     _id: postId
-  //   }, {
-  //     comments: post.comments
-  //   });
-
-  //   return post; // change that maybe
-  // },
 
   likeUnlikePostComment: function(type, id) {
     if (!Meteor.user()._id) throw new Meteor.Error('not-allowed', 'Please log in');
@@ -634,11 +559,11 @@ function getAllUserIdsForThisUser() {
 
 function createAnoUser(postId, toUserId) {
   if (!postId && !toUserId) throw new Meteor.Error('illegal-arguments', 'Missing argument (need either postId oder toUserId)');
-  console.log('createAnoUser');
+  console.log('createAnoUser: ', postId, toUserId);
 
   // random name: look at names given from postId
   // choose one of the set of left names
-  var username = 'ano (' + Meteor.user().username + ')'; // only for dev
+  var username;
 
   var usedNames = AnonymousUsers.find({
     talkgOnPost: postId
@@ -652,7 +577,10 @@ function createAnoUser(postId, toUserId) {
     }).length === 0;
   });
 
-  username = leftNames[Math.floor(Math.random() * leftNames.length)];
+  if (leftNames.length > 0)
+    username = leftNames[Math.floor(Math.random() * leftNames.length)];
+  else
+    username = KITTEN_NAMES[Math.floor(Math.random() * KITTEN_NAMES.length)] + ' ' + Math.floor(Math.random() * 100000);
   console.log('new AnoProfile with username ' + username);
 
   var id = AnonymousUsers.insert({
@@ -739,7 +667,7 @@ function notifyUser(toUserId, elId, type) {
       $set: {
         seen: 0,
         updatedAt: Date.now(),
-        // $push: {
+        // $push: { // doesnt work
         //   userIds: fromUser._id
         // }
         userIds: newUserIds

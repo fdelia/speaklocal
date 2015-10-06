@@ -8,8 +8,6 @@
     
 <div class="new-post row" ng-hide="stateParamsId !== undefined || !currentUser">
 
-
-    
 	<div class="col-md-1 col-sm-1 col-xs-1">
 		<user-shortcut ng-if="currentUser" user="currentUser" img-only="1" ano-mode="anoMode"></user-shortcut>
 	</div>
@@ -24,6 +22,7 @@
 	     <!-- <button class="btn btn-primary" type="reset" ng-click="reset()">Reset</button> -->
 		</form>
 	</div>
+
 </div>
 
 <div class="new-post row" ng-hide="stateParamsId === undefined">
@@ -36,7 +35,7 @@
 	Loading posts...
 </div>
 
-<ul class="pager" ng-show="showLoadMoreButton && !stateParamsId">
+<ul class="pager" ng-show="posts.length>0 && showLoadMoreButton && !stateParamsId">
 	<li><a href="" ng-click="loadMorePosts()">Load more posts</a></li>
 </ul>
 

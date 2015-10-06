@@ -145,6 +145,7 @@
 				if (likedComment && likedComment.postId !== post._id) continue;
 
 				post.user = speakLocal.getUser(post.userId, true);
+				if (!post.user) console.error('no user found for post');
 				post.comments = Comments.find({
 					postId: post._id
 				}, {
@@ -160,6 +161,8 @@
 
 					if (likeObj && likeObj.type === 'comment' && post._id !== comment.postId) continue;
 					comment.user = speakLocal.getUser(comment.userId, true);
+
+					if (!comment.user) console.error('no user found for comment');
 
 					comment.likes = [];
 					setCommentLikes(comment, currentUser);
