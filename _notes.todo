@@ -1,32 +1,26 @@
 Issues:
- ✔ update to meteor 1.2 @done (15-10-06 12:32)
  ☐ move to ES2015
- ☐ speed up subscribtions for mobile
  ☐ make it more "reactive" (= react faster on click), maybe don't wait on server feedback, but display error if something goes wrong
- ✔ show welcome msg and "load more" button only after loading @done (15-10-06 18:12)
+ ☐ code: add more comments, pretty messy code now
+ ☐ bring code to level "how it's done" (concerning angular), make it more modular & more readable
+
  ☐ check if Meteor.status().connected and show error message if not (say that user should reload the page after reconnection)
- ☐ posting anonymously for first time publishes the new anoUser profile too late and it's not displayed till some refresh happens (like/comment etc)
- ☐ same when liking for first time anonymously
- ☐ really need tests: a lot of small things in the UI are buggy
- ☐ bring code to level "how it's done" (concerning angular)
+ ☐ really need tests: some small things in the UI are buggy ... ?
  ☐ navbar.controller.js: routeIsUserlist(): currentUser sometimes set too late and then undefined (there's a hack for now)
  ☐ user.controller.js: bio is not updated -> use profile.bio, also in server.methods.js
+ 
  ☐ meteor.methods.js: addPost: too much is escaped, should only escape basic html chars
  ☐ meteor.methods.js: addComment: same as above
- ☐ after adding a post, if liked right away, it's not updated in the view of the user who added the post. the issue is resolved after commenting on the post, reloading the controller.
 
  ☐ users: add pagination
  ☐ users.detail: add pagination for activities
  ☐ user activity: active since (user.createdAt)
  ☐ user activity: limit by date
- ☐ createUser: add createdAt and updatedAdd
+ ☐ createUser: add createdAt and updatedAt
  ☐ throwing error from server in Meteor.pubslih doesn't work, not sure if done right
  ☐ FSCollection: add filter, doesn't work
  ☐ user.controller.js: upload user image, cropping doesnt work (img-crop directive)
- ☐ userShortCut directive: the returned image and name should be in separate links, because of hover effect
  ☐ when in a conversation: mark the new messages as read
- ✔ deletePost: after success, remove it from view @done (15-10-06 18:03)
- ✔ anoUser: if no usernames left, add random number @done (15-10-06 18:30)
 
 
 To add:
@@ -49,6 +43,15 @@ Notes:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ speed up subscribtions for mobile @done (15-10-06 19:37) @project(Issues)
+ ✔ posting anonymously for first time publishes the new anoUser profile too late and it's not displayed till some refresh happens (like/comment etc) @done (15-10-07 11:50) @project(Issues)
+ ✔ same when liking for first time anonymously @done (15-10-07 11:51) @project(Issues)
+ ✔ userShortCut directive: the returned image and name should be in separate links, because of hover effect @done (15-10-06 19:35) @project(Issues)
+ ✔ after adding a post, if liked right away, it's not updated in the view of the user who added the post. the issue is resolved after commenting on the post, reloading the controller. @done (15-10-06 19:33) @project(Issues)
+ ✔ anoUser: if no usernames left, add random number @done (15-10-06 18:30) @project(Issues)
+ ✔ show welcome msg and "load more" button only after loading @done (15-10-06 18:12) @project(Issues)
+ ✔ deletePost: after success, remove it from view @done (15-10-06 18:03) @project(Issues)
+ ✔ update to meteor 1.2 @done (15-10-06 12:32) @project(Issues)
  ✔ not logged in: hide like / message - links @done (15-09-18 17:39) @project(Issues)
  ✔ stream: computing of posts is a bit slow... (it's the updatePosts() function) @done (15-09-18 17:38) @project(Issues)
  ✔ route.js: children states like post.list and post.detail including ui-sref-active (didn't work for now: switching between children states and -active didn't add the class) @done (15-09-18 17:38) @project(Issues)

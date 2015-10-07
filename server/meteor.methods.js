@@ -131,6 +131,9 @@ Meteor.methods({
     comment._id = Comments.insert(comment);
     console.log('inserted comment');
 
+    // comment.createdAt += 1;
+    // Comments.update({_id: comment._id}, comment);
+
     notifyUsersFromPost(postId, 'comment');
 
     return comment;

@@ -66,17 +66,20 @@
 
     function deletePost(postId){
       var r = confirm('Do you really want to delete the post?');
-      if (r === true){
+      if (r === true) {
         PostsService.deletePost(postId)
-          .then(function(res){
+          .then(function(res) {
             $scope.addAlert('success', 'Post deleted.');
 
             // remove from view
-            for (var i=0; i<$scope.posts.length; i++){
-              if ($scope.posts[i]._id === postId) {$scope.posts.splice(i,1); break;}
+            for (var i = 0; i < $scope.posts.length; i++) {
+              if ($scope.posts[i]._id === postId) {
+                $scope.posts.splice(i, 1);
+                break;
+              }
             }
-          }, function(err){
-            $scope.addAlert('warning', 'Something went wrong. ('+err+')');
+          }, function(err) {
+            $scope.addAlert('warning', 'Something went wrong. (' + err + ')');
           });
       }
     }
@@ -179,6 +182,9 @@
             $scope.showLoadMoreButton = true;
           } else $scope.showLoadMoreButton = false;
 
+          // initialization is finished when subscribtions are loaded
+          initialization = false;
+
           $scope.posts = PostsService.updatePosts(posts, null, $scope.currentUser);
         });
     }
@@ -190,36 +196,25 @@
     var initialization = true;
 
     Posts.find().observe({
-      // added: function(post) {
-      //   if ($scope.posts.length <= 10)
-      //     $scope.posts = $scope.posts.concat(post);
-      // },
-
-
-      // take changed because the post is updated after creation to add userId
+      // take "changed" because the post is updated after creation to add userId and "added" is not needed
       changed: function(post, oldPost) {
-        // insert only if the post is new (not during initialization)
-        if (!initialization) {
-          post.comments = [];
-          // post._id = id;
-          post.spam = 0;
-          post.likes = [];
-          post.user = speakLocal.getUser(post.userId, true);
+        if (initialization) return false;
 
-          // Problem: see Comments observeChanges added
-          $scope.posts.splice(0, 0, post);
-          if ($scope.currentUser && post.userId !== $scope.currentUser._id)
-            $scope.$apply();
+        // TODO do this with Service.updatePosts()
+        post.comments = [];
+        post.spam = 0;
+        post.likes = [];
+        post.user = speakLocal.getUser(post.userId, true);
 
-        }
+        $scope.posts.splice(0, 0, post); // unshift / add as first post
+
+        if (($scope.currentUser && post.userId !== $scope.currentUser._id) || ! $scope.currentUser)
+          $scope.$apply();
       }
     });
 
     Comments.find().observeChanges({
       added: function(id, comment) {
-        // Problem: doesn't automatically add for the adding user in an other window/tab
-        // because there it should be $scope.$apply, but it shouldnt be $apply
-        // in the window where the user writes the comment
         if (initialization) return false;
 
         var pseudoLike = {
@@ -228,13 +223,9 @@
         };
 
         PostsService.updatePosts($scope.posts, pseudoLike, $scope.currentUser);
-
-        if ($scope.currentUser && comment.userId !== $scope.currentUser._id) {
-          $scope.$apply();
-        }
+        // why no $scope.$apply() needed here?
       }
     });
-
 
     Likes.find().observe({
       added: function(likeObj) {
@@ -249,7 +240,24 @@
       }
     });
 
-    initialization = false;
+    AnonymousUsers.find().observe({
+      // when a comment from a new anoUser is added, the anoUser profile will often reach
+      // the client after the comment itself and the user won't be found
+      // here it re-updates the post with the comment in it
+      added: function(obj) {
+        if (initialization) return false;
+
+        var pseudoLike = {
+          type: 'post',
+          on: obj.talkgOnPost
+        }
+
+        PostsService.updatePosts($scope.posts, pseudoLike, $scope.currentUser);
+      }
+    });
+
+    // initialization is finished when subscribtions are loaded (it's set to false above)
+    // initialization = false;
 
   }
 

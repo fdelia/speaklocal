@@ -52,11 +52,11 @@
 			return def.promise;
 		}
 
-		function deletePost(postId){
+		function deletePost(postId) {
 			var def = $q.defer();
 			if (!postId) def.reject('no post id');
 
-			Meteor.call('deletePost', postId, function(err, res){
+			Meteor.call('deletePost', postId, function(err, res) {
 				if (err) def.reject(err);
 				else def.resolve(res);
 			});
